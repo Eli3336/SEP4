@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPI", "WebAPI\WebAPI.csproj", "{297EA4A8-2406-4658-AF85-F913FB183FA1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{387EEE60-4B75-40FE-8080-550FC3009BD4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{297EA4A8-2406-4658-AF85-F913FB183FA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{297EA4A8-2406-4658-AF85-F913FB183FA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{297EA4A8-2406-4658-AF85-F913FB183FA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{297EA4A8-2406-4658-AF85-F913FB183FA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{387EEE60-4B75-40FE-8080-550FC3009BD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{387EEE60-4B75-40FE-8080-550FC3009BD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{387EEE60-4B75-40FE-8080-550FC3009BD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{387EEE60-4B75-40FE-8080-550FC3009BD4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
