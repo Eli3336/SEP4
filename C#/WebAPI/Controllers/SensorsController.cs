@@ -1,0 +1,49 @@
+﻿using System.Collections;
+using Application.LogicInterfaces;
+using Domain.DTOs;
+using Domain.Models;
+using Microsoft.AspNetCore.Mvc;
+
+namespace WebAPI.Controllers;
+
+[ApiController]
+[Route("[controller]")]
+public class SensorsController : ControllerBase
+{
+    private readonly ISensorLogic sensorLogic;
+
+    public SensorsController(ISensorLogic sensorLogic)
+    {
+        this.sensorLogic = sensorLogic;
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<Sensor>> CreateAsync(SensorCreationDto dto)
+    {
+        try
+        {
+            Sensor sensor = await sensorLogic.CreateAsync(dto);
+            return Created($"/sensors/{sensor.Type}", sensor);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+    
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<SensorValue>>> GetSensorsValuesAsync([FromQuery] int? roomId)
+    {
+        try
+        {
+            IEnumerable<SensorValue> values = await sensorLogic.GetSensorsValuesAsync(roomId);
+            return Ok(values);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+}
