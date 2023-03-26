@@ -1,0 +1,94 @@
+{
+  "Rooms": [
+    {
+      "Id": 1,
+      "Name": "room1",
+      "Capacity": 0,
+      "Availability": null,
+      "Patients": null,
+      "Sensors": [
+        {
+          "Id": 1,
+          "Type": "string",
+          "UpBreakpoint": null,
+          "DownBreakpoint": null,
+          "Values": [
+            {
+              "value": 20.4,
+              "timeStamp": "2023-03-26T23:03:03.2787417+02:00"
+            },
+            {
+              "value": 35,
+              "timeStamp": "2023-03-26T23:03:03.2787871+02:00"
+            },
+            {
+              "value": 0.2,
+              "timeStamp": "2023-03-26T23:03:03.2787886+02:00"
+            }
+          ]},
+        {
+          "Id": 2,
+          "Type": "co2",
+          "UpBreakpoint": null,
+          "DownBreakpoint": null,
+          "Values": [
+            {
+              "value": 20.4,
+              "timeStamp": "2023-03-26T23:12:24.409322+02:00"
+            },
+            {
+              "value": 35,
+              "timeStamp": "2023-03-26T23:12:24.4093696+02:00"
+            },
+            {
+              "value": 0.2,
+              "timeStamp": "2023-03-26T23:12:24.4093703+02:00"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "Sensors": [
+    {
+      "Id": 1,
+      "Type": "string",
+      "UpBreakpoint": null,
+      "DownBreakpoint": null,
+      "Values": [
+        {
+          "value": 20.4,
+          "timeStamp": "2023-03-26T23:03:03.2787417+02:00"
+        },
+        {
+          "value": 35,
+          "timeStamp": "2023-03-26T23:03:03.2787871+02:00"
+        },
+        {
+          "value": 0.2,
+          "timeStamp": "2023-03-26T23:03:03.2787886+02:00"
+        }
+      ]
+    },
+    {
+      "Id": 2,
+      "Type": "co2",
+      "UpBreakpoint": null,
+      "DownBreakpoint": null,
+      "Values": [
+        {
+          "value": 20.4,
+          "timeStamp": "2023-03-26T23:12:24.409322+02:00"
+        },
+        {
+          "value": 35,
+          "timeStamp": "2023-03-26T23:12:24.4093696+02:00"
+        },
+        {
+          "value": 0.2,
+          "timeStamp": "2023-03-26T23:12:24.4093703+02:00"
+        }
+      ]
+    }
+  ]
+}
