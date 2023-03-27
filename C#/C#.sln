@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileData", "FileData\FileData.csproj", "{6321C939-7E5E-48B5-AA24-51D16A014D91}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSocketIoT", "WebSocketIoT\WebSocketIoT.csproj", "{786C8A2D-34B0-4089-B99E-8D3107FC89E0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{6321C939-7E5E-48B5-AA24-51D16A014D91}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6321C939-7E5E-48B5-AA24-51D16A014D91}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6321C939-7E5E-48B5-AA24-51D16A014D91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{786C8A2D-34B0-4089-B99E-8D3107FC89E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{786C8A2D-34B0-4089-B99E-8D3107FC89E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{786C8A2D-34B0-4089-B99E-8D3107FC89E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{786C8A2D-34B0-4089-B99E-8D3107FC89E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
