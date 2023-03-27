@@ -1,8 +1,8 @@
 using Application.DaoInterfaces;
 using Application.Logic;
 using Application.LogicInterfaces;
-using FileData;
-using FileData.DAOs;
+using EfcDataAccess;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,12 +12,11 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-builder.Services.AddScoped<FileContext>();
-builder.Services.AddScoped<ISensorDao, SensorFileDao>();
+builder.Services.AddDbContext<HospitalContext>();
+builder.Services.AddScoped<ISensorDao, SensorEfcDao>();
 builder.Services.AddScoped<ISensorLogic, SensorLogic>();
 
-builder.Services.AddScoped<IRoomDao, RoomFileDao>();
+builder.Services.AddScoped<IRoomDao, RoomEfcDao>();
 builder.Services.AddScoped<IRoomLogic, RoomLogic>();
 
 var app = builder.Build();
@@ -28,6 +27,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(x => x
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .SetIsOriginAllowed(origin => true) // allow any origin
+    .AllowCredentials());
 
 app.UseHttpsRedirection();
 

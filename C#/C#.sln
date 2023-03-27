@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{F5E3601E-ECA3-42F0-ACFA-0310A7F1B58F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileData", "FileData\FileData.csproj", "{6321C939-7E5E-48B5-AA24-51D16A014D91}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EfcDataAccess", "EfcDataAccess\EfcDataAccess.csproj", "{FAB232B6-B8C1-4FAB-92E6-D7018E00BE1F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,9 +26,9 @@ Global
 		{F5E3601E-ECA3-42F0-ACFA-0310A7F1B58F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F5E3601E-ECA3-42F0-ACFA-0310A7F1B58F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F5E3601E-ECA3-42F0-ACFA-0310A7F1B58F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6321C939-7E5E-48B5-AA24-51D16A014D91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6321C939-7E5E-48B5-AA24-51D16A014D91}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6321C939-7E5E-48B5-AA24-51D16A014D91}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6321C939-7E5E-48B5-AA24-51D16A014D91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAB232B6-B8C1-4FAB-92E6-D7018E00BE1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAB232B6-B8C1-4FAB-92E6-D7018E00BE1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAB232B6-B8C1-4FAB-92E6-D7018E00BE1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAB232B6-B8C1-4FAB-92E6-D7018E00BE1F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
