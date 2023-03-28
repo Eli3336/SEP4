@@ -5,7 +5,6 @@ namespace Domain.Models;
 
 public class SensorValue
 {
-    [Key]
     public int valueId;
     public double value { get; set; }
     public DateTime timeStamp { get; set; }
