@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EfcDataAccess.Migrations
 {
     [DbContext(typeof(HospitalContext))]
-    [Migration("20230327150415_InitialCreate")]
+    [Migration("20230328180216_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

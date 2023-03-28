@@ -31,18 +31,17 @@ public class SensorEfcDao : ISensorDao
     public async Task<IEnumerable<SensorValue>> GetSensorsValuesAsync(int? roomId)
     {
         
-         
-         var result2 = context.Rooms
-             .Include(r => r.Sensors)
-             .ThenInclude(s => s.Values)
-             .Where(r => r.Id == roomId) 
-             .SelectMany(r => r.Sensors) 
-             .SelectMany(s => s.Values) 
-             .AsQueryable();
-         
-         IEnumerable<SensorValue> result = await result2.ToListAsync();
+        Room? roomToGet = await context.Rooms.FindAsync(roomId);
 
-         return result;
+        List<SensorValue> sensorValues = new List<SensorValue>();
+
+        foreach (Sensor sensor in roomToGet.Sensors)
+        {
+            sensorValues.Add(sensor.Values.LastOrDefault());
+        }
+
+        return sensorValues;
+
     }
 
 }
