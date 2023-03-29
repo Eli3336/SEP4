@@ -46,4 +46,19 @@ public class SensorsController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+
+    [HttpGet("{sensorId:int}")]
+    public async Task<ActionResult<IEnumerable<SensorValue>>> GetLogOfSensorValuesAsync([FromRoute] int? sensorId)
+    {
+        try
+        {
+            IEnumerable<SensorValue> log = await sensorLogic.GetLogOfSensorValuesAsync(sensorId);
+            return Ok(log);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
 }
