@@ -27,8 +27,14 @@ public class SensorLogic : ISensorLogic
         return created;
     }
 
-    public Task<IEnumerable<SensorValue>> GetSensorsValuesAsync(int? roomId)
+    public async Task<IEnumerable<SensorValue>> GetSensorsValuesAsync(int? roomId)
     {
-        return sensorDao.GetSensorsValuesAsync(roomId);
+        return await sensorDao.GetSensorsValuesAsync(roomId);
     }
+
+    public async Task<IEnumerable<SensorValue>> GetLogOfSensorValuesAsync(int? sensorId)
+    {
+        return await sensorDao.GetLogOfSensorValuesAsync(sensorId);
+    }
+
 }

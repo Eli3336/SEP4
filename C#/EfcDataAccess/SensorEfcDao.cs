@@ -65,4 +65,15 @@ public class SensorEfcDao : ISensorDao
 
     }
 
+    public async Task<IEnumerable<SensorValue>> GetLogOfSensorValuesAsync(int? sensorId)
+    {
+        Sensor? sensor = await context.Sensors.Include(sensor => sensor.Values)
+            .SingleOrDefaultAsync(sensor => sensor.Id == sensorId);
+        if (sensor != null)
+        {
+            return sensor.Values.AsEnumerable();
+        }
+        else throw new Exception("Sensor with given Id not found.");
+    }
 }
+
