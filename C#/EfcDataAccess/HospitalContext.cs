@@ -8,6 +8,7 @@ public class HospitalContext : DbContext
      public DbSet<Sensor> Sensors { get; set; }
      public DbSet<Room> Rooms { get; set; }
      public DbSet<Patient> Patients { get; set; }
+     public DbSet<SensorValue> SensorValue { get; set; }
 
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -31,21 +31,37 @@ public class SensorEfcDao : ISensorDao
     public async Task<IEnumerable<SensorValue>> GetSensorsValuesAsync(int? roomId)
     {
         List<SensorValue> sensorValues = new List<SensorValue>();
-
         
-        Room? roomToGet = await context.Rooms.FindAsync(roomId);
-
-        if(roomToGet!=null){
-
-        foreach (Sensor sensor in roomToGet.Sensors)
+        Room? roomToGet = await context.Rooms.Include(room => room.Sensors)
+            .SingleOrDefaultAsync(room => room.Id == roomId);
+        if (roomToGet != null)
         {
-            if (sensor.Values.Count != 0)
+            int sensorId1 = roomToGet.Sensors[0].Id;
+            int sensorId2 = roomToGet.Sensors[1].Id;
+            int sensorId3 = roomToGet.Sensors[2].Id;
+
+
+            Sensor? sensor1 = await context.Sensors.Include(sensor => sensor.Values)
+                .SingleOrDefaultAsync(sensor => sensor.Id == sensorId1);
+            Sensor? sensor2 = await context.Sensors.Include(sensor => sensor.Values)
+                .SingleOrDefaultAsync(sensor => sensor.Id == sensorId2);
+            Sensor? sensor3 = await context.Sensors.Include(sensor => sensor.Values)
+                .SingleOrDefaultAsync(sensor => sensor.Id == sensorId3);
+
+            if (sensor1 != null && sensor2 != null && sensor3 != null)
             {
-                sensorValues.Add(sensor.Values.LastOrDefault());
+                sensorValues.Add(sensor1.Values[sensor1.Values.Count - 1]);
+                sensorValues.Add(sensor2.Values[sensor2.Values.Count - 1]);
+                sensorValues.Add(sensor3.Values[sensor3.Values.Count - 1]);
             }
+
+            else throw new Exception("Sensors are null");
+
+
         }
-        }
+
         return sensorValues;
+
 
     }
 
