@@ -30,16 +30,21 @@ public class SensorEfcDao : ISensorDao
 
     public async Task<IEnumerable<SensorValue>> GetSensorsValuesAsync(int? roomId)
     {
+        List<SensorValue> sensorValues = new List<SensorValue>();
+
         
         Room? roomToGet = await context.Rooms.FindAsync(roomId);
 
-        List<SensorValue> sensorValues = new List<SensorValue>();
+        if(roomToGet!=null){
 
         foreach (Sensor sensor in roomToGet.Sensors)
         {
-            sensorValues.Add(sensor.Values.LastOrDefault());
+            if (sensor.Values.Count != 0)
+            {
+                sensorValues.Add(sensor.Values.LastOrDefault());
+            }
         }
-
+        }
         return sensorValues;
 
     }
