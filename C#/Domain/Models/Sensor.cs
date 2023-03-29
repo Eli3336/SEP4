@@ -22,9 +22,9 @@ public class Sensor
 
     public Sensor(string type, double? upBreakpoint, double? downBreakpoint, List<SensorValue> values)
     {
-        Type = type;
-        UpBreakpoint = upBreakpoint;
-        DownBreakpoint = downBreakpoint;
-        Values = values;
+        this.Type = type;
+        this.UpBreakpoint = upBreakpoint;
+        this.DownBreakpoint = downBreakpoint;
+        this.Values = values;
     }
 }
