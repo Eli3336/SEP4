@@ -24,4 +24,15 @@ public class RoomEfcDao : IRoomDao
         Room? room = await context.Rooms.FindAsync(id);
         return room;
     }
+    public IEnumerable<string> GetAllNames()
+    {
+        List<string> names = new List<string>();
+        List<Room> rooms = context.Rooms.ToList();
+
+        for (int i = 0; i < rooms.Count; i++)
+        {
+            names.Add(rooms[i].Name);
+        }
+        return names;
     }
+}

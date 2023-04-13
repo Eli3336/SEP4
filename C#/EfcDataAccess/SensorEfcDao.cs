@@ -26,7 +26,8 @@ public class SensorEfcDao : ISensorDao
     public async Task<Sensor?> GetById(int id)
     {
         Sensor? sensor = await context.Sensors.FindAsync(id);
-        return sensor;    }
+        return sensor;    
+    }
 
     public async Task<IEnumerable<SensorValue>> GetSensorsValuesAsync(int? roomId)
     {
@@ -39,7 +40,6 @@ public class SensorEfcDao : ISensorDao
             int sensorId1 = roomToGet.Sensors[0].Id;
             int sensorId2 = roomToGet.Sensors[1].Id;
             int sensorId3 = roomToGet.Sensors[2].Id;
-
 
             Sensor? sensor1 = await context.Sensors.Include(sensor => sensor.Values)
                 .SingleOrDefaultAsync(sensor => sensor.Id == sensorId1);
@@ -54,15 +54,9 @@ public class SensorEfcDao : ISensorDao
                 sensorValues.Add(sensor2.Values[sensor2.Values.Count - 1]);
                 sensorValues.Add(sensor3.Values[sensor3.Values.Count - 1]);
             }
-
             else throw new Exception("Sensors are null");
-
-
         }
-
         return sensorValues;
-
-
     }
 
     public async Task<IEnumerable<SensorValue>> GetLogOfSensorValuesAsync(int? sensorId)

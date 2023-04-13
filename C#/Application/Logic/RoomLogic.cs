@@ -29,6 +29,7 @@ public class RoomLogic : IRoomLogic
     
         return created;
     }
+
     private void ValidateRoom(RoomCreationDto roomToCreate)
     {
         if (roomToCreate.Capacity < 1)
@@ -48,5 +49,9 @@ public class RoomLogic : IRoomLogic
             throw new ArgumentException("The first sensor is not the humidity one. Please make sure that you have the sensors in the correct order: Temperature, Humidity, CO2; and that there are no misspellings!");
         if (!sensorsInRoom[2].Type.Equals("CO2"))
             throw new ArgumentException("The first sensor is not the CO2 one. Please make sure that you have the sensors in the correct order: Temperature, Humidity, CO2; and that there are no misspellings!");
+    }
+    public IEnumerable<string> GetAllNames()
+    {
+        return roomDao.GetAllNames();
     }
 }
