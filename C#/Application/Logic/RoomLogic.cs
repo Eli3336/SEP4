@@ -20,6 +20,8 @@ public class RoomLogic : IRoomLogic
         Room toCreate = new Room()
         {
             Name = roomToCreate.Name,
+            Capacity = roomToCreate.Capacity,
+            Availability = roomToCreate.Availability,
             Sensors = roomToCreate.Sensors
         };
     
@@ -29,6 +31,14 @@ public class RoomLogic : IRoomLogic
     }
     private void ValidateRoom(RoomCreationDto roomToCreate)
     {
+        if (roomToCreate.Capacity < 1)
+        {
+            throw new ArgumentException("The capacity cannot be smaller than 1");
+        }
+        if (roomToCreate.Availability != "Available" && roomToCreate.Availability != "Under maintenance")
+        {
+            throw new ArgumentException("The room can only be Available or Under maintenance. Please choose one or check for typos!");
+        }
         List<Sensor> sensorsInRoom = roomToCreate.Sensors;
         if (sensorsInRoom.Count != 3)
             throw new ArgumentException("The room has less or more than 3 sensors. Please choose 3 sensors.");

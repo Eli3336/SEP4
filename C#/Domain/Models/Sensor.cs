@@ -14,17 +14,17 @@ public class Sensor
 
     public Sensor(string type, List<SensorValue> values)
     {
-        this.Type = type;
-        this.Values = values;
-        this.UpBreakpoint = null;
-        this.DownBreakpoint = null;
+        Type = type;
+        Values = values;
+        UpBreakpoint = null;
+        DownBreakpoint = null;
     }
 
     public Sensor(string type, double? upBreakpoint, double? downBreakpoint, List<SensorValue> values)
     {
-        this.Type = type;
-        this.UpBreakpoint = upBreakpoint;
-        this.DownBreakpoint = downBreakpoint;
-        this.Values = values;
+        Type = type;
+        UpBreakpoint = upBreakpoint;
+        DownBreakpoint = downBreakpoint;
+        Values = values;
     }
 }

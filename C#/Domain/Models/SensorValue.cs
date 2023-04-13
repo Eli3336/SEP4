@@ -24,7 +24,7 @@ public class SensorValue
         this.valueId = 0;
     }
 
-    public SensorValue(double value, DateTime timeStamp, int valueId)
+    public SensorValue(int valueId, double value, DateTime timeStamp)
     {
         this.value = value;
         this.timeStamp = timeStamp;
