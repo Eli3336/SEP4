@@ -16,6 +16,7 @@ public class Room
         Name = name;
         Capacity = capacity;
         Availability = availability;
-        this.Sensors = sensors;
+        Patients = new List<Patient>();
+        Sensors = sensors;
     }
 }

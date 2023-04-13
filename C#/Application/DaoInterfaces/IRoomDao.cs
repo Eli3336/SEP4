@@ -6,4 +6,5 @@ public interface IRoomDao
 {
     Task<Room> CreateAsync(Room room);
     Task<Room?> GetById(int id);
+    IEnumerable<string> GetAllNames();
 }

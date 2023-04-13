@@ -20,6 +20,8 @@ public class RoomLogic : IRoomLogic
         Room toCreate = new Room()
         {
             Name = roomToCreate.Name,
+            Capacity = roomToCreate.Capacity,
+            Availability = roomToCreate.Availability,
             Sensors = roomToCreate.Sensors
         };
     
@@ -27,8 +29,17 @@ public class RoomLogic : IRoomLogic
     
         return created;
     }
+
     private void ValidateRoom(RoomCreationDto roomToCreate)
     {
+        if (roomToCreate.Capacity < 1)
+        {
+            throw new ArgumentException("The capacity cannot be smaller than 1");
+        }
+        if (roomToCreate.Availability != "Available" && roomToCreate.Availability != "Under maintenance")
+        {
+            throw new ArgumentException("The room can only be Available or Under maintenance. Please choose one or check for typos!");
+        }
         List<Sensor> sensorsInRoom = roomToCreate.Sensors;
         if (sensorsInRoom.Count != 3)
             throw new ArgumentException("The room has less or more than 3 sensors. Please choose 3 sensors.");
@@ -38,5 +49,9 @@ public class RoomLogic : IRoomLogic
             throw new ArgumentException("The first sensor is not the humidity one. Please make sure that you have the sensors in the correct order: Temperature, Humidity, CO2; and that there are no misspellings!");
         if (!sensorsInRoom[2].Type.Equals("CO2"))
             throw new ArgumentException("The first sensor is not the CO2 one. Please make sure that you have the sensors in the correct order: Temperature, Humidity, CO2; and that there are no misspellings!");
+    }
+    public IEnumerable<string> GetAllNames()
+    {
+        return roomDao.GetAllNames();
     }
 }
