@@ -7,6 +7,7 @@ using WebAPI.Gateway;
 
 var builder = WebApplication.CreateBuilder(args);
 LoriotClient client = LoriotClient.Instance;
+
 // Add services to the container.
 
 builder.Services.AddControllers();

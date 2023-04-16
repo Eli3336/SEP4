@@ -8,17 +8,6 @@ namespace WebAPI.IoTGate.Services
     public class MessageProcessor
     {
 
-       /* public Measurement CreateMeasurement(IoTStruct data)
-        {
-            var measurement = new Measurement();
-            measurement.Temperature = CreateTemperature(data).TemperatureInDegrees;
-            measurement.Humidity = CreateHumidity(data).RelativeHumidity;
-            measurement.CO2 = CreateCo2(data).CO2Level;
-            measurement.Light = CreateLight(data).LightLevel;
-            measurement.TimeStamp = DateTimeOffset.FromUnixTimeMilliseconds(data.ts).DateTime;
-            return measurement;
-        }
-        */
        
         public SensorValue CreateValue(IoTStruct message)
         {
@@ -38,7 +27,6 @@ namespace WebAPI.IoTGate.Services
             {
                 value = number,
                 timeStamp = DateTimeOffset.FromUnixTimeMilliseconds(message.ts).DateTime,
-                EUI = message.EUI
             }; 
         }
 
