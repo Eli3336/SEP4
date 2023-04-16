@@ -1,8 +1,10 @@
-﻿namespace WebAPI.IoTGate.Loriot;
+﻿using Domain.Models;
+
+namespace WebAPI.IoTGate.Loriot;
 
 public class LoriotImpl: ILoriotTasks
 {
-    public Task AddMeasurement(Measurement measurement, string eui)
+    public Task AddMeasurement(SensorValue sensorValue, string eui)
     {
         throw new NotImplementedException();
     }

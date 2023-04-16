@@ -16,9 +16,9 @@ namespace WebAPI.Gateway.Service
             _loriotTasks = new LoriotImpl();
             _processor = new MessageProcessor();
         }
-     
-        
-        
+
+
+
         public async Task HandleData(IoTStruct data)
         {
             switch (data.cmd)

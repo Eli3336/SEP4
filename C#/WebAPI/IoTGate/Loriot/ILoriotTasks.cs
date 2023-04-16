@@ -1,6 +1,8 @@
-﻿namespace WebAPI.IoTGate.Loriot;
+﻿using Domain.Models;
+
+namespace WebAPI.IoTGate.Loriot;
 
 public interface ILoriotTasks
 {
-    Task AddMeasurement(Measurement measurement, string eui);
+    Task AddMeasurement(SensorValue sensorValue, string eui);
 }
