@@ -5,12 +5,16 @@ namespace Domain.Models;
 public class Sensor
 {
     public int Id { get; set; }
-    public String Type { get; set; }
+    public string Type { get; set; }
     public double? UpBreakpoint { get; set; }
     public double? DownBreakpoint { get; set; }
     public List<SensorValue> Values { get; set; }
 
-    public Sensor() {}
+    public Sensor()
+    {
+        Type = "";
+        Values = new List<SensorValue>();
+    }
 
     public Sensor(string type, List<SensorValue> values)
     {
