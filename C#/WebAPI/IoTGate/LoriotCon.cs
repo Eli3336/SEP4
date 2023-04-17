@@ -15,7 +15,9 @@ namespace WebAPI.Gateway
         private WebSocket _socket;
 
         private string Url =
-            "wss://iotnet.cibicom.dk/app?token=vnoUBwAAABFpb3RuZXQuY2liaWNvbS5ka54Zx4fqYp5yzAQtnGzDDUw=";
+            "wss://iotnet.cibicom.dk/app?token=vnoVQgAAABFpb3RuZXQudGVyYWNvbS5kawcinBwAkIjcdx98hF2KBE8=";
+        
+        
 
         private ILoriotServ _loriotServ;
         
