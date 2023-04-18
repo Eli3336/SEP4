@@ -46,4 +46,20 @@ public class RoomsController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+    
+    
+    [HttpGet("{name}")]
+    public async Task<ActionResult<Room?>> GetRoomDetailsByNameAsync([FromRoute] string name)
+    {
+        try
+        {
+            Room? result = await roomLogic.GetRoomDetailsByNameAsync(name);
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
 }
