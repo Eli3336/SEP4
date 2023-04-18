@@ -5,12 +5,8 @@ public class Request
     public int Id { get; set; }
     public string Type { get; set; }
     public string Content { get; set; }
-
-    public Request()
-    {
-        Type = "";
-        Content = "";
-    }
+    
+    public Request(){}
 
     public Request(string type, string content)
     {
