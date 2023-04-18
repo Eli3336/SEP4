@@ -47,7 +47,6 @@ public class RoomsController : ControllerBase
         }
     }
 
-
     [HttpGet ("{id:int}")]
 
     public async Task<ActionResult<Room?>> GetRoomDetailsByIdAsync([FromRoute] int id)
@@ -63,4 +62,5 @@ public class RoomsController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+
 }

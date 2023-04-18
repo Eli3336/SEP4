@@ -1,6 +1,5 @@
 ﻿using Application.DaoInterfaces;
 using Domain.Models;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EfcDataAccess;
@@ -36,7 +35,6 @@ public class RoomEfcDao : IRoomDao
         }
         return names;
     }
-
     public async Task<Room?> GetRoomDetailsByIdAsync(int id)
     {
         Room? room = await context.Rooms.Include(room => room.Sensors).Include(room => room.Patients).SingleOrDefaultAsync(room => room.Id==id);
