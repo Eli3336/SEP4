@@ -55,13 +55,13 @@ public class RoomLogic : IRoomLogic
         return roomDao.GetAllNames();
     }
 
-    public async Task<Room?> GetRoomDetailsByNameAsync(string name)
+    public async Task<Room?> GetRoomDetailsByIdAsync(int id)
     {
-        Room? room = await roomDao.GetRoomDetailsByNameAsync(name);
+        Room? room = await roomDao.GetRoomDetailsByIdAsync(id);
         if (room == null)
         {
             throw new Exception(
-                $"Room with name {name} not found!");
+                $"Room with the id {id} not found!");
         }
         return room;
     }

@@ -8,5 +8,5 @@ public interface IRoomLogic
     Task<Room> CreateAsync(RoomCreationDto roomToCreate);
     IEnumerable<string> GetAllNames();
 
-    Task<Room?> GetRoomDetailsByNameAsync(string name);
+    Task<Room?> GetRoomDetailsByIdAsync(int id);
 }
