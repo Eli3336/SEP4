@@ -54,4 +54,16 @@ public class RoomLogic : IRoomLogic
     {
         return roomDao.GetAllNames();
     }
+
+    public async Task<Room?> GetRoomDetailsByNameAsync(string name)
+    {
+        Room? room = await roomDao.GetRoomDetailsByNameAsync(name);
+        if (room == null)
+        {
+            throw new Exception(
+                $"Room with name {name} not found!");
+        }
+        return room;
+    }
+
 }

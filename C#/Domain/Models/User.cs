@@ -7,7 +7,12 @@ public class User
     public string Password { get; set; }
     public string PhoneNumber { get; set; }
 
-    public User(){}
+    public User()
+    {
+        Name = "";
+        Password = "";
+        PhoneNumber = "";
+    }
 
     public User(string name, string password, string phoneNumber)
     {
