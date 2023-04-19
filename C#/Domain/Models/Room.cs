@@ -9,7 +9,10 @@ public class Room
     public List<Patient> Patients { get; set; }
     public List <Sensor> Sensors { get; set; }
 
-    public Room() {}
+    public Room()
+    {
+        Patients = new List<Patient>();
+    }
 
     public Room(string name, int capacity, string availability, List<Sensor> sensors)
     {
