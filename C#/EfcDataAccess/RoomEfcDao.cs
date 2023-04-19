@@ -1,5 +1,6 @@
 ﻿using Application.DaoInterfaces;
 using Domain.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EfcDataAccess;
