@@ -27,12 +27,4 @@
       <ProjectReference Include="..\WebAPI\WebAPI.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="DomainTesting" />
-      <Folder Include="DomainTests" />
-      <Folder Include="EfcTests" />
-      <Folder Include="LogicTests" />
-      <Folder Include="WebAPITests" />
-    </ItemGroup>
-
 </Project>
