@@ -1,0 +1,24 @@
+{
+  "name": "buildingplan",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "next": "13.2.4",
+    "next-images": "^1.8.4",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-svg": "^16.1.7",
+    "react-tooltip": "^5.10.1",
+    "svgo": "^3.0.2"
+  },
+  "devDependencies": {
+    "@svgr/webpack": "^7.0.0"
+  }
+}
