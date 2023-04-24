@@ -2,15 +2,13 @@
 
 public class Patient
 {
+     public int Id { get; set; }
     public string Name { get; set; }
-
-    public int Id { get; set; }
-
+    
     public Patient(){}
 
-    public Patient(string name, int id)
+    public Patient(string name)
     {
         Name = name;
-        this.Id = id;
     }
 }

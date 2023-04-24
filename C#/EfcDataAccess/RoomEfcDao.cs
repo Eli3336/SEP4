@@ -1,5 +1,6 @@
 ﻿using Application.DaoInterfaces;
 using Domain.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EfcDataAccess;
@@ -24,4 +25,32 @@ public class RoomEfcDao : IRoomDao
         Room? room = await context.Rooms.FindAsync(id);
         return room;
     }
+    public IEnumerable<string> GetAllNames()
+    {
+        List<string> names = new List<string>();
+        List<Room> rooms = context.Rooms.ToList();
+
+        for (int i = 0; i < rooms.Count; i++)
+        {
+            names.Add(rooms[i].Name);
+        }
+        return names;
     }
+    public async Task<Room?> GetRoomDetailsByIdAsync(int id)
+    {
+        Room? room = await context.Rooms.Include(room => room.Sensors).Include(room => room.Patients).SingleOrDefaultAsync(room => room.Id==id);
+        return room;
+    }
+
+    public async Task<Patient> CreateAndAddToRoomAsync(int roomId, Patient patient)
+    {
+        Room? room = await context.Rooms.FindAsync(roomId);
+        if (room == null)
+            throw new Exception($"Room with id {roomId} not found");
+        EntityEntry<Patient> newPatient = await context.Patients.AddAsync(patient);
+        context.Rooms.Find(roomId).Patients.Add(patient);
+        await context.SaveChangesAsync();
+        return newPatient.Entity;
+    }
+    
+}

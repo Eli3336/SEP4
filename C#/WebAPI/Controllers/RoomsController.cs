@@ -31,4 +31,36 @@ public class RoomsController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+    
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<string>>> GetAllRoomsName()
+    {
+        try
+        {
+            IEnumerable<string> names = roomLogic.GetAllNames();
+            return Ok(names);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+
+    [HttpGet ("{id:int}")]
+
+    public async Task<ActionResult<Room?>> GetRoomDetailsByIdAsync([FromRoute] int id)
+    {
+        try
+        {
+            Room? result = await roomLogic.GetRoomDetailsByIdAsync(id);
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+
 }

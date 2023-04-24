@@ -4,8 +4,8 @@ namespace Domain.DTOs;
 
 public class SensorCreationDto
 {
-    public string Type { get; }
-    public List<SensorValue> Values { get; }
+    public string Type { get; set; }
+    public List<SensorValue> Values { get; set; }
 
     public SensorCreationDto(string type)
     {
@@ -14,5 +14,10 @@ public class SensorCreationDto
         Values.Add(new SensorValue(20.4));
         Values.Add(new SensorValue(35));
         Values.Add(new SensorValue(0.2));
+    }
+
+    public SensorCreationDto()
+    {
+        
     }
 }
