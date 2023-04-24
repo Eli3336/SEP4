@@ -44,7 +44,16 @@
 .header h2 {
   color: #000000; /* Change text color to black */
 }
-
+tr {
+  display: block;
+  float: left;
+}
+th,td {
+  display: block;
+  text-align: left;
+  padding: 6px;
+  border: 1px solid #ccc;
+}
 .content {
   font-size: 18px;
   color: #000000; /* Change text color to black */
