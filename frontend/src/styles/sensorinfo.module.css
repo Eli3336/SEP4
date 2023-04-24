@@ -1,0 +1,12 @@
+.container {
+  margin-top: 1rem;
+}
+
+.sensorList {
+  list-style-type: none;
+  padding: 0;
+}
+
+.sensorListItem {
+  margin-bottom: 0.5rem;
+}

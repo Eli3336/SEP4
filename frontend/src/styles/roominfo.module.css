@@ -1,0 +1,61 @@
+.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20%; /* Change width to 40% */
+  height: 50%; /* Change height to 50% */
+  background-color: #f1f1f1; /* Change background color to light grey */
+  border-radius: 10px;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.close {
+  background-color: transparent; /* Remove background color */
+  border: none;
+  color: #000000; /* Change color to white */
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  color: #000000; /* Change text color to black *
+}
+
+.header h2 {
+  color: #000000; /* Change text color to black */
+}
+tr {
+  display: block;
+  float: left;
+}
+th,td {
+  display: block;
+  text-align: left;
+  padding: 6px;
+  border: 1px solid #ccc;
+}
+.content {
+  font-size: 18px;
+  color: #000000; /* Change text color to black */
+  font-family: "Roboto", sans-serif; /* Add the "Roboto" font */
+}
