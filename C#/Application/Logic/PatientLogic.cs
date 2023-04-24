@@ -8,10 +8,12 @@ namespace Application.Logic;
 public class PatientLogic : IPatientLogic
 {
     private readonly IRoomDao roomDao;
+    private readonly IPatientDao patientDao;
 
-    public PatientLogic(IRoomDao roomDao)
+    public PatientLogic(IRoomDao roomDao, IPatientDao patientDao)
     {
         this.roomDao = roomDao;
+        this.patientDao = patientDao;
     }
     public async Task<Patient> CreateAndAddToRoomAsync(int roomId, PatientCreationDto dto)
     {
@@ -31,5 +33,28 @@ public class PatientLogic : IPatientLogic
             throw new ArgumentException("The name cannot be smaller than 3 characters!");
         if (dto.Name.Length > 255)
             throw new ArgumentException("The name is too long!");
+    }
+    
+    public async Task DeleteAsync(int id)
+    {
+        Patient? patient = await patientDao.GetByIdAsync(id);
+        if (patient == null)
+        {
+            throw new Exception($"Patient with ID {id} was not found!");
+        }
+
+
+        await patientDao.DeleteAsync(id);
+    }
+    
+    public async Task<Patient?> GetByIdAsync(int id)
+    {
+        Patient? product = await patientDao.GetByIdAsync(id);
+        if (product == null)
+        {
+            throw new Exception(
+                $"Patient with id {id} not found!");
+        }
+        return product;
     }
 }
