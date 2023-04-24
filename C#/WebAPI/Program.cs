@@ -19,7 +19,7 @@ builder.Services.AddScoped<ISensorDao, SensorEfcDao>();
 builder.Services.AddScoped<ISensorLogic, SensorLogic>();
 
 builder.Services.AddScoped<IPatientLogic, PatientLogic>();
-
+builder.Services.AddScoped<IPatientDao, PatientEfcDao>();
 builder.Services.AddScoped<IRoomDao, RoomEfcDao>();
 builder.Services.AddScoped<IRoomLogic, RoomLogic>();
 
