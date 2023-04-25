@@ -59,7 +59,7 @@
     <com_atmel_avrdbg_tool_atmelice>
       <ToolOptions>
         <InterfaceProperties>
-          <JtagDbgClock>8000</JtagDbgClock>
+          <JtagDbgClock>1962885</JtagDbgClock>
         </InterfaceProperties>
         <InterfaceName>JTAG</InterfaceName>
       </ToolOptions>
@@ -67,7 +67,7 @@
       <ToolNumber>J41800025230</ToolNumber>
       <ToolName>Atmel-ICE</ToolName>
     </com_atmel_avrdbg_tool_atmelice>
-    <avrtoolinterfaceclock>8000</avrtoolinterfaceclock>
+    <avrtoolinterfaceclock>1962885</avrtoolinterfaceclock>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <ToolchainSettings>
@@ -300,9 +300,6 @@
     <Compile Include="LoRaWANHandler.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="main_example.c">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="_c\CO2Task.c">
       <SubType>compile</SubType>
     </Compile>
@@ -372,6 +369,9 @@
     <None Include="FreeRTOS\src\LICENSE.md">
       <SubType>compile</SubType>
     </None>
+    <Compile Include="main.c">
+      <SubType>compile</SubType>
+    </Compile>
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
 </Project>
