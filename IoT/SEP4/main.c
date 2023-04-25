@@ -22,7 +22,6 @@
 
 // define two Tasks
 void task1( void *pvParameters );
-void task2( void *pvParameters );
 
 // define semaphore handle
 SemaphoreHandle_t xTestSemaphore;
@@ -53,13 +52,6 @@ void create_tasks_and_semaphores(void)
 	,  2  // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
 	,  NULL );
 
-	xTaskCreate(
-	task2
-	,  "Task2"  // A name just for humans
-	,  configMINIMAL_STACK_SIZE  // This stack size can be checked & adjusted by reading the Stack Highwater
-	,  NULL
-	,  1  // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
-	,  NULL );
 }
 
 /*-----------------------------------------------------------*/
@@ -80,22 +72,7 @@ void task1( void *pvParameters )
 }
 
 /*-----------------------------------------------------------*/
-void task2( void *pvParameters )
-{
-	TickType_t xLastWakeTime;
-	const TickType_t xFrequency = 1000/portTICK_PERIOD_MS; // 1000 ms
 
-	// Initialise the xLastWakeTime variable with the current time.
-	xLastWakeTime = xTaskGetTickCount();
-
-	for(;;)
-	{
-		xTaskDelayUntil( &xLastWakeTime, xFrequency );
-		puts("Task2"); // stdio functions are not reentrant - Should normally be protected by MUTEX
-		puts("message sent");
-		PORTA ^= _BV(PA7);
-	}
-}
 
 /*-----------------------------------------------------------*/
 void initialiseSystem()
@@ -127,8 +104,6 @@ int main(void)
 	/* Replace with your application code */
 	while (1)
 	{
-		puts("message sent");
-		
 	}
 }
 
