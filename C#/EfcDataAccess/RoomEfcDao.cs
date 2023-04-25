@@ -20,11 +20,6 @@ public class RoomEfcDao : IRoomDao
         return newRoom.Entity;
     }
 
-    public Task<Room?> GetByIdAsync(int id)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<Room?> GetById(int id)
     {
         Room? room = await context.Rooms.FindAsync(id);
