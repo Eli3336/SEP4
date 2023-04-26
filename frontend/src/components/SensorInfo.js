@@ -4,11 +4,16 @@ import styles from "@/styles/sensorinfo.module.css";
 const SensorInfo = ({ sensorData }) => {
   return (
     <div className={styles.container}>
-      <h4>Sensors:</h4>
+      <h4>Sensor Logs:</h4>
       <ul className={styles.sensorList}>
         {sensorData?.map((sensor, index) => (
           <li key={index} className={styles.sensorListItem}>
-            {sensor.Type}: {sensor.Values.slice(-1)[0].value}
+            <strong>{sensor.Type}:</strong>
+            {sensor.Values.map((value, idx) => (
+              <div key={idx}>
+                {value.timestamp}: {value.value}
+              </div>
+            ))}
           </li>
         ))}
       </ul>

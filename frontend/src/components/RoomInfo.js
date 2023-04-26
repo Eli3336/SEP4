@@ -4,18 +4,20 @@ import SensorInfo from "./SensorInfo";
 
 const RoomInfo = ({ roomData, onClose }) => {
   const [show, setShow] = useState(true);
+  const [showSensorLog, setShowSensorLog] = useState(false);
 
   const handleClose = () => {
     setShow(false);
     onClose();
   };
 
-  // Debugging
-  console.log("Room data:", roomData);
+  const handleShowSensorLog = () => {
+    setShowSensorLog(!showSensorLog);
+  };
 
   return (
     show &&
-    roomData && ( // Add this check
+    roomData && (
       <div className={styles.container} onClick={handleClose}>
         <div
           className={styles.modal}
@@ -43,8 +45,13 @@ const RoomInfo = ({ roomData, onClose }) => {
                 ))
               )}
             </ul>
-            {/* Add the SensorInfo component */}
-            {/* <SensorInfo sensorData={roomData.Sensors} /> */}
+            <button
+              className={styles.sensorLogButton}
+              onClick={handleShowSensorLog}
+            >
+              {showSensorLog ? "Hide Sensor Log" : "Show Sensor Log"}
+            </button>
+            {showSensorLog && <SensorInfo sensorData={roomData.Sensors} />}
           </div>
         </div>
       </div>
