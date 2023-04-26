@@ -9,4 +9,6 @@ public interface IRoomDao
     Task<Room?> GetRoomDetailsByIdAsync(int id);
     IEnumerable<string> GetAllNames();
     Task<Patient> CreateAndAddToRoomAsync(int roomId, Patient patient);
+    
+    Task RoomUpdateAsync(Room room);
 }

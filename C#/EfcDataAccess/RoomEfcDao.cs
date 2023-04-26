@@ -53,7 +53,13 @@ public class RoomEfcDao : IRoomDao
         return newPatient.Entity;
     }
     
+    public async Task RoomUpdateAsync(Room room)
+    {
+        context.Rooms.Update(room);
+        await context.SaveChangesAsync();        }
+    }
+    
    
     
-    
-}
+
+

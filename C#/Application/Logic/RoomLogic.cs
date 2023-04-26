@@ -66,4 +66,48 @@ public class RoomLogic : IRoomLogic
         return room;
     }
 
+    
+    public async Task RoomUpdateAsync(RoomUpdateDto dto)
+    {
+        Room? existing = await roomDao.GetById(dto.Id);
+        if (existing == null)
+        {
+            throw new Exception($"Room with ID {dto.Id} not found!");
+        }
+        int capacityToUse = dto.Capacity ?? existing.Capacity;
+        string statusToUse = dto.Status ?? existing.Availability;
+        
+        Room updated = new (capacityToUse, statusToUse)
+        {
+            Id = existing.Id,
+            Name = existing.Name,
+            Patients = existing.Patients,
+            Sensors = existing.Sensors
+            
+        };
+        ValidateRoomUpdate(updated);
+        await roomDao.RoomUpdateAsync(updated);
+    }
+    
+    private void ValidateRoomUpdate(Room room)
+    {
+        if (room.Capacity < 1)
+        {
+            throw new ArgumentException("The capacity cannot be smaller than 1");
+        }
+        if (room.Availability != "Available" && room.Availability != "Under maintenance")
+        {
+            throw new ArgumentException("The room can only be Available or Under maintenance. Please choose one or check for typos!");
+        }
+        List<Sensor> sensorsInRoom = room.Sensors;
+        if (sensorsInRoom.Count != 3)
+            throw new ArgumentException("The room has less or more than 3 sensors. Please choose 3 sensors.");
+        if (!sensorsInRoom[0].Type.Equals("Temperature"))
+            throw new ArgumentException("The first sensor is not the temperature one. Please make sure that you have the sensors in the correct order: Temperature, Humidity, CO2; and that there are no misspellings!");
+        if (!sensorsInRoom[1].Type.Equals("Humidity"))
+            throw new ArgumentException("The first sensor is not the humidity one. Please make sure that you have the sensors in the correct order: Temperature, Humidity, CO2; and that there are no misspellings!");
+        if (!sensorsInRoom[2].Type.Equals("CO2"))
+            throw new ArgumentException("The first sensor is not the CO2 one. Please make sure that you have the sensors in the correct order: Temperature, Humidity, CO2; and that there are no misspellings!");
+    }
+   
 }
