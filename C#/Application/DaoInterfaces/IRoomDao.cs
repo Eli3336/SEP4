@@ -11,4 +11,7 @@ public interface IRoomDao
     Task<Patient> CreateAndAddToRoomAsync(int roomId, Patient patient);
     
     Task RoomUpdateAsync(Room room);
+    
+    Task<Room?> GetByIdToUpdateAsync(int? id);
+
 }

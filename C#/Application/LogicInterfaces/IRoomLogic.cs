@@ -9,6 +9,6 @@ public interface IRoomLogic
     IEnumerable<string> GetAllNames();
     Task<Room?> GetRoomDetailsByIdAsync(int id);
     
-    Task RoomUpdateAsync(RoomUpdateDto room);
+    Task RoomUpdateAsync(int id, int capacity, string availability);
 
 }

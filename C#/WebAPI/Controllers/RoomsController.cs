@@ -63,12 +63,12 @@ public class RoomsController : ControllerBase
         }
     }
     
-    [HttpPatch]
-    public async Task<ActionResult> RoomUpdateAsync([FromBody] RoomUpdateDto dto)
+    [HttpPatch("{id:int}")]
+    public async Task<ActionResult> RoomUpdateAsync([FromRoute] int id, int capacity, string availability)
     {
         try
         {
-            await roomLogic.RoomUpdateAsync(dto);
+            await roomLogic.RoomUpdateAsync(id, capacity, availability);
             return Ok();
         }
         catch (Exception e)
