@@ -36,6 +36,10 @@ public class RoomLogic : IRoomLogic
         {
             throw new ArgumentException("The capacity cannot be smaller than 1");
         }
+        if (roomToCreate.Capacity > 3)
+        {
+            throw new ArgumentException("The capacity cannot be bigger than 3");
+        }
         if (roomToCreate.Availability != "Available" && roomToCreate.Availability != "Under maintenance")
         {
             throw new ArgumentException("The room can only be Available or Under maintenance. Please choose one or check for typos!");
@@ -66,4 +70,47 @@ public class RoomLogic : IRoomLogic
         return room;
     }
 
+    
+    public async Task RoomUpdateAsync(int id, int capacity, string availability)
+    {
+        Room? existing = await roomDao.GetByIdToUpdateAsync(id);
+        if (existing == null)
+        {
+            throw new Exception($"Room with ID {id} not found!");
+        }
+        
+        RoomUpdateDto dto = new RoomUpdateDto(id, capacity, availability);
+
+        int capacityToUse = dto.Capacity ?? existing.Capacity;
+        string statusToUse = dto.Status ?? existing.Availability;
+        
+        
+        Room updated = new (capacityToUse, statusToUse)
+        {
+            Id = existing.Id,
+            Name = existing.Name,
+            Patients = existing.Patients,
+            Sensors = existing.Sensors
+            
+        };
+        ValidateRoomUpdate(updated);
+        await roomDao.RoomUpdateAsync(updated);
+    }
+    
+    private void ValidateRoomUpdate(Room room)
+    {
+        if (room.Capacity < 1)
+        {
+            throw new ArgumentException("The capacity cannot be smaller than 1");
+        }
+        if (room.Capacity > 3)
+        {
+            throw new ArgumentException("The capacity cannot be bigger than 3");
+        }
+        if (room.Availability != "Available" && room.Availability != "Under maintenance")
+        {
+            throw new ArgumentException("The room can only be Available or Under maintenance. Please choose one or check for typos!");
+        }
+    }
+   
 }

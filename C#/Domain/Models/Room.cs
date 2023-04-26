@@ -22,4 +22,10 @@ public class Room
         Patients = new List<Patient>();
         Sensors = sensors;
     }
+
+    public Room(int capacity, String availability)
+    {
+        this.Capacity = capacity;
+        this.Availability = availability;
+    }
 }
