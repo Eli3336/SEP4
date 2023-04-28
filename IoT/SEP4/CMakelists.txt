@@ -1,0 +1,21 @@
+cmake_minimum_required(VERSION 3.10)
+project(MyProject CXX C)
+
+# Included for debugging
+set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g")
+
+file(GLOB SRC_FILES "*.c") # This is not good practice. Its better to add the source files
+set(SOURCES
+    ${SRC_FILES}
+)
+include_directories("C:\\Denmark studies\\4th semester\\sep4IOT\\GitHub\\SEP4\\IoT\\SEP4\\_h")
+
+# Add the header files in this folder
+file(GLOB H_FILES "*.h")
+# yeah, quick and dirty
+set(HEADERS ${H_FILES} )
+# Create the executable
+add_executable(MyProject ${SRC_FILES} ${HEADERS})
+# Add the headers directory to include path #include_directories(${CMAKE_CURRENT_SOURCE_DIR})
