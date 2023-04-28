@@ -62,5 +62,20 @@ public class RoomsController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+    
+    [HttpPatch("{id:int}")]
+    public async Task<ActionResult> RoomUpdateAsync([FromRoute] int id, int capacity, string availability)
+    {
+        try
+        {
+            await roomLogic.RoomUpdateAsync(id, capacity, availability);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
 
 }
