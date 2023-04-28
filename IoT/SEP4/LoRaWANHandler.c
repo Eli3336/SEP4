@@ -61,6 +61,7 @@ static void _lora_setup(void)
 
 	// Set receiver window1 delay to 500 ms - this is needed if down-link messages will be used
 	printf("Set Receiver Delay: %d ms >%s<\n", 500, lora_driver_mapReturnCodeToText(lora_driver_setReceiveDelay(500)));
+	printf("something");
 
 	// Join the LoRaWAN
 	uint8_t maxJoinTriesLeft = 10;
