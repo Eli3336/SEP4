@@ -7,9 +7,8 @@ public class Patient
     
     public Patient(){}
 
-    public Patient(int id, string name)
+    public Patient(string name)
     {
-        Id = id;
         Name = name;
     }
 }

@@ -301,9 +301,6 @@
     <Compile Include="LoRaWANHandler.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="main_example.c">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="_c\CO2Task.c">
       <SubType>compile</SubType>
     </Compile>
@@ -379,6 +376,9 @@
     <None Include="FreeRTOS\src\LICENSE.md">
       <SubType>compile</SubType>
     </None>
+    <Compile Include="main.c">
+      <SubType>compile</SubType>
+    </Compile>
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
 </Project>

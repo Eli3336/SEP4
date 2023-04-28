@@ -1,5 +1,6 @@
 ﻿
 
+using Domain.DTOs;
 using Domain.Models;
 using WebAPI.IoTGate.Model;
 
@@ -9,7 +10,7 @@ namespace WebAPI.IoTGate.Services
     {
 
        
-        public SensorValue CreateValue(IoTStruct message)
+        public SensorValueDto CreateTemperature(IoTStruct message)
         {
             String hexString = message.data;
             
@@ -23,9 +24,33 @@ namespace WebAPI.IoTGate.Services
             double number = (dec + (point / 100.0));
             Console.WriteLine($"Number: {number}");
             
-            return new()
+            return new ()
             {
                 value = number,
+                timeStamp = DateTimeOffset.FromUnixTimeMilliseconds(message.ts).DateTime,
+            }; 
+        }
+        
+        public SensorValueDto CreateHumidity(IoTStruct message)
+        {
+            String hexString = message.data;
+            //Byte[2]
+            int humidity = int.Parse(hexString.Substring(4,2), System.Globalization.NumberStyles.HexNumber);
+            return new SensorValueDto()
+            {
+                value = humidity,
+                timeStamp = DateTimeOffset.FromUnixTimeMilliseconds(message.ts).DateTime,
+            }; 
+        }
+        
+        public SensorValueDto CreateCo2(IoTStruct message)
+        {
+            String hexString = message.data;
+            int co2Level = int.Parse(hexString.Substring(6,4), System.Globalization.NumberStyles.HexNumber);
+            
+            return new()
+            {
+                value = co2Level,
                 timeStamp = DateTimeOffset.FromUnixTimeMilliseconds(message.ts).DateTime,
             }; 
         }

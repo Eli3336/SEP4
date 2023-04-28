@@ -74,7 +74,7 @@ static void _lora_setup(void)
 			// Make the red led pulse to tell something went wrong
 			status_leds_longPuls(led_ST1); // OPTIONAL
 			// Wait 5 sec and lets try again
-			vTaskDelay(pdMS_TO_TICKS(5000UL));
+			vTaskDelay(pdMS_TO_TICKS(500UL));
 		}
 		else
 		{
