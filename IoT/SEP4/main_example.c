@@ -92,6 +92,7 @@ void task2( void *pvParameters )
 	{
 		xTaskDelayUntil( &xLastWakeTime, xFrequency );
 		puts("Task2"); // stdio functions are not reentrant - Should normally be protected by MUTEX
+		puts("message sent");
 		PORTA ^= _BV(PA7);
 	}
 }
@@ -126,6 +127,8 @@ int main(void)
 	/* Replace with your application code */
 	while (1)
 	{
+		puts("message sent");
+		
 	}
 }
 

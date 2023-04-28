@@ -26,8 +26,12 @@ namespace WebAPI.Gateway.Service
                 case "rx":
                 {
                    
-                    var measurement = _processor.CreateValue(data);
-                    await _loriotTasks.AddMeasurement(measurement, data.EUI);
+                    var temperature = _processor.CreateTemperature(data);
+                    var humidity = _processor.CreateHumidity(data);
+                    var co2 = _processor.CreateCo2(data);
+                    await _loriotTasks.AddTemperature(temperature, data.EUI);
+                    await _loriotTasks.AddHumidity(humidity, data.EUI);
+                    await _loriotTasks.AddCo2(co2, data.EUI);
                     break;
                 }
             }

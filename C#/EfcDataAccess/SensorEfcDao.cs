@@ -35,7 +35,7 @@ public class SensorEfcDao : ISensorDao
         
         Room? roomToGet = await context.Rooms.Include(room => room.Sensors)
             .SingleOrDefaultAsync(room => room.Id == roomId);
-        if (roomToGet != null)
+        if (roomToGet != null && roomToGet.Sensors.Count>0)
         {
             int sensorId1 = roomToGet.Sensors[0].Id;
             int sensorId2 = roomToGet.Sensors[1].Id;
@@ -56,6 +56,10 @@ public class SensorEfcDao : ISensorDao
             }
             else throw new Exception("Sensors are null");
         }
+        else
+        {
+            throw new Exception("Something went wrong. Either the room does not exist, or it doesn't have sensors!");
+        }
         return sensorValues;
     }
 
@@ -69,5 +73,7 @@ public class SensorEfcDao : ISensorDao
         }
         else throw new Exception("Sensor with given Id not found.");
     }
+    
+    
 }
 
