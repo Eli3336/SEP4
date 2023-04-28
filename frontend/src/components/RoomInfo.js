@@ -1,22 +1,37 @@
-import { useState } from "react";
-import styles from "@/styles/roominfo.module.css";
+import React, { useState, useEffect } from "react";
+import styles from "../styles/RoomInfo.module.css";
 import SensorInfo from "./SensorInfo";
+import { fetchRoomDetailsById } from "@/api";
 
-const RoomInfo = ({ roomData, onClose }) => {
-  const [show, setShow] = useState(true);
+const RoomInfo = ({ roomId, onClose }) => {
+  const [roomData, setRoomData] = useState(null);
   const [showSensorLog, setShowSensorLog] = useState(false);
 
+  useEffect(() => {
+    async function fetchRoomData() {
+      try {
+        const roomDetails = await fetchRoomDetailsById(roomId);
+        setRoomData(roomDetails);
+        console.log("Room data:", roomDetails);
+      } catch (error) {
+        console.error("Error fetching room data:", error);
+      }
+    }
+
+    if (roomId) {
+      fetchRoomData();
+    }
+  }, [roomId]);
+
   const handleClose = () => {
-    setShow(false);
     onClose();
   };
 
-  const handleShowSensorLog = () => {
+  const handleToggleSensorLog = () => {
     setShowSensorLog(!showSensorLog);
   };
 
   return (
-    show &&
     roomData && (
       <div className={styles.container} onClick={handleClose}>
         <div
@@ -25,33 +40,47 @@ const RoomInfo = ({ roomData, onClose }) => {
             e.stopPropagation();
           }}
         >
-          <div className={styles.header}>
-            <h3>Room Information</h3>
-            <button className={styles.close} onClick={handleClose}>
-              X
-            </button>
+          <div className={styles.leftSection}>
+            <div className={styles.content}>
+              <h2>{roomData.name}</h2>
+              <p>Capacity: {roomData.capacity}</p>
+              <p>Availability: {roomData.availability}</p>
+              <h4>Sensor Data:</h4>
+              {roomData.sensors &&
+                roomData.sensors.map((sensor) => (
+                  <p key={sensor.id}>
+                    {sensor.type}:{" "}
+                    {sensor.values && sensor.values.length > 0
+                      ? sensor.values[sensor.values.length - 1].value
+                      : "N/A"}
+                    {sensor.type === "Temperature"
+                      ? "°C"
+                      : sensor.type === "Humidity"
+                      ? "%"
+                      : "ppm"}
+                  </p>
+                ))}
+              <h4>Patients:</h4>
+              <ul>
+                {roomData.patients && roomData.patients.length === 0 ? (
+                  <li>No patients assigned</li>
+                ) : (
+                  roomData.patients &&
+                  roomData.patients.map((patient, index) => (
+                    <li key={index}>{patient.name}</li>
+                  ))
+                )}
+              </ul>
+            </div>
           </div>
-          <div className={styles.content}>
-            <p>Temperature: {roomData.temperature}°C</p>
-            <p>Humidity: {roomData.humidity}%</p>
-            <p>CO2: {roomData.co2} ppm</p>
-            <h4>Patients:</h4>
-            <ul>
-              {roomData.patients.length === 0 ? (
-                <li>No patients assigned</li>
-              ) : (
-                roomData.patients.map((patient, index) => (
-                  <li key={index}>{patient}</li>
-                ))
-              )}
-            </ul>
+          <div className={styles.rightSection}>
             <button
+              onClick={handleToggleSensorLog}
               className={styles.sensorLogButton}
-              onClick={handleShowSensorLog}
             >
-              {showSensorLog ? "Hide Sensor Log" : "Show Sensor Log"}
+              {showSensorLog ? "Hide Sensor Logs" : "Show Sensor Logs"}
             </button>
-            {showSensorLog && <SensorInfo sensorData={roomData.Sensors} />}
+            {showSensorLog && <SensorInfo sensors={roomData.sensors} />}
           </div>
         </div>
       </div>

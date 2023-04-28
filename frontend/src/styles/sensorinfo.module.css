@@ -2,35 +2,40 @@
   margin-top: 1rem;
 }
 
-.sensorList {
-  list-style-type: none;
-  padding: 0;
+.sensorTable {
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed;
+  font-family: "Roboto", sans-serif;
 }
 
-.sensorListItem {
-  margin-bottom: 0.5rem;
+.sensorTable th,
+.sensorTable td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+  word-wrap: break-word;
+  color: #000000; /* Add this line to make the text color black /
 }
 
-.showSensorLogs {
-  background-color: #4caf50;
-  border: none;
-  color: white;
-  padding: 5px 10px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 14px;
-  margin: 4px 2px;
-  cursor: pointer;
-  border-radius: 4px;
+.sensorTable th {
+  background-color: #f2f2f2;
+  font-weight: bold;
 }
 
-.sensorLogsList {
-  list-style-type: none;
-  padding: 0;
-  margin-top: 1rem;
+.sensorTable tr:nth-child(even) {
+  background-color: #f9f9f9;
 }
 
-.sensorLogsListItem {
-  margin-bottom: 0.5rem;
+.sensorTable tr:hover {
+  background-color: #ddd;
+}
+
+/ Add these lines to improve the table appearance */}
+.sensorTable {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.sensorTable th {
+  border-bottom: 2px solid #ccc;
 }
