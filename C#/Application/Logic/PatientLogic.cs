@@ -1,5 +1,4 @@
-﻿using System.Security.AccessControl;
-using Application.DaoInterfaces;
+﻿using Application.DaoInterfaces;
 using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.Models;
@@ -74,28 +73,15 @@ public class PatientLogic : IPatientLogic
         } 
         await roomDao.RoomUpdateAsync(room);
     }
-    private bool IsRoomNotFull(int roomId)
-    {
-        bool ok = false;
-        Room? room = roomDao.GetByIdToUpdateAsync(roomId).Result;
-        if (room != null)
-        {
-            int capacity = room.Capacity;
-            int actual = room.Patients.Count;
-            if (actual == capacity - 1)
-                ok = true;
-        }
-        return ok;
-    }
     
     public async Task<Patient?> GetByIdAsync(int id)
     {
-        Patient? product = await patientDao.GetByIdAsync(id);
-        if (product == null)
+        Patient? patient = await patientDao.GetByIdAsync(id);
+        if (patient == null)
         {
             throw new Exception(
                 $"Patient with id {id} not found!");
         }
-        return product;
+        return patient;
     }
 }

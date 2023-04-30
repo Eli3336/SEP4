@@ -14,7 +14,6 @@ public class PatientsController : ControllerBase
     public PatientsController(IPatientLogic patientLogic)
     {
         this.patientLogic = patientLogic;
-      
     }
     
     [HttpPost]

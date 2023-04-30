@@ -1,4 +1,3 @@
-    
 using Application.DaoInterfaces;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;

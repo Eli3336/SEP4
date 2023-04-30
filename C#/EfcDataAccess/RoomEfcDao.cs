@@ -1,5 +1,4 @@
 ﻿using Application.DaoInterfaces;
-using Domain.DTOs;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -55,17 +54,13 @@ public class RoomEfcDao : IRoomDao
         await context.SaveChangesAsync();
 
     }
-    public async  Task<Room?> GetByIdToUpdateAsync(int? id)
+    public async Task<Room?> GetByIdToUpdateAsync(int? id)
     {
         Room? found = await context.Rooms
             .AsNoTracking()
             .SingleOrDefaultAsync(p => p.Id == id);
 
         return found;
-    }
-    public List<Room> GetAllRoomsWithPatientsNotSensors()
-    {
-        return context.Rooms.AsNoTracking().Include(room => room.Patients).ToList();
     }
 }
     

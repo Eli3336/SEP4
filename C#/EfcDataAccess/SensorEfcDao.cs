@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using Application.DaoInterfaces;
+﻿using Application.DaoInterfaces;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -8,9 +7,7 @@ namespace EfcDataAccess;
 
 public class SensorEfcDao : ISensorDao
 {
-
     private readonly HospitalContext context;
-
     public SensorEfcDao(HospitalContext context)
     {
         this.context = context;
@@ -62,7 +59,7 @@ public class SensorEfcDao : ISensorDao
         }
         return sensorValues;
     }
-
+    
     public async Task<IEnumerable<SensorValue>> GetLogOfSensorValuesAsync(int? sensorId)
     {
         Sensor? sensor = await context.Sensors.Include(sensor => sensor.Values)
@@ -73,7 +70,5 @@ public class SensorEfcDao : ISensorDao
         }
         else throw new Exception("Sensor with given Id not found.");
     }
-    
-    
 }
 

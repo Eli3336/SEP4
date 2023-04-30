@@ -9,7 +9,6 @@ using NUnit.Framework;
 
 namespace TestingReq5.ApplicationTesting;
 using NUnit.Framework;
-using Sandbox;
 
 public class RoomLogicTest
 {
@@ -53,7 +52,6 @@ public class RoomLogicTest
         mockRoomDao.Verify(dao => dao.CreateAsync(It.IsAny<Room>()), Times.Once);
     }
     
-
     [Test]
     public async Task get_All_Names_Pass()
     {
@@ -75,7 +73,4 @@ public class RoomLogicTest
         Assert.AreEqual(3, allRoomNames.Count());
         Assert.IsTrue(rooms.Select(room => room.Name).SequenceEqual(allRoomNames));
     }
-    
-
-    
 }

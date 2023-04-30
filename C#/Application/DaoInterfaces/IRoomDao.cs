@@ -11,6 +11,4 @@ public interface IRoomDao
     Task RoomUpdateAsync(Room room);
     Task<Room?> GetByIdToUpdateAsync(int? id);
     Task<Room?> GetRoomWithPatientId(int patientId);
-    List<Room> GetAllRoomsWithPatientsNotSensors();
-
 }
