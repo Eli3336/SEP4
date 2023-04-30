@@ -23,7 +23,7 @@ public class RoomEfcDao : IRoomDao
 
     public async Task<Room?> GetById(int id)
     {
-        Room? room = await context.Rooms.FindAsync(id);
+        Room? room = await context.Rooms.Include(room => room.Patients).Include(room => room.Sensors).SingleOrDefaultAsync(room => room.Id == id);
         return room;
     }
     public IEnumerable<string> GetAllNames()
@@ -42,25 +42,19 @@ public class RoomEfcDao : IRoomDao
         Room? room = await context.Rooms.Include(room => room.Sensors).Include(room => room.Patients).SingleOrDefaultAsync(room => room.Id==id);
         return room;
     }
-
-    public async Task<Patient> CreateAndAddToRoomAsync(int roomId, Patient patient)
-    {
-        Room? room = await context.Rooms.FindAsync(roomId);
-        if (room == null)
-            throw new Exception($"Room with id {roomId} not found");
-        EntityEntry<Patient> newPatient = await context.Patients.AddAsync(patient);
-        context.Rooms.Find(roomId).Patients.Add(patient);
-        await context.SaveChangesAsync();
-        return newPatient.Entity;
-    }
     
+    public async Task<Room?> GetRoomWithPatientId(int patientId)
+    {
+        Room? room = await context.Rooms.Include(room => room.Patients).SingleOrDefaultAsync(room => room.Patients.Any(patient => patient.Id == patientId));
+        return room;
+    }
+
     public async Task RoomUpdateAsync(Room room)
     {
         context.Rooms.Update(room);
         await context.SaveChangesAsync();
-        
+
     }
-    
     public async  Task<Room?> GetByIdToUpdateAsync(int? id)
     {
         Room? found = await context.Rooms
@@ -68,6 +62,10 @@ public class RoomEfcDao : IRoomDao
             .SingleOrDefaultAsync(p => p.Id == id);
 
         return found;
+    }
+    public List<Room> GetAllRoomsWithPatientsNotSensors()
+    {
+        return context.Rooms.AsNoTracking().Include(room => room.Patients).ToList();
     }
 }
     
