@@ -1,31 +1,23 @@
-﻿
-
-
-namespace WebAPI.IoTGate.Model;
+﻿namespace WebAPI.IoTGate.Model;
 
 public class IoTStruct
 {
-    public string data { get; set; }
+    public string Data { get; set; }
     public string EUI { get; set; }
-    
-    public string cmd { get; set; }
-        
-  
-    public int port { get; set; }
-    
-    public long ts { get; set; }
-    
-    public List<IoTStruct> cache { get; set; }
+    public string Cmd { get; set; }
+    public int Port { get; set; }
+    public long Ts { get; set; }
+    public List<IoTStruct> Cache { get; set; }
 
     public override string ToString()
     {
-        if (cmd.Equals("cq"))
+        if (Cmd.Equals("cq"))
         {
-            foreach (var j in cache)
+            foreach (var j in Cache)
             {
                 Console.WriteLine(j);
             }
         }
-        return $"cmd: {cmd}\nEUI: {EUI}\nport: {port}\nts: {ts}\ndata: {data}";
+        return $"cmd: {Cmd}\nEUI: {EUI}\nport: {Port}\nts: {Ts}\ndata: {Data}";
     }
 }

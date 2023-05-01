@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using Domain.Models;
+﻿using Domain.Models;
 
 namespace Application.DaoInterfaces;
 

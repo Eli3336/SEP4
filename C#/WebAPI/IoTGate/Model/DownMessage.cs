@@ -2,18 +2,15 @@
 
 public class DownMessage
 {
-    public string data { get; set; }
-    public int port { get; set; }
-   
-    public string eui { get; set; }
-    
-    public bool confirmation { get; set; }
-  
-    public string cmd { get; set; }
+    public string Data { get; set; }
+    public int Port { get; set; }
+    public string Eui { get; set; }
+    public bool Confirmation { get; set; }
+    public string Cmd { get; set; }
 
     public override string ToString()
     {
         return
-            $"Down Message => CMD = {cmd}, EUI = {eui}, PORT = {port}, CONFIRMED = {confirmation}, DATA = {data}";
+            $"Down Message => CMD = {Cmd}, EUI = {Eui}, PORT = {Port}, CONFIRMED = {Confirmation}, DATA = {Data}";
     }
 }

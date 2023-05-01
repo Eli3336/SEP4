@@ -16,9 +16,5 @@ public class RoomCreationDto
         Availability = availability;
         Sensors = sensors;
     }
-
-    public RoomCreationDto()
-    {
-        
-    }
+    public RoomCreationDto() {}
 }

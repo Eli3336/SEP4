@@ -59,7 +59,7 @@
     <com_atmel_avrdbg_tool_atmelice>
       <ToolOptions>
         <InterfaceProperties>
-          <JtagDbgClock>1962885</JtagDbgClock>
+          <JtagDbgClock>2690622</JtagDbgClock>
         </InterfaceProperties>
         <InterfaceName>JTAG</InterfaceName>
       </ToolOptions>
@@ -67,7 +67,7 @@
       <ToolNumber>J41800025230</ToolNumber>
       <ToolName>Atmel-ICE</ToolName>
     </com_atmel_avrdbg_tool_atmelice>
-    <avrtoolinterfaceclock>1962885</avrtoolinterfaceclock>
+    <avrtoolinterfaceclock>2690622</avrtoolinterfaceclock>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <ToolchainSettings>
@@ -131,6 +131,7 @@
             <Value>%24(PackRepoDir)\atmel\ATmega_DFP\1.2.209\include</Value>
             <Value>../drivers</Value>
             <Value>../FreeRTOS/src</Value>
+            <Value>../_h</Value>
           </ListValues>
         </avrgcc.compiler.directories.IncludePaths>
         <avrgcc.compiler.optimization.level>Optimize (-O1)</avrgcc.compiler.optimization.level>
@@ -300,10 +301,22 @@
     <Compile Include="LoRaWANHandler.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="main.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="main_toDo.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="_c\CO2Task.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="_c\Configuration.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="_h\CO2Task.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="_h\Configuration.h">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>

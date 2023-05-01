@@ -1,6 +1,6 @@
 ﻿using Domain.Models;
 
-namespace WebAPI.IoTGate.Loriot;
+namespace Application.DaoInterfaces;
 
 public interface ILoriotDao
 {

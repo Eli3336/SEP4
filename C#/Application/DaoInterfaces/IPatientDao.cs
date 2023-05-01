@@ -6,4 +6,5 @@ public interface IPatientDao
 {
     Task<Patient?> GetByIdAsync(int id);
     Task DeleteAsync(int id);
+    Task<Patient> CreateAsync(Patient patient);
 }

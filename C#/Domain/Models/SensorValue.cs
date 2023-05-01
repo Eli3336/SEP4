@@ -1,33 +1,30 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Domain.Models;
+﻿namespace Domain.Models;
 
 public class SensorValue
 {
-    public int valueId;
-    public double value { get; set; }
-    public DateTime timeStamp { get; set; }
+    public int ValueId { get; set; }
+    public double Value { get; set; }
+    public DateTime TimeStamp { get; set; }
     
 
     public SensorValue()
     {
-        this.value = 0;
-        this.timeStamp = DateTime.Now;
-        this.valueId = 0;
+        Value = 0;
+        TimeStamp = DateTime.Now;
+        ValueId = 0;
     }
     
     public SensorValue(double value)
     {
-        this.value = value;
-        this.timeStamp = DateTime.Now;
-        this.valueId = 0;
+        Value = value;
+        TimeStamp = DateTime.Now;
+        ValueId = 0;
     }
 
     public SensorValue(int valueId, double value, DateTime timeStamp)
     {
-        this.value = value;
-        this.timeStamp = timeStamp;
-        this.valueId = valueId;
+        Value = value;
+        TimeStamp = timeStamp;
+        ValueId = valueId;
     }
 }
