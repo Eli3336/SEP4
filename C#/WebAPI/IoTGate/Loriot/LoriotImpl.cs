@@ -1,8 +1,6 @@
-﻿using Domain.DTOs;
+﻿using Application.DaoInterfaces;
+using Domain.DTOs;
 using Domain.Models;
-using EfcDataAccess;
-using Microsoft.EntityFrameworkCore;
-
 
 namespace WebAPI.IoTGate.Loriot;
 
@@ -22,45 +20,38 @@ public class LoriotImpl: ILoriotTasks
     {
         this.loriotDao = loriotDao;
     }
-
-    public LoriotImpl()
-    {
-        
-    }
+    public LoriotImpl() {}
 
     public async Task<SensorValue> AddTemperature(SensorValueDto tempValue, string eui) 
     {
-        
         SensorValue toCreate = new SensorValue()
         {
-            value = tempValue.value,
-            timeStamp = tempValue.timeStamp
+            Value = tempValue.value,
+            TimeStamp = tempValue.timeStamp
         };
     
         SensorValue created = await loriotDao.CreateAsync(toCreate, 1);
         return created;
     }
 
-    public async Task<SensorValue>  AddHumidity(SensorValueDto humidityValue, string eui)
+    public async Task<SensorValue> AddHumidity(SensorValueDto humidityValue, string eui)
     {
-       
         SensorValue toCreate = new SensorValue()
         {
-            value = humidityValue.value,
-            timeStamp = humidityValue.timeStamp
+            Value = humidityValue.value,
+            TimeStamp = humidityValue.timeStamp
         };
     
         SensorValue created = await loriotDao.CreateAsync(toCreate, 2);
         return created;
     }
 
-    public async Task<SensorValue>  AddCo2(SensorValueDto co2Value, string eui)
+    public async Task<SensorValue> AddCo2(SensorValueDto co2Value, string eui)
     {
-       
         SensorValue toCreate = new SensorValue()
         {
-            value = co2Value.value,
-            timeStamp = co2Value.timeStamp
+            Value = co2Value.value,
+            TimeStamp = co2Value.timeStamp
         };
     
         SensorValue created = await loriotDao.CreateAsync(toCreate, 3);

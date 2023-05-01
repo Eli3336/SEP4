@@ -2,8 +2,7 @@ using Application.DaoInterfaces;
 using Application.Logic;
 using Application.LogicInterfaces;
 using EfcDataAccess;
-using WebAPI.Gateway;
-
+using WebAPI.IoTGate;
 
 var builder = WebApplication.CreateBuilder(args);
 LoriotClient client = LoriotClient.Instance;

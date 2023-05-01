@@ -6,14 +6,14 @@ public class RoomUpdateDto
 {
     public int Id { get; set; }
     public int? Capacity { get; set; }
-    public string? Status { get; set; }
+    public string? Availability { get; set; }
     
     public RoomUpdateDto(){}
 
-    public RoomUpdateDto(int id, int? capacity, string? status)
+    public RoomUpdateDto(int id, int? capacity, string? availability)
     {
-        this.Id = id;
-        this.Capacity = capacity;
-        this.Status = status;
+        Id = id;
+        Capacity = capacity;
+        Availability = availability;
     }
 }

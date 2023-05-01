@@ -1,4 +1,3 @@
-    
 using Application.DaoInterfaces;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +19,6 @@ public class PatientEfcDao : IPatientDao
         {
             throw new Exception($"Patient with id {id} not found");
         }
-
         context.Patients.Remove(existing);
         await context.SaveChangesAsync();    
     }
@@ -31,5 +29,11 @@ public class PatientEfcDao : IPatientDao
             .SingleOrDefaultAsync(patient => patient.Id == id);
         //     .AsNoTracking().FirstOrDefaultAsync(p => p.id == id);
         return found;
+    }
+    public async Task<Patient> CreateAsync(Patient patient)
+    {
+        EntityEntry<Patient> newPatient = await context.Patients.AddAsync(patient);
+        await context.SaveChangesAsync();
+        return newPatient.Entity;
     }
 }
