@@ -1,27 +1,70 @@
-// const API_BASE_URL = "https://localhost:7216";
-
-// export async function fetchRoomDetailsById(id) {
-//   const response = await fetch(`${API_BASE_URL}/Rooms/${id}`);
-//   if (!response.ok) {
-//     throw new Error(`Error fetching room details: ${response.statusText}`);
-//   }
-//   return response.json();
-// }
-
 const API_BASE_URL = "https://localhost:7216";
 
-export async function fetchRoomDetailsById(id) {
-  const response = await fetch(`${API_BASE_URL}/Rooms/${id}`);
-  if (!response.ok) {
-    throw new Error(`Error fetching room details: ${response.statusText}`);
+export async function fetchRoomDetailsById(roomId) {
+  try {
+    const roomDataUrl = `${API_BASE_URL}/Rooms/${roomId}`;
+    console.log("fetchRoomDetailsById URL:", roomDataUrl);
+
+    const roomDataResponse = await fetch(roomDataUrl);
+    console.log("fetchRoomDetailsById response:", roomDataResponse);
+
+    if (!roomDataResponse.ok) {
+      throw new Error(
+        `Error fetching room data: ${roomDataResponse.statusText}`
+      );
+    }
+    const roomData = await roomDataResponse.json();
+    console.log("fetchRoomDetailsById data:", roomData);
+
+    return roomData;
+  } catch (error) {
+    console.error("Error in fetchRoomDetailsById:", error);
+    throw error;
   }
-  return response.json();
 }
 
-export async function fetchSensorData(id){
-  const response = await fetch(`${API_BASE_URL}/Sensors?roomId=${id}`);
-  if (!response.ok) {
-    throw new Error(`Error fetching sensor values: ${response.statusText}`);
+export async function fetchSensorDataByRoomId(roomId) {
+  try {
+    const sensorDataUrl = `${API_BASE_URL}/Sensors?roomId=${roomId}`;
+    console.log("fetchSensorDataByRoomId URL:", sensorDataUrl);
+
+    const sensorDataResponse = await fetch(sensorDataUrl);
+    console.log("fetchSensorDataByRoomId response:", sensorDataResponse);
+
+    if (!sensorDataResponse.ok) {
+      throw new Error(
+        `Error fetching sensor data: ${sensorDataResponse.statusText}`
+      );
+    }
+    const sensorData = await sensorDataResponse.json();
+    console.log("fetchSensorDataByRoomId data:", sensorData);
+
+    return sensorData;
+  } catch (error) {
+    console.error("Error in fetchSensorDataByRoomId:", error);
+    throw error;
   }
-  return response.json();
+}
+
+export async function fetchSensorLogById(sensorId) {
+  try {
+    const sensorLogUrl = `${API_BASE_URL}/Sensors/${sensorId}`;
+    console.log("fetchSensorLogById URL:", sensorLogUrl);
+
+    const sensorLogResponse = await fetch(sensorLogUrl);
+    console.log("fetchSensorLogById response:", sensorLogResponse);
+
+    if (!sensorLogResponse.ok) {
+      throw new Error(
+        `Error fetching sensor logs: ${sensorLogResponse.statusText} | URL: ${sensorLogUrl}`
+      );
+    }
+    const sensorLogs = await sensorLogResponse.json();
+    console.log("fetchSensorLogById data:", sensorLogs);
+
+    return sensorLogs;
+  } catch (error) {
+    console.error("Error in fetchSensorLogById:", error);
+    throw error;
+  }
 }
