@@ -7,7 +7,7 @@ public class Room
     public int Capacity { get; set; }
     public string Availability { get; set; }
     public List<Patient> Patients { get; set; }
-    public List <Sensor> Sensors { get; set; }
+    public List<Sensor> Sensors { get; set; }
 
     public Room()
     {
@@ -21,5 +21,11 @@ public class Room
         Availability = availability;
         Patients = new List<Patient>();
         Sensors = sensors;
+    }
+
+    public Room(int capacity, string availability)
+    {
+        Capacity = capacity;
+        Availability = availability;
     }
 }

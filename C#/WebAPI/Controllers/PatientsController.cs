@@ -14,7 +14,6 @@ public class PatientsController : ControllerBase
     public PatientsController(IPatientLogic patientLogic)
     {
         this.patientLogic = patientLogic;
-      
     }
     
     [HttpPost]
@@ -47,12 +46,12 @@ public class PatientsController : ControllerBase
         }
     }
     
-    [HttpGet("{id:long}")]
+    [HttpGet("{id:int}")]
     public async Task<ActionResult<Patient>> GetById([FromRoute] int id)
     {
         try
         {
-            Patient result = await patientLogic.GetByIdAsync(id);
+            Patient? result = await patientLogic.GetByIdAsync(id);
             return Ok(result);
         }
         catch (Exception e)

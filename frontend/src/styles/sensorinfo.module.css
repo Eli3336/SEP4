@@ -2,11 +2,40 @@
   margin-top: 1rem;
 }
 
-.sensorList {
-  list-style-type: none;
-  padding: 0;
+.sensorTable {
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed;
+  font-family: "Roboto", sans-serif;
 }
 
-.sensorListItem {
-  margin-bottom: 0.5rem;
+.sensorTable th,
+.sensorTable td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+  word-wrap: break-word;
+  color: #000000; /* Add this line to make the text color black /
+}
+
+.sensorTable th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.sensorTable tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.sensorTable tr:hover {
+  background-color: #ddd;
+}
+
+/ Add these lines to improve the table appearance */}
+.sensorTable {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.sensorTable th {
+  border-bottom: 2px solid #ccc;
 }

@@ -1,7 +1,7 @@
-﻿using Domain.Models;
+﻿using Application.DaoInterfaces;
+using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using WebAPI.IoTGate.Loriot;
 namespace EfcDataAccess;
 
 public class SensorValueEfcDao : ILoriotDao

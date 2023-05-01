@@ -16,7 +16,7 @@
 #include <stdio_driver.h>
 #include <serial.h>
 
- // Needed for LoRaWAN
+// Needed for LoRaWAN
 #include <lora_driver.h>
 #include <status_leds.h>
 
@@ -106,4 +106,3 @@ int main(void)
 	{
 	}
 }
-
