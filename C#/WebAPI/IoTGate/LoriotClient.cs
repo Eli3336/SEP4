@@ -3,6 +3,7 @@ using System.Text;
 using Application.DaoInterfaces;
 using Domain.Models;
 using EfcDataAccess;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using WebAPI.IoTGate.Interface;
@@ -12,8 +13,8 @@ namespace WebAPI.IoTGate;
 
 public class LoriotClient : IWebClient
 {
-    private RoomEfcDao _roomEfcDao = new RoomEfcDao(new DBContext());
-    private ILoriotDao _loriotDao = new SensorValueEfcDao(new DBContext());
+    private RoomEfcDao _roomEfcDao = new RoomEfcDao(new HospitalContext());
+    private  ILoriotDao _loriotDao= new SensorValueEfcDao(new HospitalContext());
     private ClientWebSocket _clientWebSocket;
     
     
@@ -66,10 +67,13 @@ public class LoriotClient : IWebClient
     {
         try
         {
+            Console.WriteLine("i got here");
             await _clientWebSocket.ConnectAsync(new Uri(_uriAddress), CancellationToken.None);
         }
         catch (Exception e)
         {
+            Console.WriteLine("i crashed");
+
             Console.WriteLine(e.Message);
             throw;
         }
