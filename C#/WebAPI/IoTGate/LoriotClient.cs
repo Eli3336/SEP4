@@ -1,5 +1,6 @@
 ﻿using System.Net.WebSockets;
 using System.Text;
+using Application.DaoInterfaces;
 using Domain.Models;
 using EfcDataAccess;
 using Entity;
@@ -15,7 +16,8 @@ namespace WebAPI.IoTGate;
 public class LoriotClient : IWebClient
 {
     private IRecordService _recordService= new RecordService(new RecordDAO(new DBContext()));
-    private IBoxDao _boxDao = new BoxDao(new DBContext());
+    private RoomEfcDao _boxDao = new RoomEfcDao(new DBContext);
+    private ILoriotDao _loriotDao = new LoriotDao(new DBContext());
     private ClientWebSocket _clientWebSocket;
     
     
@@ -29,7 +31,7 @@ public class LoriotClient : IWebClient
         ConnectClientAsync();
     }
     
-    private SensorValue? ReceivedData(string receivedJson)
+    private List<SensorValue?> ReceivedData(string receivedJson)
     {
         var details = JObject.Parse(receivedJson);
         char[] array = details["data"].Value<String>().ToCharArray();
@@ -38,15 +40,29 @@ public class LoriotClient : IWebClient
         float co2 = Convert.ToInt16(array[8].ToString()+array[9].ToString()+array[10].ToString()+array[11].ToString(),16);
         Console.WriteLine(humidity + " " + temperature + " " + co2);
 
+        List<SensorValue?> sensorValues = new List<SensorValue?>();
+        
         SensorValue record = new SensorValue()
         {
-            Humidity = humidity,
-            Temperature = temperature,
-            CO2 = co2,
-            BoxId = _eui,
-            Timestamp = DateTime.UtcNow
+            Value = temperature,
+            TimeStamp = DateTime.UtcNow
         };
-        return record;
+        SensorValue record2 = new SensorValue()
+        {
+            Value = humidity,
+            TimeStamp = DateTime.UtcNow
+        };
+        SensorValue record3 = new SensorValue()
+        {
+            Value = co2,
+            TimeStamp = DateTime.UtcNow
+        };
+        
+        sensorValues.Add(record);
+        sensorValues.Add(record2);
+        sensorValues.Add(record3);
+        
+        return sensorValues;
     }
     
     
@@ -67,10 +83,10 @@ public class LoriotClient : IWebClient
     {
         try
         {
-            ICollection<Box> boxes = await _boxDao.GetBoxesAsync();
-            foreach (var box in boxes)
+            ICollection<Room> rooms = await _boxDao.GetAllRoomsAsync();
+            foreach (var room in rooms)
             {
-                _eui = box.Id;
+                _eui = room.Sensors.id;
                 
                 Console.WriteLine("WS-CLIENT--------->START");
                 DownLinkStream upLinkStream = new()
@@ -89,8 +105,8 @@ public class LoriotClient : IWebClient
                 var strResult = Encoding.UTF8.GetString(buffer);
             
                 //get data and convert
-                Record? getRecord = ReceivedData(strResult);
-                await _recordService.AddRecordDataAsync(getRecord);
+                SensorValue? getRecord = ReceivedData(strResult);
+                await _loriotDao.CreateAsync(getRecord, _eui);
             }
         }
         catch (Exception e)
