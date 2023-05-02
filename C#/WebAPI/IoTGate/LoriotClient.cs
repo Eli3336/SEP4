@@ -12,7 +12,7 @@ using WebAPI.IoTGate.Stream;
 
 namespace WebAPI.IoTGate;
 
-public class RecordClient : IWebClient
+public class LoriotClient : IWebClient
 {
     private IRecordService _recordService= new RecordService(new RecordDAO(new DBContext()));
     private IBoxDao _boxDao = new BoxDao(new DBContext());
@@ -23,7 +23,7 @@ public class RecordClient : IWebClient
     private readonly string _uriAddress = "ws://iotnet.cibicom.dk/app?token=vnoVQgAAABFpb3RuZXQudGVyYWNvbS5kawcinBwAkIjcdx98hF2KBE8=";
     private string _eui = String.Empty;
 
-    public RecordClient()
+    public LoriotClient()
     {
         _clientWebSocket = new ClientWebSocket();
         ConnectClientAsync();
