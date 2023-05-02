@@ -1,6 +1,8 @@
-/*
- * SenderTask.h
- *
- * Created: 5/2/2023 8:33:45 AM
- *  Author: tstfa
- */ 
+#pragma once
+
+#include <ATMEGA_FreeRTOS.h>
+#include <queue.h>
+
+void senderTask_create(QueueHandle_t senderQueue);
+void senderTask_initTask(void* params);
+void senderTask_runTask(void);

@@ -1,6 +1,8 @@
-/*
- * ReceiverTask.h
- *
- * Created: 5/2/2023 8:34:15 AM
- *  Author: tstfa
- */ 
+#pragma once
+
+#include <ATMEGA_FreeRTOS.h>
+#include <message_buffer.h>
+
+void receiverTask_create(MessageBufferHandle_t receiverBuffer);
+void receiverTask_initTask(void* params);
+void receiverTask_runTask(void);
