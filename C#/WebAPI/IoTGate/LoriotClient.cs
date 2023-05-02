@@ -1,84 +1,105 @@
-﻿using System.Text.Json;
-using WebAPI.IoTGate.Model;
-using WebAPI.IoTGate.Services;
-using WebSocketSharp;
-using ErrorEventArgs = WebSocketSharp.ErrorEventArgs;
-using WebSocket = WebSocketSharp.WebSocket;
+﻿using System.Net.WebSockets;
+using System.Text;
+using EfcDataAccess;
+using Entity;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Services.Implementations;
+using Services.Interfaces;
+using WebAPI.IoTGate.Interface;
+using WebSocket.Stream;
 
 namespace WebAPI.IoTGate;
-public sealed class LoriotClient
+
+public class RecordClient : IWebClient
 {
-    private static readonly Lazy<LoriotClient> lazy =
-        new(() => new LoriotClient());
+    private IRecordService _recordService= new RecordService(new RecordDAO(new DBContext()));
+    private IBoxDao _boxDao = new BoxDao(new DBContext());
+    private ClientWebSocket _clientWebSocket;
     
-    private WebSocket _socket;
+    
+    
+    private readonly string _uriAddress = "wss://iotnet.cibicom.dk/app?token=vnoUeAAAABFpb3RuZXQudGVyYWNvbS5kawhxYha6idspsvrlQ4C7KWA=";
+    private string _eui = String.Empty;
 
-    private string Url =
-        "wss://iotnet.cibicom.dk/app?token=vnoVQgAAABFpb3RuZXQudGVyYWNvbS5kawcinBwAkIjcdx98hF2KBE8=";
-    
-    private ILoriotServ _loriotServ;
-    public static LoriotClient Instance => lazy.Value;
-    
-    private LoriotClient()
+    public RecordClient()
     {
-        _loriotServ = new LoriotServImpl();
-        _socket = new WebSocket(Url);
-        _socket.OnOpen += OnOpen;
-        _socket.OnMessage += OnMessage;
-        _socket.OnError += OnError;
-        _socket.OnClose += OnClose;
-        _socket.Connect();
+        _clientWebSocket = new ClientWebSocket();
+        ConnectClientAsync();
     }
     
-    public void SendDownLinkMessage(string eui, int toOpen)
+    private Record? ReceivedData(string receivedJson)
     {
-        string data = toOpen == 1
-            ? "01"
-            : "00";
-        
-        var message = new DownMessage()
+        var details = JObject.Parse(receivedJson);
+        char[] array = details["data"].Value<String>().ToCharArray();
+        float humidity = Convert.ToInt16(array[0].ToString()+array[1].ToString()+array[2].ToString()+array[3].ToString(),16);
+        float temperature= Convert.ToInt16(array[4].ToString()+array[5].ToString()+array[6].ToString()+array[7].ToString(),16);
+        float co2 = Convert.ToInt16(array[8].ToString()+array[9].ToString()+array[10].ToString()+array[11].ToString(),16);
+        Console.WriteLine(humidity + " " + temperature + " " + co2);
+
+        Record record = new Record()
         {
-            Cmd = "tx",
-            Eui = eui,
-            Port = 1,
-            Confirmation = true,
-            Data = data
+            Humidity = humidity,
+            Temperature = temperature,
+            CO2 = co2,
+            BoxId = _eui,
+            Timestamp = DateTime.UtcNow
         };
-        string json = JsonSerializer.Serialize(message);
-        Console.WriteLine(json);
-        _socket.Send(json);
+        return record;
     }
-
-    public void GetCacheReadings()
+    
+    
+    private async Task ConnectClientAsync()
     {
-        var message = new IoTStruct()
+        try
         {
-            Cmd = "cq"
-        };
-        var json = JsonSerializer.Serialize(message);
-        _socket.Send(json);
+            await _clientWebSocket.ConnectAsync(new Uri(_uriAddress), CancellationToken.None);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            throw;
+        }
+    }
+    
+    public async Task WSGetData()
+    {
+        try
+        {
+            ICollection<Box> boxes = await _boxDao.GetBoxesAsync();
+            foreach (var box in boxes)
+            {
+                _eui = box.Id;
+                
+                Console.WriteLine("WS-CLIENT--------->START");
+                DownLinkStream upLinkStream = new()
+                {
+                    cmd = "tx",
+                    EUI = _eui,
+                    port = 2,
+                    data = "EFC"
+                };
+                string payloadJson = JsonConvert.SerializeObject(upLinkStream);
+                //send
+                await _clientWebSocket.SendAsync(Encoding.UTF8.GetBytes(payloadJson), WebSocketMessageType.Text, true, CancellationToken.None);
+            
+                Byte[] buffer = new byte[500];
+                var x = await _clientWebSocket.ReceiveAsync(buffer,CancellationToken.None);
+                var strResult = Encoding.UTF8.GetString(buffer);
+            
+                //get data and convert
+                Record? getRecord = ReceivedData(strResult);
+                await _recordService.AddRecordDataAsync(getRecord);
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
     }
 
-    private void OnOpen(object? sender, EventArgs e)
+    public Task WSSendData()
     {
-        Console.WriteLine($"GATEWAY CONTROLLER => CONNECTION ESTABLISHED...");
-    }
-
-    private void OnMessage(object? sender, MessageEventArgs e)
-    {
-        Console.WriteLine("Received from the server: " + e.Data);
-        var message = JsonSerializer.Deserialize<IoTStruct>(e.Data);
-        Console.WriteLine($"GATEWAY CONTROLLER => {message}");
-        _loriotServ.HandleData(message);
-    }
-
-    private void OnError(object? sender, ErrorEventArgs e)
-    {
-        Console.WriteLine("GATEWAY CONTROLLER => ERROR OCCURED: " + e.Message);
-    }
-
-    private void OnClose(object? sender, CloseEventArgs e)
-    {
-        Console.WriteLine("GATEWAY CONTROLLER => Connection closed: " + e.Code);
+        throw new NotImplementedException();
     }
 }
