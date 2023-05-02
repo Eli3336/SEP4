@@ -2,7 +2,7 @@
 #include <task.h>
 #include <stdint.h>
 #include <mh_z19.h>
-#include <Configuration.h>
+#include <Config.h>
 
 #define TASK_NAME "CO2Task"
 #define TASK_PRIORITY configMAX_PRIORITIES - 2
