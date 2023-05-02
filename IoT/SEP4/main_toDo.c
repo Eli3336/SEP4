@@ -13,8 +13,11 @@
 //#include <VibeHealth.h>
 #include <CO2Task.h>
 #include <Configuration.h>
+#include <HumiTemp.h>
 
 // humidity + temperature
+static QueueHandle_t _humidityQueue;
+static QueueHandle_t _temperatureQueue;
 static QueueHandle_t _co2Queue;
 // servo
 // sender queues
@@ -30,6 +33,8 @@ static MessageBufferHandle_t _messageBuffer;
 
 static void _createQueues(void) {
 	_co2Queue = xQueueCreate(10, sizeof(uint16_t));
+	_humidityQueue = xQueueCreate(10, sizeof(uint16_t));
+	_temperatureQueue = xQueueCreate(10, sizeof(int16_t));
 	_messageBuffer = xMessageBufferCreate(sizeof(lora_driver_payload_t)*5);
 }
 
@@ -45,11 +50,13 @@ static void _createMutexes(void){
 static void _initDrivers(void) {
 	puts("Initializing drivers...");
 	mh_z19_initialise(ser_USART3);
+	hih8120_initialise();
 	lora_driver_initialise(ser_USART1, _messageBuffer);
 }
 
 static void _createTasks(void) {
 	co2Task_create(_co2Queue, _actEventGroup, _doneEventGroup);
+	humidityTemperatureTask_create(_humidityQueue, _temperatureQueue, _actEventGroup, _doneEventGroup);
 }
 
 int main(void) {
