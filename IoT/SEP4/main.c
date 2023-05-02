@@ -2,8 +2,7 @@
 * main.c
 * Author : IHA
 *
-* Example main file including LoRaWAN setup
-* Just for inspiration :)
+* Edited example main file
 */
 
 #include <stdio.h>
@@ -155,19 +154,19 @@ void initialiseSystem()
 int main(void)
 {
 	initialiseSystem(); // Must be done as the very first thing!!
-	printf("Program Started!!\n");
+	printf("Start initiated\n");
 	vTaskStartScheduler(); // Initialise and run the freeRTOS scheduler. Execution should never return from here.
-stdio_initialise(ser_USART0);
+	stdio_initialise(ser_USART0);
 
-_createQueues();
-_initDrivers();
-_createEventGroups();
-_createTasks();
-_createMutexes();
-config_create(_mutex);
+	_createQueues();
+	_initDrivers();
+	_createEventGroups();
+	_createTasks();
+	_createMutexes();
+	config_create(_mutex);
 
-puts("Starting...");
-vTaskStartScheduler();
+	puts("Launching IoT device...");
+	vTaskStartScheduler();
 	/* Replace with your application code */
 	while (1)
 	{
