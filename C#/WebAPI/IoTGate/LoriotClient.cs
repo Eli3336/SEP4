@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 using Services.Implementations;
 using Services.Interfaces;
 using WebAPI.IoTGate.Interface;
-using WebSocket.Stream;
+using WebAPI.IoTGate.Stream;
 
 namespace WebAPI.IoTGate;
 
