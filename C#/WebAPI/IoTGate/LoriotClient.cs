@@ -1,6 +1,7 @@
 ﻿using System.Net.WebSockets;
 using System.Text;
 using Application.DaoInterfaces;
+using Domain.DTOs;
 using Domain.Models;
 using EfcDataAccess;
 using Microsoft.EntityFrameworkCore;
@@ -14,12 +15,12 @@ namespace WebAPI.IoTGate;
 public class LoriotClient : IWebClient
 {
     private RoomEfcDao _roomEfcDao = new RoomEfcDao(new HospitalContext());
-    private  ILoriotDao _loriotDao= new SensorValueEfcDao(new HospitalContext());
+    private  SensorValueEfcDao sensorEfcDao= new SensorValueEfcDao(new HospitalContext());
     private ClientWebSocket _clientWebSocket;
     
     
     
-    private readonly string _uriAddress = "ws://iotnet.cibicom.dk/app?token=vnoVQgAAABFpb3RuZXQudGVyYWNvbS5kawcinBwAkIjcdx98hF2KBE8=";
+    private readonly string _uriAddress = "wss://iotnet.cibicom.dk/app?token=vnoVQgAAABFpb3RuZXQudGVyYWNvbS5kawcinBwAkIjcdx98hF2KBE8=";
     private string _eui = String.Empty;
 
     public LoriotClient()
@@ -28,7 +29,7 @@ public class LoriotClient : IWebClient
         ConnectClientAsync();
     }
     
-    private List<SensorValue?> ReceivedData(string receivedJson)
+    private List<SensorValueDto> ReceivedData(string receivedJson)
     {
         var details = JObject.Parse(receivedJson);
         char[] array = details["data"].Value<String>().ToCharArray();
@@ -37,14 +38,14 @@ public class LoriotClient : IWebClient
         float co2 = Convert.ToInt16(array[8].ToString()+array[9].ToString()+array[10].ToString()+array[11].ToString(),16);
         Console.WriteLine(humidity + " " + temperature + " " + co2);
 
-        List<SensorValue?> sensorValues = new List<SensorValue?>();
+        List<SensorValueDto> sensorValues = new List<SensorValueDto>();
         
-        SensorValue record = new SensorValue()
+        SensorValueDto record = new SensorValueDto()
         {
-            Value = temperature,
-            TimeStamp = DateTime.UtcNow
+            value = 23,
+            timeStamp = DateTime.UtcNow
         };
-        SensorValue record2 = new SensorValue()
+       /* SensorValue record2 = new SensorValue()
         {
             Value = humidity,
             TimeStamp = DateTime.UtcNow
@@ -54,10 +55,10 @@ public class LoriotClient : IWebClient
             Value = co2,
             TimeStamp = DateTime.UtcNow
         };
-        
+        */
         sensorValues.Add(record);
-        sensorValues.Add(record2);
-        sensorValues.Add(record3);
+        //sensorValues.Add(record2);
+       // sensorValues.Add(record3);
         
         return sensorValues;
     }
@@ -72,7 +73,7 @@ public class LoriotClient : IWebClient
         }
         catch (Exception e)
         {
-            Console.WriteLine("i crashed");
+            Console.WriteLine("i crashed at connect");
 
             Console.WriteLine(e.Message);
             throw;
@@ -84,6 +85,7 @@ public class LoriotClient : IWebClient
         try
         {
             IEnumerable<Room> rooms = await _roomEfcDao.GetAllRoomsAsync();
+            Console.WriteLine(rooms);
             foreach (var room in rooms)
             {
                 _eui = "eeeds";
@@ -105,10 +107,10 @@ public class LoriotClient : IWebClient
                 var strResult = Encoding.UTF8.GetString(buffer);
             
                 //get data and convert
-               List<SensorValue?> getRecord = ReceivedData(strResult);
-                await _loriotDao.CreateAsync(getRecord[0], 1);
-                await _loriotDao.CreateAsync(getRecord[1], 2);
-                await _loriotDao.CreateAsync(getRecord[2], 3);
+               List<SensorValueDto> getRecord = ReceivedData(strResult);
+                await sensorEfcDao.CreateAsync(getRecord[0], 1);
+               // await sensorEfcDao.CreateAsync(getRecord[1], 2);
+               // await sensorEfcDao.CreateAsync(getRecord[2], 3);
             }
         }
         catch (Exception e)
