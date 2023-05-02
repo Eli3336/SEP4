@@ -3,11 +3,8 @@ using System.Text;
 using Application.DaoInterfaces;
 using Domain.Models;
 using EfcDataAccess;
-using Entity;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Services.Implementations;
-using Services.Interfaces;
 using WebAPI.IoTGate.Interface;
 using WebAPI.IoTGate.Stream;
 
@@ -15,9 +12,8 @@ namespace WebAPI.IoTGate;
 
 public class LoriotClient : IWebClient
 {
-    private IRecordService _recordService= new RecordService(new RecordDAO(new DBContext()));
-    private RoomEfcDao _boxDao = new RoomEfcDao(new DBContext);
-    private ILoriotDao _loriotDao = new LoriotDao(new DBContext());
+    private RoomEfcDao _roomEfcDao = new RoomEfcDao(new DBContext());
+    private ILoriotDao _loriotDao = new SensorValueEfcDao(new DBContext());
     private ClientWebSocket _clientWebSocket;
     
     
@@ -83,10 +79,10 @@ public class LoriotClient : IWebClient
     {
         try
         {
-            ICollection<Room> rooms = await _boxDao.GetAllRoomsAsync();
+            IEnumerable<Room> rooms = await _roomEfcDao.GetAllRoomsAsync();
             foreach (var room in rooms)
             {
-                _eui = room.Sensors.id;
+                _eui = "eeeds";
                 
                 Console.WriteLine("WS-CLIENT--------->START");
                 DownLinkStream upLinkStream = new()
@@ -105,8 +101,10 @@ public class LoriotClient : IWebClient
                 var strResult = Encoding.UTF8.GetString(buffer);
             
                 //get data and convert
-                SensorValue? getRecord = ReceivedData(strResult);
-                await _loriotDao.CreateAsync(getRecord, _eui);
+               List<SensorValue?> getRecord = ReceivedData(strResult);
+                await _loriotDao.CreateAsync(getRecord[0], 1);
+                await _loriotDao.CreateAsync(getRecord[1], 2);
+                await _loriotDao.CreateAsync(getRecord[2], 3);
             }
         }
         catch (Exception e)
