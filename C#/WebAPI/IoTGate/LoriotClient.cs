@@ -1,5 +1,6 @@
 ﻿using System.Net.WebSockets;
 using System.Text;
+using Domain.Models;
 using EfcDataAccess;
 using Entity;
 using Newtonsoft.Json;
@@ -19,7 +20,7 @@ public class RecordClient : IWebClient
     
     
     
-    private readonly string _uriAddress = "wss://iotnet.cibicom.dk/app?token=vnoUeAAAABFpb3RuZXQudGVyYWNvbS5kawhxYha6idspsvrlQ4C7KWA=";
+    private readonly string _uriAddress = "ws://iotnet.cibicom.dk/app?token=vnoVQgAAABFpb3RuZXQudGVyYWNvbS5kawcinBwAkIjcdx98hF2KBE8=";
     private string _eui = String.Empty;
 
     public RecordClient()
@@ -28,7 +29,7 @@ public class RecordClient : IWebClient
         ConnectClientAsync();
     }
     
-    private Record? ReceivedData(string receivedJson)
+    private SensorValue? ReceivedData(string receivedJson)
     {
         var details = JObject.Parse(receivedJson);
         char[] array = details["data"].Value<String>().ToCharArray();
@@ -37,7 +38,7 @@ public class RecordClient : IWebClient
         float co2 = Convert.ToInt16(array[8].ToString()+array[9].ToString()+array[10].ToString()+array[11].ToString(),16);
         Console.WriteLine(humidity + " " + temperature + " " + co2);
 
-        Record record = new Record()
+        SensorValue record = new SensorValue()
         {
             Humidity = humidity,
             Temperature = temperature,
