@@ -2,7 +2,8 @@
 #include <task.h>
 #include <stdint.h>
 #include <mh_z19.h>
-#include <Configuration.h>
+#include <Config.h>
+#include <HumiTempTask.h>
 
 #define TASK_NAME "CO2Task"
 #define TASK_PRIORITY configMAX_PRIORITIES - 2
@@ -45,7 +46,7 @@ void co2Task_runTask() {
 		_co2CallBack(ppm);
 	}
 	
-	xEventGroupSetBits(_doneEventGroup, BIT_CO2_DONE);
+	xEventGroupSetBits(_doneEventGroup, bit_co2_done);
 }
 
 static void _co2CallBack(uint16_t ppm){
