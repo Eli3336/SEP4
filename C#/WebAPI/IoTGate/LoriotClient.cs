@@ -14,9 +14,9 @@ namespace WebAPI.IoTGate;
 
 public class LoriotClient : IWebClient
 {
-    private RoomEfcDao _roomEfcDao = new RoomEfcDao(new HospitalContext());
-    private  SensorValueEfcDao sensorEfcDao= new SensorValueEfcDao(new HospitalContext());
-    private ClientWebSocket _clientWebSocket;
+    private readonly RoomEfcDao _roomEfcDao = new RoomEfcDao(new HospitalContext());
+    private  SensorValueEfcDao _sensorEfcDao= new SensorValueEfcDao(new HospitalContext());
+    private readonly ClientWebSocket _clientWebSocket;
     
     
     
@@ -31,6 +31,7 @@ public class LoriotClient : IWebClient
     
     private List<SensorValueDto> ReceivedData(string receivedJson)
     {
+        
         var details = JObject.Parse(receivedJson);
         char[] array = details["data"].Value<String>().ToCharArray();
         float humidity = Convert.ToInt16(array[0].ToString()+array[1].ToString()+array[2].ToString()+array[3].ToString(),16);
@@ -108,9 +109,9 @@ public class LoriotClient : IWebClient
             
                 //get data and convert
                List<SensorValueDto> getRecord = ReceivedData(strResult);
-                await sensorEfcDao.CreateAsync(getRecord[0], 1);
-               // await sensorEfcDao.CreateAsync(getRecord[1], 2);
-               // await sensorEfcDao.CreateAsync(getRecord[2], 3);
+                await _sensorEfcDao.CreateAsync(getRecord[0], 1);
+               // await _sensorEfcDao.CreateAsync(getRecord[1], 2);
+               // await _sensorEfcDao.CreateAsync(getRecord[2], 3);
             }
         }
         catch (Exception e)
