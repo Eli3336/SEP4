@@ -1,4 +1,6 @@
-﻿namespace Domain.Models;
+﻿using Domain.DTOs;
+
+namespace Domain.Models;
 
 public class SensorValue
 {
@@ -26,5 +28,10 @@ public class SensorValue
         Value = value;
         TimeStamp = timeStamp;
         ValueId = valueId;
+    }
+    public SensorValue(double value, DateTime timeStamp)
+    {
+        Value = value;
+        TimeStamp = timeStamp;
     }
 }

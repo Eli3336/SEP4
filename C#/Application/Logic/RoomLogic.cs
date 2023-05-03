@@ -95,7 +95,13 @@ public class RoomLogic : IRoomLogic
         ValidateRoomUpdate(updated);
         await roomDao.RoomUpdateAsync(updated);
     }
-    
+
+    public Task<IEnumerable<Room?>> GetAllRoomsAsync()
+    {
+        IEnumerable<Room?> rooms = roomDao.GetAllRoomsAsync().Result;
+        return Task.FromResult(rooms);
+    }
+
     private void ValidateRoomUpdate(Room room)
     {
         if (room.Capacity < 1)
