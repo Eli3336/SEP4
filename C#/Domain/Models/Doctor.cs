@@ -10,4 +10,8 @@ public class Doctor : User
         Requests = new List<Request>();
     }
 
+    public Doctor()
+    {
+        Requests = new List<Request>();
+    }
 }

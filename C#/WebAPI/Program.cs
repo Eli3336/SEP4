@@ -21,6 +21,10 @@ builder.Services.AddScoped<IWebClient, LoriotClient>();
 builder.Services.AddHostedService<WebClientBackgroundService>();
 builder.Services.AddScoped<IPatientLogic, PatientLogic>();
 builder.Services.AddScoped<IPatientDao, PatientEfcDao>();
+
+builder.Services.AddScoped<IDoctorLogic, DoctorLogic>();
+builder.Services.AddScoped<IDoctorDao, DoctorEfcDao>();
+
 builder.Services.AddScoped<IRoomDao, RoomEfcDao>();
 builder.Services.AddScoped<IRoomLogic, RoomLogic>();
 
