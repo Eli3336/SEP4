@@ -9,6 +9,10 @@ public class HospitalContext : DbContext
      public DbSet<Room> Rooms { get; set; }
      public DbSet<Patient> Patients { get; set; }
      public DbSet<SensorValue> SensorValue { get; set; }
+     public DbSet<Doctor> Doctors { get; set; }
+     
+     public DbSet<Receptionist> Receptionists { get; set; }
+
      
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -21,5 +25,9 @@ public class HospitalContext : DbContext
         modelBuilder.Entity<Room>().HasKey(room => room.Id);
         modelBuilder.Entity<Patient>().HasKey(patient => patient.Id);
         modelBuilder.Entity<SensorValue>().HasKey(sensorValueId => sensorValueId.ValueId);
+        modelBuilder.Entity<Doctor>().HasKey(doctor => doctor.Id);
+        modelBuilder.Entity<Receptionist>().HasKey(receptionist => receptionist.Id);
+
+
     }
 }
