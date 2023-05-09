@@ -1,4 +1,4 @@
-#include "./_h/ReceiverTask.h"
+#include "ReceiverTask.h"
 #include <task.h>
 #include <message_buffer.h>
 #include <stdint.h>
@@ -6,7 +6,7 @@
 #include <stddef.h>
 #include <lora_driver.h>
 #include <task.h>
-#include <Configuration.h>
+#include <Config.h>
 
 #define TASK_NAME "ReceiverTask"
 #define TASK_PRIORITY configMAX_PRIORITIES - 2
