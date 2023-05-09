@@ -34,12 +34,37 @@ public class ReceptionistLogic : IReceptionistLogic
         Receptionist? receptionist = await receptionistDao.GetByIdAsync(id);
         if (receptionist == null)
         {
-            throw new Exception($"Doctor with ID {id} was not found!");
+            throw new Exception($"Receptionist with ID {id} was not found!");
         }
         
         await receptionistDao.DeleteAsync(id);
     }
-    
+
+    public async Task ReceptionistUpdateAsync(int id, string name, string phoneNumber)
+    {
+        Receptionist? existing = await receptionistDao.GetByIdToUpdateAsync(id);
+        if (existing == null)
+        {
+            throw new Exception($"Receptionist with ID {id} not found!");
+        }
+
+        ReceptionistUpdateDto dto = new ReceptionistUpdateDto(name, phoneNumber);
+
+        string nameToUse = dto.Name ?? existing.Name;
+        string phoneNumberToUse = dto.PhoneNumber ?? existing.PhoneNumber;
+        
+        
+        Receptionist updated = new ()
+        {
+            Id = existing.Id,
+            Name = nameToUse,
+            Password = existing.Password,
+            PhoneNumber = phoneNumberToUse
+        };
+        ValidateReceptionistUpdate(updated);
+        await receptionistDao.ReceptionistUpdateAsync(updated);
+    }
+
     public async Task<Receptionist?> GetByIdAsync(int id)
     {
         Receptionist? receptionist = await receptionistDao.GetByIdAsync(id);
@@ -49,6 +74,19 @@ public class ReceptionistLogic : IReceptionistLogic
                 $"Doctor with ID {id} not found!");
         }
         return receptionist;
+    }
+    
+    private void ValidateReceptionistUpdate(Receptionist receptionist)
+    {
+        if (receptionist.Name.Length > 1)
+        {
+            throw new ArgumentException("The name is too short");
+        }
+        if (receptionist.PhoneNumber.Length >= 10)
+        {
+            throw new ArgumentException("The phone number is too short");
+        }
+        
     }
     
 }
