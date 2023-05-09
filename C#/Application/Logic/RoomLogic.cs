@@ -69,7 +69,6 @@ public class RoomLogic : IRoomLogic
         }
         return room;
     }
-
     
     public async Task RoomUpdateAsync(int id, int capacity, string availability)
     {
@@ -82,7 +81,7 @@ public class RoomLogic : IRoomLogic
         RoomUpdateDto dto = new RoomUpdateDto(id, capacity, availability);
 
         int capacityToUse = dto.Capacity ?? existing.Capacity;
-        string statusToUse = dto.Status ?? existing.Availability;
+        string statusToUse = dto.Availability ?? existing.Availability;
         
         
         Room updated = new (capacityToUse, statusToUse)
@@ -96,7 +95,13 @@ public class RoomLogic : IRoomLogic
         ValidateRoomUpdate(updated);
         await roomDao.RoomUpdateAsync(updated);
     }
-    
+
+    public Task<IEnumerable<Room?>> GetAllRoomsAsync()
+    {
+        IEnumerable<Room?> rooms = roomDao.GetAllRoomsAsync().Result;
+        return Task.FromResult(rooms);
+    }
+
     private void ValidateRoomUpdate(Room room)
     {
         if (room.Capacity < 1)

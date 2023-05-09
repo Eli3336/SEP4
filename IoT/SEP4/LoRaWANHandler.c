@@ -13,7 +13,7 @@
 #include <status_leds.h>
 
 // Parameters for OTAA join - You have got these in a mail from IHA
-#define LORA_appEUI "0004A30B00ED3752"
+#define LORA_appEUI "6BE1FDCE7E214CF9"
 #define LORA_appKEY "EECCD39BD2AB6C6BD107A08E0DBE9DB9"
 
 void lora_handler_task( void *pvParameters );
@@ -75,7 +75,7 @@ static void _lora_setup(void)
 			// Make the red led pulse to tell something went wrong
 			status_leds_longPuls(led_ST1); // OPTIONAL
 			// Wait 5 sec and lets try again
-			vTaskDelay(pdMS_TO_TICKS(5000UL));
+			vTaskDelay(pdMS_TO_TICKS(500UL));
 		}
 		else
 		{

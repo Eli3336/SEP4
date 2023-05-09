@@ -2,11 +2,11 @@ using Application.DaoInterfaces;
 using Application.Logic;
 using Application.LogicInterfaces;
 using EfcDataAccess;
-using WebAPI.Gateway;
-
+using WebAPI.IoTGate;
+using WebAPI.IoTGate.Background;
+using WebAPI.IoTGate.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
-LoriotClient client = LoriotClient.Instance;
 
 // Add services to the container.
 
@@ -17,9 +17,14 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<HospitalContext>();
 builder.Services.AddScoped<ISensorDao, SensorEfcDao>();
 builder.Services.AddScoped<ISensorLogic, SensorLogic>();
-
+builder.Services.AddScoped<IWebClient, LoriotClient>();
+builder.Services.AddHostedService<WebClientBackgroundService>();
 builder.Services.AddScoped<IPatientLogic, PatientLogic>();
 builder.Services.AddScoped<IPatientDao, PatientEfcDao>();
+
+builder.Services.AddScoped<IDoctorLogic, DoctorLogic>();
+builder.Services.AddScoped<IDoctorDao, DoctorEfcDao>();
+
 builder.Services.AddScoped<IRoomDao, RoomEfcDao>();
 builder.Services.AddScoped<IRoomLogic, RoomLogic>();
 

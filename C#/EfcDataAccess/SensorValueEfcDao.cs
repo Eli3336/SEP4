@@ -1,7 +1,8 @@
-﻿using Domain.Models;
+﻿using Application.DaoInterfaces;
+using Domain.DTOs;
+using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using WebAPI.IoTGate.Loriot;
 namespace EfcDataAccess;
 
 public class SensorValueEfcDao : ILoriotDao
@@ -13,8 +14,14 @@ public class SensorValueEfcDao : ILoriotDao
         this.context = context;
     }
 
-    public async Task<SensorValue> CreateAsync(SensorValue sensorValue, int id)
+    public async Task<SensorValue> CreateAsync(SensorValueDto sensorValuedto, int id)
+
+
     {
+
+        SensorValue? sensorValue = new SensorValue(sensorValuedto.value, sensorValuedto.timeStamp);
+        
+        
         EntityEntry<SensorValue> newSensorValue = await context.SensorValue.AddAsync(sensorValue);
         var sensor = await context.Sensors.Include(s => s.Values)
             .FirstAsync(p => p.Id.Equals(id));

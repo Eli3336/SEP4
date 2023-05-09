@@ -1,8 +1,9 @@
-﻿using Domain.Models;
+﻿using Domain.DTOs;
+using Domain.Models;
 
-namespace WebAPI.IoTGate.Loriot;
+namespace Application.DaoInterfaces;
 
 public interface ILoriotDao
 {
-    Task<SensorValue> CreateAsync(SensorValue sensorValue, int id);
+    Task<SensorValue> CreateAsync(SensorValueDto sensorValue, int id);
 }

@@ -15,8 +15,7 @@ public class RoomsController : ControllerBase
     {
         this.roomLogic = roomLogic;
     }
-    
-    
+
     [HttpPost]
     public async Task<ActionResult<Room>> CreateAsync(RoomCreationDto dto)
     {
@@ -48,7 +47,6 @@ public class RoomsController : ControllerBase
     }
 
     [HttpGet ("{id:int}")]
-
     public async Task<ActionResult<Room?>> GetRoomDetailsByIdAsync([FromRoute] int id)
     {
         try
@@ -77,5 +75,7 @@ public class RoomsController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
-
+    
+    
+    
 }
