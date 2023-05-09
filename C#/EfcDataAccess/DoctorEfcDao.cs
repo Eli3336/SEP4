@@ -1,11 +1,9 @@
 using Application.DaoInterfaces;
 using Domain.Models;
-
-namespace EfcDataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-
+namespace EfcDataAccess;
 public class DoctorEfcDao : IDoctorDao
 {
     private readonly HospitalContext context;
@@ -37,5 +35,19 @@ public class DoctorEfcDao : IDoctorDao
         }
         context.Doctors.Remove(existing);
         await context.SaveChangesAsync();  
+    }
+    
+    public async Task DoctorUpdateAsync(Doctor doctor)
+    {
+        context.Doctors.Update(doctor);
+        await context.SaveChangesAsync();
+    }
+    
+    public async Task<Doctor?> GetByIdNoTrackingAsync(int id)
+    {
+        Doctor? found = await context.Doctors
+            .AsNoTracking()
+            .SingleOrDefaultAsync(p => p.Id == id);
+        return found;
     }
 }
