@@ -34,21 +34,23 @@ public class LoriotClient : IWebClient
         
         var details = JObject.Parse(receivedJson);
         char[] array = details["data"].Value<String>().ToCharArray();
-        float humidity = Convert.ToInt16(array[0].ToString()+array[1].ToString()+array[2].ToString()+"."+array[3].ToString(),16);
-        float temperature= Convert.ToInt16(array[4].ToString()+array[5].ToString()+array[6].ToString()+"."+array[7].ToString(),16);
-        float co2 = Convert.ToInt16(array[8].ToString()+array[9].ToString()+array[10].ToString()+"."+array[11].ToString(),16);
+        float humidity = Convert.ToInt16(array[0].ToString()+array[1].ToString()+array[2].ToString()+array[3].ToString(),16);
+        float temperature= Convert.ToInt16(array[4].ToString()+array[5].ToString()+array[6].ToString()+array[7].ToString(),16);
+        float co2 = Convert.ToInt16(array[8].ToString()+array[9].ToString()+array[10].ToString()+array[11].ToString(),16);
         Console.WriteLine(humidity + " " + temperature + " " + co2);
-
+        
+        humidity = humidity / 10;
+        
         List<SensorValueDto> sensorValues = new List<SensorValueDto>();
         
         SensorValueDto record = new SensorValueDto()
         {
-            value = temperature,
+            value = Math.Round(temperature, 1),
             timeStamp = DateTime.UtcNow
         };
       SensorValueDto record2 = new SensorValueDto()
         {
-            value =  humidity,
+            value =  Math.Round(humidity,1),
             timeStamp = DateTime.UtcNow
         };
         SensorValueDto record3 = new SensorValueDto()
