@@ -43,6 +43,26 @@ public class DoctorsControllerTest
         var okResult = (CreatedResult)result.Result;
         Assert.AreSame(expectedDoctor, okResult.Value);
     }
+
+    [Test]
+    public async Task CreateAsync_ReturnCreatedDoctor_InvalidNameNumber()
+    {
+        doctorLogicMock.Setup(x => x.CreateAsync(It.IsAny<DoctorCreationDto>()))
+            .ThrowsAsync(new Exception("Name cannot contain numbers!"));
+
+        var result = await controller.CreateAsync(
+            new DoctorCreationDto()
+            {
+                Name = "Ana2",
+                Password = "1234",
+                PhoneNumber = "50123456"
+            });
+        
+        Assert.IsInstanceOf<ObjectResult>(result.Result);
+        var badResult = (ObjectResult)result.Result;
+        Assert.AreEqual(500, badResult.StatusCode);
+        Assert.IsNull(result.Value);
+    }
     
     [Test]
     public async Task CreateAsync_ReturnsCreatedDoctor_InvalidNameSmall()

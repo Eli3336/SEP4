@@ -53,6 +53,25 @@ public class DoctorLogicTest
     }
     
     [Test]
+    public async Task CreateAsync_ReturnsCreatedDoctor_InvalidNameNumber()
+    {
+        // Arrange
+        doctorDaoMock.Setup(x => x.CreateAsync(It.IsAny<Doctor>())).ThrowsAsync(new Exception("Name cannot contain numbers!"));
+
+        // Act
+        var doctor = new DoctorCreationDto()
+        {
+            Name = "Ana2",
+            Password = "1234",
+            PhoneNumber = "50123456"
+        };
+
+        // Assert
+        var ex = Assert.Throws<Exception>(() => logic.CreateAsync(doctor));
+        Assert.AreEqual("Name cannot contain numbers!", ex.Message);
+    }
+    
+    [Test]
     public async Task CreateAsync_ReturnsCreatedDoctor_InvalidNameSmall()
     {
         // Arrange
