@@ -67,7 +67,7 @@ public class DoctorsControllerTest
     }
     
     [Test]
-    public async Task CreateAsync_ReturnsCreatedReceptionist_InvalidNameBig()
+    public async Task CreateAsync_ReturnsCreatedDoctor_InvalidNameBig()
     {
         // Arrange
         doctorLogicMock.Setup(x => x.CreateAsync(It.IsAny<DoctorCreationDto>())).ThrowsAsync(new Exception("Name too small!"));
@@ -89,7 +89,7 @@ public class DoctorsControllerTest
     }
     
     [Test]
-    public async Task CreateAsync_ReturnsCreatedReceptionist_InvalidPasswordSmall()
+    public async Task CreateAsync_ReturnsCreatedDoctor_InvalidPasswordSmall()
     {
         // Arrange
         doctorLogicMock.Setup(x => x.CreateAsync(It.IsAny<DoctorCreationDto>())).ThrowsAsync(new Exception("Name too small!"));
@@ -111,7 +111,7 @@ public class DoctorsControllerTest
     }
     
     [Test]
-    public async Task CreateAsync_ReturnsCreatedReceptionist_InvalidPasswordBig()
+    public async Task CreateAsync_ReturnsCreatedDoctor_InvalidPasswordBig()
     {
         // Arrange
         doctorLogicMock.Setup(x => x.CreateAsync(It.IsAny<DoctorCreationDto>())).ThrowsAsync(new Exception("Name too small!"));
@@ -133,7 +133,7 @@ public class DoctorsControllerTest
     }
     
     [Test]
-    public async Task CreateAsync_ReturnsCreatedReceptionist_InvalidPhoneNumberSmall()
+    public async Task CreateAsync_ReturnsCreatedDoctor_InvalidPhoneNumberSmall()
     {
         // Arrange
         doctorLogicMock.Setup(x => x.CreateAsync(It.IsAny<DoctorCreationDto>())).ThrowsAsync(new Exception("Name too small!"));
@@ -155,7 +155,7 @@ public class DoctorsControllerTest
     }
     
     [Test]
-    public async Task CreateAsync_ReturnsCreatedReceptionist_InvalidPhoneNumberBig()
+    public async Task CreateAsync_ReturnsCreatedDoctor_InvalidPhoneNumberBig()
     {
         // Arrange
         doctorLogicMock.Setup(x => x.CreateAsync(It.IsAny<DoctorCreationDto>())).ThrowsAsync(new Exception("Name too small!"));
