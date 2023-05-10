@@ -10,6 +10,5 @@ public interface IRoomLogic
     Task<Room?> GetRoomDetailsByIdAsync(int id);
     Task RoomUpdateAsync(int id, string name, int capacity, string availability);
     Task<IEnumerable<Room?>> GetAllRoomsAsync();
-    Task RoomUpdateAsync(int id, int capacity, string availability);
     Task<IEnumerable<Room>> GetAllEmptyRooms();
 }
