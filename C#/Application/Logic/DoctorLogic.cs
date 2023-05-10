@@ -73,6 +73,8 @@ public class DoctorLogic : IDoctorLogic
 
     private void ValidateDoctor(Doctor doctor)
     {
+        if (doctor.Name.Contains("0") || doctor.Name.Contains("1") || doctor.Name.Contains("2") || doctor.Name.Contains("3") || doctor.Name.Contains("4") || doctor.Name.Contains("5") || doctor.Name.Contains("6") || doctor.Name.Contains("7") || doctor.Name.Contains("8") || doctor.Name.Contains("9"))
+            throw new Exception("Name cannot contain numbers!");
         if (doctor.Name.Length < 3)
             throw new Exception("Name too small!");
         if (doctor.Name.Length > 255)
