@@ -49,6 +49,28 @@ public class ReceptionistsControllerTest
     }
     
     [Test]
+    public async Task CreateAsync_ReturnsCreatedReceptionist_InvalidNameNumber()
+    {
+        // Arrange
+        receptionistLogicMock.Setup(x => x.CreateAsync(It.IsAny<ReceptionistCreationDto>())).ThrowsAsync(new Exception("Name cannot contain numbers!"));
+
+        // Act
+        var result = await controller.CreateAsync(
+            new ReceptionistCreationDto()
+            {
+                Name = "Ana2",
+                Password = "1234",
+                PhoneNumber = "50123456"
+            });
+
+        // Assert
+        Assert.IsInstanceOf<ObjectResult>(result.Result);
+        var badResult = (ObjectResult)result.Result;
+        Assert.AreEqual(500, badResult.StatusCode);
+        Assert.IsNull(result.Value);
+    }
+
+    [Test]
     public async Task CreateAsync_ReturnsCreatedReceptionist_InvalidNameSmall()
     {
         // Arrange

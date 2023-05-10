@@ -53,6 +53,25 @@ public class ReceptionistLogicTest
     }
     
     [Test]
+    public async Task CreateAsync_ReturnsCreatedReceptionist_InvalidNameNumber()
+    {
+        // Arrange
+        receptionistDaoMock.Setup(x => x.CreateAsync(It.IsAny<Receptionist>())).ThrowsAsync(new Exception("Name cannot contain numbers!"));
+
+        // Act
+        var receptionist = new ReceptionistCreationDto()
+        {
+            Name = "Ana2",
+            Password = "1234",
+            PhoneNumber = "50123456"
+        };
+
+        // Assert
+        var ex = Assert.Throws<Exception>(() => logic.CreateAsync(receptionist));
+        Assert.AreEqual("Name cannot contain numbers!", ex.Message);
+    }
+    
+    [Test]
     public async Task CreateAsync_ReturnsCreatedReceptionist_InvalidNameSmall()
     {
         // Arrange
