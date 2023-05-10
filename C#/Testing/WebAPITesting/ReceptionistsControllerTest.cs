@@ -19,6 +19,9 @@ public class ReceptionistsControllerTest
         receptionistLogicMock = new Mock<IReceptionistLogic>();
         controller = new ReceptionistsController(receptionistLogicMock.Object);
     }
+    
+    //create method
+    
     [Test]
     public async Task CreateAsync_ReturnsCreatedReceptionist()
     {
@@ -176,6 +179,4 @@ public class ReceptionistsControllerTest
         Assert.AreEqual(500, badResult.StatusCode);
         Assert.IsNull(result.Value);
     }
-    
-    
 }

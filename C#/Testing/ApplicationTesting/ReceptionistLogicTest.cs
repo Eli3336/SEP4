@@ -21,6 +21,8 @@ public class ReceptionistLogicTest
         logic = new ReceptionistLogic(receptionistDaoMock.Object);
     }
     
+    //create method
+    
     [Test]
     public async Task CreateAsync_ReturnsCreatedReceptionist()
     {
@@ -162,5 +164,38 @@ public class ReceptionistLogicTest
         // Assert
         var ex = Assert.Throws<Exception>(() => logic.CreateAsync(receptionist));
         Assert.AreEqual("Phone number too big!", ex.Message);
+    }
+    
+    //get method
+    
+    [Test]
+    public async Task GetReceptionistByIdAsync_ReturnsReceptionist()
+    {
+        var expectedReceptionist = new Receptionist() { 
+            Id = 1,
+            Name = "Ana",
+            Password = "1234",
+            PhoneNumber = "50123456"
+        };
+        receptionistDaoMock.Setup(dao => dao.GetByIdAsync(It.IsAny<int>()))
+            .ReturnsAsync(expectedReceptionist);
+
+        var result = await logic.GetByIdAsync(1);
+
+        Assert.IsNotNull(result);
+        Assert.AreEqual(result.Id, expectedReceptionist.Id);
+        Assert.AreEqual(result.Name, expectedReceptionist.Name);
+        Assert.AreEqual(result.Password, expectedReceptionist.Password);
+        Assert.AreEqual(result.PhoneNumber, expectedReceptionist.PhoneNumber);
+    }
+
+    [Test]
+    public async Task GetReceptionistByIdAsync_ReturnsReceptionist_InvalidId()
+    {
+        receptionistDaoMock.Setup(dao => dao.GetByIdAsync(It.IsAny<int>()))
+            .ThrowsAsync(new Exception("Receptionist with ID 2 not found!"));
+
+        //var ex = Assert.Throws<Exception>(await logic.GetByIdAsync(10));
+        //Assert.AreEqual("Receptionist with ID 2 not found!", ex.Message);
     }
 }
