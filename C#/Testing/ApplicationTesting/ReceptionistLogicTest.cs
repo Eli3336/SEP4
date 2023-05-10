@@ -193,9 +193,9 @@ public class ReceptionistLogicTest
     public async Task GetReceptionistByIdAsync_ReturnsReceptionist_InvalidId()
     {
         receptionistDaoMock.Setup(dao => dao.GetByIdAsync(It.IsAny<int>()))
-            .ThrowsAsync(new Exception("Receptionist with ID 2 not found!"));
+            .ThrowsAsync(new Exception("Receptionist with ID 10 not found!"));
 
-        //var ex = Assert.Throws<Exception>(await logic.GetByIdAsync(10));
-        //Assert.AreEqual("Receptionist with ID 2 not found!", ex.Message);
+        var ex = Assert.Throws<Exception>(() => logic.GetByIdAsync(10));
+        Assert.AreEqual("Receptionist with ID 10 not found!", ex.Message);
     }
 }
