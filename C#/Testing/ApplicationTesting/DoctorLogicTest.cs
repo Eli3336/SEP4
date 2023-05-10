@@ -21,6 +21,8 @@ public class DoctorLogicTest
         logic = new DoctorLogic(doctorDaoMock.Object);
     }
     
+    //create method
+    
     [Test]
     public async Task CreateAsync_ReturnsCreatedDoctor()
     {
@@ -162,5 +164,38 @@ public class DoctorLogicTest
         // Assert
         var ex = Assert.Throws<Exception>(() => logic.CreateAsync(doctor));
         Assert.AreEqual("Phone number too big!", ex.Message);
+    }
+    
+    //get method
+
+    [Test]
+    public async Task GetDoctorByIdAsync_ReturnsDoctor()
+    {
+        var expectedDoctor = new Doctor()
+        {
+            Id = 1,
+            Name = "Ana",
+            Password = "1234",
+            PhoneNumber = "50123456"
+        };
+            
+        doctorDaoMock.Setup(x => x.GetByIdAsync(It.IsAny<int>())).ReturnsAsync(expectedDoctor);
+
+        var result = await logic.GetByIdAsync(1);
+        
+        Assert.IsNotNull(result);
+        Assert.AreEqual(result.Id, expectedDoctor.Id);
+        Assert.AreEqual(result.Name, expectedDoctor.Name);
+        Assert.AreEqual(result.Password, expectedDoctor.Password);
+        Assert.AreEqual(result.PhoneNumber, expectedDoctor.PhoneNumber);
+    }
+    
+    [Test]
+    public async Task GetDoctorByIdAsync_ReturnsDoctor_InvalidId()
+    {
+        doctorDaoMock.Setup(x => x.GetByIdAsync(It.IsAny<int>())).ThrowsAsync(new Exception("Doctor with ID 10 not found!"));
+
+        var ex = Assert.ThrowsAsync<Exception>((() => logic.GetByIdAsync(10)));
+        Assert.AreEqual("Doctor with ID 10 not found!", ex.Message);
     }
 }
