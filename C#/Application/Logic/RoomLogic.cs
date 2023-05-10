@@ -102,6 +102,23 @@ public class RoomLogic : IRoomLogic
         return Task.FromResult(rooms);
     }
 
+    public async Task<IEnumerable<Room>> GetAllEmptyRooms()
+    {
+        List<Room> result = new List<Room>();
+        List<Room?> rooms = roomDao.GetAllRoomsAsync().Result.ToList();
+        if (rooms.Count < 1)
+        {
+            return result;
+        }
+        for (int i = 0; i < rooms.Count; i++)
+        {
+            Room room = rooms[i];
+            if (room.Patients.Count == 0)
+                    result.Add(room);
+        }
+        return result;
+    }
+
     private void ValidateRoomUpdate(Room room)
     {
         if (room.Capacity < 1)
