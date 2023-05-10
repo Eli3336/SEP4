@@ -45,6 +45,21 @@ public class RoomsController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+    
+    [HttpGet("Empty")]
+    public async Task<ActionResult<IEnumerable<Room>>> GetAllEmptyRoomsIdToUpdate()
+    {
+        try
+        {
+            IEnumerable<Room> rooms = await roomLogic.GetAllEmptyRooms();
+            return Ok(rooms);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
 
     [HttpGet ("{id:int}")]
     public async Task<ActionResult<Room?>> GetRoomDetailsByIdAsync([FromRoute] int id)
