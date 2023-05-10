@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "../styles/RoomInfo.module.css";
 import SensorInfo from "./SensorInfo";
 import { fetchRoomDetailsById } from "@/api";
+import { fetchSensorDataByRoomId } from "@/api";
 
 const RoomInfo = ({ roomId, onClose }) => {
   const [roomData, setRoomData] = useState(null);
@@ -10,9 +11,21 @@ const RoomInfo = ({ roomId, onClose }) => {
   useEffect(() => {
     async function fetchRoomData() {
       try {
-        const roomDetails = await fetchRoomDetailsById(roomId);
-        setRoomData(roomDetails);
-        console.log("Room data:", roomDetails);
+        const [roomData, sensorsData] = await Promise.all([
+          fetchRoomDetailsById(roomId),
+          fetchSensorDataByRoomId(roomId),
+        ]);
+
+        const sensorsWithValues = roomData.sensors.map((sensor, index) => {
+          return {
+            ...sensor,
+            values: [{ value: sensorsData[index]?.value ?? null }],
+          };
+        });
+
+        const updatedRoomData = { ...roomData, sensors: sensorsWithValues };
+        setRoomData(updatedRoomData);
+        console.log("Room data:", updatedRoomData);
       } catch (error) {
         console.error("Error fetching room data:", error);
       }
