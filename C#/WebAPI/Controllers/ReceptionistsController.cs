@@ -47,4 +47,19 @@ public class ReceptionistsController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+    
+    [HttpPatch("{id:int}")]
+    public async Task<ActionResult> ReceptionistUpdateAsync([FromRoute] int id, string name, string phoneNumber)
+    {
+        try
+        {
+            await receptionistLogic.ReceptionistUpdateAsync(id, name, phoneNumber);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
 }

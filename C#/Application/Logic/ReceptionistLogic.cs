@@ -71,22 +71,23 @@ public class ReceptionistLogic : IReceptionistLogic
         if (receptionist == null)
         {
             throw new Exception(
-                $"Doctor with ID {id} not found!");
+                $"Receptionist with ID {id} not found!");
         }
         return receptionist;
     }
     
     private void ValidateReceptionistUpdate(Receptionist receptionist)
     {
-        if (receptionist.Name.Length > 1)
-        {
-            throw new ArgumentException("The name is too short");
-        }
-        if (receptionist.PhoneNumber.Length >= 10)
-        {
-            throw new ArgumentException("The phone number is too short");
-        }
-        
+       if (receptionist.Name.Contains("0") || receptionist.Name.Contains("1") || receptionist.Name.Contains("2") || receptionist.Name.Contains("3") || receptionist.Name.Contains("4") || receptionist.Name.Contains("5") || receptionist.Name.Contains("6") || receptionist.Name.Contains("7") || receptionist.Name.Contains("8") || receptionist.Name.Contains("9"))
+            throw new Exception("Name cannot contain numbers!");
+        if (receptionist.Name.Length < 3)
+            throw new Exception("Name too short!");
+        if (receptionist.Name.Length > 255)
+            throw new Exception("Name too long!");
+        if (receptionist.PhoneNumber.Length < 6)
+            throw new Exception("Phone number too short!");
+        if (receptionist.PhoneNumber.Length > 13)
+            throw new Exception("Phone number too long!");
     }
     
 }
