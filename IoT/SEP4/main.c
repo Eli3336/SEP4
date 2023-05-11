@@ -43,6 +43,7 @@ void lora_handler_initialise(UBaseType_t lora_handler_task_priority);
 static QueueHandle_t _humidityQueue;
 static QueueHandle_t _temperatureQueue;
 static QueueHandle_t _co2Queue;
+static QueueHandle_t _senderQueue;
 // servo
 // sender queues
 // breakpoint queues?
@@ -59,6 +60,7 @@ static void _createQueues(void) {
 	_co2Queue = xQueueCreate(10, sizeof(uint16_t));
 	_humidityQueue = xQueueCreate(10, sizeof(uint16_t));
 	_temperatureQueue = xQueueCreate(10, sizeof(int16_t));
+	_senderQueue= xQueueCreate(10,sizeof(lora_driver_payload_t));
 	_messageBuffer = xMessageBufferCreate(sizeof(lora_driver_payload_t)*5);
 }
 
@@ -72,15 +74,18 @@ static void _createMutexes(void){
 }
 
 static void _initDrivers(void) {
+	 lora_driver_initialise(ser_USART1, _messageBuffer);
 	puts("Initializing drivers...");
 	mh_z19_initialise(ser_USART3);
 	hih8120_initialise();
-	lora_driver_initialise(ser_USART1, _messageBuffer);
+	
 }
 
 static void _createTasks(void) {
 	co2Task_create(_co2Queue, _actEventGroup, _doneEventGroup);
 	humiTempTask_create(_humidityQueue, _temperatureQueue, _actEventGroup, _doneEventGroup);
+	senderTask_create(_senderQueue);
+	
 }
 
 //added sensors end
@@ -114,7 +119,7 @@ void initialiseSystem()
 	DDRA |= _BV(DDA0) | _BV(DDA7);
 
 	// Make it possible to use stdio on COM port 0 (USB) on Arduino board - Setting 57600,8,N,1
-	stdio_initialise(ser_USART0);
+	
 	// Let's create some tasks
 	create_tasks_and_semaphores();
 
@@ -122,17 +127,18 @@ void initialiseSystem()
 	// Status Leds driver
 	status_leds_initialise(5); // Priority 5 for internal task
 	// Initialise the LoRaWAN driver without down-link buffer
-	lora_driver_initialise(1, NULL);
+	
 	// Create LoRaWAN task and start it up with priority 3
-	lora_handler_initialise(3);
+	// lora_handler_initialise(3);
+	
 }
 
 /*-----------------------------------------------------------*/
 int main(void)
 {
-	initialiseSystem(); // Must be done as the very first thing!!
-	printf("Start initiated\n");
 	stdio_initialise(ser_USART0);
+	//initialiseSystem(); // Must be done as the very first thing!!
+	printf("Start initiated\n");
 
 	_createQueues();
 	_initDrivers();

@@ -8,8 +8,8 @@
 
 #define TASK_NAME "SenderTask"
 #define TASK_PRIORITY configMAX_PRIORITIES - 2
-#define LORA_appEUI "6BE1FDCE7E214CF9"
-#define LORA_appKEY "EECCD39BD2AB6C6BD107A08E0DBE9DB9"
+ #define LORA_appEUI "6BE1FDCE7E214CF9"
+ #define LORA_appKEY "EECCD39BD2AB6C6BD107A08E0DBE9DB9"
 
 static void _run(void* params);
 static void _connectToLoRaWAN();
@@ -19,13 +19,14 @@ static QueueHandle_t _senderQueue;
 void senderTask_create(QueueHandle_t senderQueue) {
 	_senderQueue = senderQueue;
 	
-	xTaskCreate(_run,
+	 xTaskCreate(_run,
 	TASK_NAME,
 	configMINIMAL_STACK_SIZE,
 	NULL,
 	TASK_PRIORITY,
 	NULL
 	);
+	
 }
 
 void senderTask_initTask(void* params) {
@@ -87,14 +88,15 @@ static void _connectToLoRaWAN() {
 	
 	do {
 		rc = lora_driver_join(LORA_OTAA);
+	
 		printf("Join Network TriesLeft:%d >%s<\n", maxJoinTriesLeft, lora_driver_mapReturnCodeToText(rc));
-
 		if ( rc != LORA_ACCEPTED)
 		{
 			// Make the red led pulse to tell something went wrong
 			status_leds_longPuls(led_ST1); // OPTIONAL
 			// Wait 5 sec and lets try again
 			vTaskDelay(pdMS_TO_TICKS(5000UL));
+			printf("the connection status is : Denied \n");
 		}
 		else
 		{
@@ -105,7 +107,23 @@ static void _connectToLoRaWAN() {
 	if (rc == LORA_ACCEPTED)
 	{
 		// Connected to LoRaWAN
+		printf("connection is ACCEPTED %s",LORA_ACCEPTED);
 		// Make the green led steady
 		status_leds_ledOn(led_ST2); // OPTIONAL
 	}
+	else
+	{
+		// Something went wrong
+		// Turn off the green led
+		status_leds_ledOff(led_ST2); // OPTIONAL
+		// Make the red led blink fast to tell something went wrong
+		status_leds_fastBlink(led_ST1); // OPTIONAL
+
+		// Lets stay here
+		while (1)
+		{
+			taskYIELD();
+		}
+	}
+	
 }
