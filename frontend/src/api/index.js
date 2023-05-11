@@ -1,22 +1,41 @@
+import axios from "axios";
+
 const API_BASE_URL = "https://localhost:7216";
+
+const instance = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  },
+});
 
 export async function fetchRoomDetailsById(roomId) {
   try {
-    const roomDataUrl = `${API_BASE_URL}/Rooms/${roomId}`;
+    const roomDataUrl = `/Rooms/${roomId}`;
     console.log("fetchRoomDetailsById URL:", roomDataUrl);
 
-    const roomDataResponse = await fetch(roomDataUrl);
+    const roomDataResponse = await instance.get(roomDataUrl);
+
     console.log("fetchRoomDetailsById response:", roomDataResponse);
 
-    if (!roomDataResponse.ok) {
-      throw new Error(
-        `Error fetching room data: ${roomDataResponse.statusText}`
-      );
-    }
-    const roomData = await roomDataResponse.json();
+    const roomData = roomDataResponse.data;
     console.log("fetchRoomDetailsById data:", roomData);
 
-    return roomData;
+    const sensorsWithValues = await Promise.all(
+      roomData.sensors.map(async (sensor) => {
+        const sensorResponse = await instance.get(`/Sensors/${sensor.id}`);
+        return {
+          ...sensor,
+          values: sensorResponse.data.values,
+        };
+      })
+    );
+
+    return {
+      ...roomData,
+      sensors: sensorsWithValues,
+    };
   } catch (error) {
     console.error("Error in fetchRoomDetailsById:", error);
     throw error;
@@ -91,3 +110,62 @@ export async function fetchSensorLogById(sensorId) {
     throw error;
   }
 }
+
+// receptionist
+export async function createAndAddPatientToRoom(patientInfo, roomId) {
+  try {
+    const response = await instance.post(
+      `/Patients?roomId=${roomId}`,
+      patientInfo
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error in createAndAddPatientToRoom:", error);
+    alert(`Failed to add patient: ${error.response.data}`);
+    throw error;
+  }
+}
+
+export async function deletePatientById(patientId) {
+  try {
+    const response = await instance.delete(`/Patients/${patientId}`);
+    return response;
+  } catch (error) {
+    console.error("Error in deletePatientById:", error);
+    alert(`Failed to delete patient: ${error.response.data}`);
+    throw error;
+  }
+}
+
+export async function getPatientById(patientId) {
+  try {
+    const response = await instance.get(`/Patients/${patientId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error in getPatientById:", error);
+    alert(`Failed to get patient: ${error.response.data}`);
+    throw error;
+  }
+}
+
+export const updateRoom = async (id, capacity, availability) => {
+  try {
+    if (availability !== "Available" && availability !== "Under maintenance") {
+      throw new Error(
+        'Invalid availability status. Must be "Available" or "Under maintenance"'
+      );
+    }
+
+    console.log(
+      `Updating room ${id} with capacity ${capacity} and availability ${availability}`
+    );
+    const response = await instance.patch(
+      `/Rooms/${id}?capacity=${capacity}&availability=${availability}`
+    );
+    console.log("Updated room:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating room:", error);
+    throw error;
+  }
+};

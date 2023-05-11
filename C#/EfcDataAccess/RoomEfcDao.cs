@@ -48,6 +48,13 @@ public class RoomEfcDao : IRoomDao
         return room;
     }
 
+    public async Task<IEnumerable<Room?>> GetAllRoomsAsync()
+    {
+        IQueryable<Room> rooms = context.Rooms.Include(room => room.Patients).Include(room => room.Sensors).AsQueryable();
+        IEnumerable<Room> result = await rooms.ToListAsync();
+        return result;
+    }
+
     public async Task RoomUpdateAsync(Room room)
     {
         context.Rooms.Update(room);

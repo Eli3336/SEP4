@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EfcDataAccess.Migrations
 {
     [DbContext(typeof(HospitalContext))]
-    [Migration("20230328180216_InitialCreate")]
+    [Migration("20230508134704_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -19,6 +19,29 @@ namespace EfcDataAccess.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.4");
+
+            modelBuilder.Entity("Domain.Models.Doctor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Doctors");
+                });
 
             modelBuilder.Entity("Domain.Models.Patient", b =>
                 {
@@ -38,6 +61,53 @@ namespace EfcDataAccess.Migrations
                     b.HasIndex("RoomId");
 
                     b.ToTable("Patients");
+                });
+
+            modelBuilder.Entity("Domain.Models.Receptionist", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Receptionists");
+                });
+
+            modelBuilder.Entity("Domain.Models.Request", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("DoctorId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DoctorId");
+
+                    b.ToTable("Request");
                 });
 
             modelBuilder.Entity("Domain.Models.Room", b =>
@@ -90,20 +160,20 @@ namespace EfcDataAccess.Migrations
 
             modelBuilder.Entity("Domain.Models.SensorValue", b =>
                 {
-                    b.Property<int>("valueId")
+                    b.Property<int>("ValueId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("SensorId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("timeStamp")
+                    b.Property<DateTime>("TimeStamp")
                         .HasColumnType("TEXT");
 
-                    b.Property<double>("value")
+                    b.Property<double>("Value")
                         .HasColumnType("REAL");
 
-                    b.HasKey("valueId");
+                    b.HasKey("ValueId");
 
                     b.HasIndex("SensorId");
 
@@ -115,6 +185,13 @@ namespace EfcDataAccess.Migrations
                     b.HasOne("Domain.Models.Room", null)
                         .WithMany("Patients")
                         .HasForeignKey("RoomId");
+                });
+
+            modelBuilder.Entity("Domain.Models.Request", b =>
+                {
+                    b.HasOne("Domain.Models.Doctor", null)
+                        .WithMany("Requests")
+                        .HasForeignKey("DoctorId");
                 });
 
             modelBuilder.Entity("Domain.Models.Sensor", b =>
@@ -129,6 +206,11 @@ namespace EfcDataAccess.Migrations
                     b.HasOne("Domain.Models.Sensor", null)
                         .WithMany("Values")
                         .HasForeignKey("SensorId");
+                });
+
+            modelBuilder.Entity("Domain.Models.Doctor", b =>
+                {
+                    b.Navigation("Requests");
                 });
 
             modelBuilder.Entity("Domain.Models.Room", b =>

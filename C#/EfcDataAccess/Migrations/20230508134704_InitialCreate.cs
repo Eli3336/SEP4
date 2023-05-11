@@ -12,6 +12,36 @@ namespace EfcDataAccess.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Doctors",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Password = table.Column<string>(type: "TEXT", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Doctors", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Receptionists",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Password = table.Column<string>(type: "TEXT", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Receptionists", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Rooms",
                 columns: table => new
                 {
@@ -24,6 +54,26 @@ namespace EfcDataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Rooms", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Request",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Type = table.Column<string>(type: "TEXT", nullable: false),
+                    Content = table.Column<string>(type: "TEXT", nullable: false),
+                    DoctorId = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Request", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Request_Doctors_DoctorId",
+                        column: x => x.DoctorId,
+                        principalTable: "Doctors",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -70,15 +120,15 @@ namespace EfcDataAccess.Migrations
                 name: "SensorValue",
                 columns: table => new
                 {
-                    valueId = table.Column<int>(type: "INTEGER", nullable: false)
+                    ValueId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    value = table.Column<double>(type: "REAL", nullable: false),
-                    timeStamp = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Value = table.Column<double>(type: "REAL", nullable: false),
+                    TimeStamp = table.Column<DateTime>(type: "TEXT", nullable: false),
                     SensorId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SensorValue", x => x.valueId);
+                    table.PrimaryKey("PK_SensorValue", x => x.ValueId);
                     table.ForeignKey(
                         name: "FK_SensorValue_Sensors_SensorId",
                         column: x => x.SensorId,
@@ -90,6 +140,11 @@ namespace EfcDataAccess.Migrations
                 name: "IX_Patients_RoomId",
                 table: "Patients",
                 column: "RoomId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Request_DoctorId",
+                table: "Request",
+                column: "DoctorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Sensors_RoomId",
@@ -109,7 +164,16 @@ namespace EfcDataAccess.Migrations
                 name: "Patients");
 
             migrationBuilder.DropTable(
+                name: "Receptionists");
+
+            migrationBuilder.DropTable(
+                name: "Request");
+
+            migrationBuilder.DropTable(
                 name: "SensorValue");
+
+            migrationBuilder.DropTable(
+                name: "Doctors");
 
             migrationBuilder.DropTable(
                 name: "Sensors");
