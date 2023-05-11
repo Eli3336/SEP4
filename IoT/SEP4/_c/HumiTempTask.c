@@ -40,12 +40,13 @@ void humiTempTask_initTask(void* params) {
 }
 
 void humiTempTask_runTask() {
-	xEventGroupWaitBits(_actEventGroup, 
+	/* xEventGroupWaitBits(_actEventGroup, 
 					    BIT_HUMIDITY_ACT | BIT_TEMPERATURE_ACT,
 						pdTRUE,	
 						pdFALSE, 
 						portMAX_DELAY
 	);
+	*/
 	
 	if (hih8120_wakeup() == HIH8120_OK) {
 		vTaskDelay(pdMS_TO_TICKS(100));
@@ -54,9 +55,13 @@ void humiTempTask_runTask() {
 			vTaskDelay(pdMS_TO_TICKS(50));
 			_latestHumidity = hih8120_getHumidityPercent_x10();
 			_latestTemperature = hih8120_getTemperature_x10();
+			
+			printf("Temperature Value Is : %d \n",_latestTemperature);
+			printf("Humidity Value Is : %d \n",_latestHumidity);
 		} else {
 			_latestHumidity = CONFIG_INVALID_HUMIDITY_VALUE;
 			_latestTemperature = CONFIG_INVALID_TEMPERATURE_VALUE;
+			
 		}
 	} else {
 		_latestHumidity = CONFIG_INVALID_HUMIDITY_VALUE;
