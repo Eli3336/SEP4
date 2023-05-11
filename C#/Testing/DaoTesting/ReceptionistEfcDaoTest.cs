@@ -6,13 +6,14 @@ namespace TestingReq5.DaoTesting;
 
 public class ReceptionistEfcDaoTest
 {
-    private Mock<> x;
+    private Mock<HospitalContext> context;
     private ReceptionistEfcDao dao;
 
     [SetUp]
     public void Setup()
     {
-        x = new Mock<>();
-        dao = new ReceptionistEfcDao(x.Object);
+        context = new Mock<HospitalContext>();
+        dao = new ReceptionistEfcDao(context.Object);
     }
+    
 }
