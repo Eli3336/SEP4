@@ -23,6 +23,29 @@ export async function fetchRoomDetailsById(roomId) {
   }
 }
 
+export async function fetchDoctorDetailsById(doctorId) {
+  try {
+    const doctorDataUrl = `${API_BASE_URL}/Doctors/${doctorId}`;
+    console.log("fetchDoctorsDetailsById URL:", doctorDataUrl);
+
+    const doctorDataResponse = await fetch(doctorDataUrl);
+    console.log("fetchDoctorDetailsById response:", doctorDataResponse);
+
+    if (!doctorataResponse.ok) {
+      throw new Error(
+        `Error fetching doctor data: ${doctorDataResponse.statusText}`
+      );
+    }
+    const doctorData = await doctorDataResponse.json();
+    console.log("fetchDoctorDetailsById data:", doctorData);
+
+    return doctorData;
+  } catch (error) {
+    console.error("Error in fetchDoctorDetailsById:", error);
+    throw error;
+  }
+}
+
 export async function fetchSensorDataByRoomId(roomId) {
   try {
     const sensorDataUrl = `${API_BASE_URL}/Sensors?roomId=${roomId}`;
