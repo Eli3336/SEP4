@@ -23,8 +23,6 @@ void humiTempTask_create(QueueHandle_t humidityQueue,
 									EventGroupHandle_t doneEventGroup) {
 	_humidityQueue = humidityQueue;
 	_temperatureQueue = temperatureQueue;
-	_actEventGroup = actEventGroup;
-	_doneEventGroup = doneEventGroup;
 	
 	xTaskCreate(_run, 
 				TASK_NAME, 
