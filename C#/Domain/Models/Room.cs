@@ -23,8 +23,9 @@ public class Room
         Sensors = sensors;
     }
 
-    public Room(int capacity, string availability)
+    public Room(string name, int capacity, string availability)
     {
+        Name = name;
         Capacity = capacity;
         Availability = availability;
     }

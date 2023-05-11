@@ -14,7 +14,7 @@ public class WebClientBackgroundService : BackgroundService
             while (!stoppingToken.IsCancellationRequested)
             {
                 await _webClient.WSGetData();
-                await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
+                await Task.Delay(TimeSpan.FromMinutes(0.5), stoppingToken);
             }
             
         }
