@@ -292,6 +292,7 @@
     <Compile Include="FreeRTOS\src\timers.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="_c\ReceiverTask.c">
     <Compile Include="_c\VibeControllerImpl.c">
       <SubType>compile</SubType>
     </Compile>
@@ -304,7 +305,25 @@
     <Compile Include="FreeRTOS\src\variantHooks.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="LoRaWANHandler.c">
+    <Compile Include="_c\SenderTask.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="_c\UplinkMessageBuilder.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="_h\ReceiverTask.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="_h\SenderTask.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="_h\UplinkMessageBuilder.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <None Include="FreeRTOS\src\timers.h">
+      <SubType>compile</SubType>
+    </None>
+    <Compile Include="FreeRTOS\src\variantHooks.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="_c\CO2Task.c">
@@ -316,15 +335,6 @@
     <Compile Include="_c\HumiTempTask.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="_c\ReceiverTask.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="_c\SenderTask.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="_c\UplinkMessageBuilder.c">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="_h\CO2Task.h">
       <SubType>compile</SubType>
     </Compile>
@@ -332,15 +342,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="_h\HumiTempTask.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="_h\ReceiverTask.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="_h\SenderTask.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="_h\UplinkMessageBuilder.h">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>
