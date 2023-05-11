@@ -50,7 +50,7 @@ public class DoctorLogic : IDoctorLogic
         return doctor;
     }
 
-    public async Task DoctorUpdateAsync(int id, string name, string password, string phoneNumber)
+    public async Task DoctorUpdateAsync(int id, string name, string phoneNumber)
     {
         Doctor? existing = await doctorDao.GetByIdNoTrackingAsync(id);
         if (existing == null)
@@ -58,16 +58,16 @@ public class DoctorLogic : IDoctorLogic
             throw new Exception($"Doctor with ID {id} not found!");
         }
         
-        DoctorUpdateDto dto = new DoctorUpdateDto(id, name, password, phoneNumber);
+        DoctorUpdateDto dto = new DoctorUpdateDto(id, name, phoneNumber);
 
         string nameToUse = dto.Name ?? existing.Name;
-        string passwordToUse = dto.Password ?? existing.Password;
         string phoneNumberToUse = dto.PhoneNumber ?? existing.PhoneNumber;
         
         
-        Doctor updated = new (nameToUse, passwordToUse, phoneNumberToUse)
+        Doctor updated = new (nameToUse, phoneNumberToUse)
         {
-            Id = existing.Id
+            Id = existing.Id,
+            Password = existing.Password
         };
         ValidateDoctor(updated);
         await doctorDao.DoctorUpdateAsync(updated);

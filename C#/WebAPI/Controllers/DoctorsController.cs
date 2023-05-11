@@ -62,11 +62,11 @@ public class DoctorsController : ControllerBase
     }
     
     [HttpPatch("{id:int}")]
-    public async Task<ActionResult> DoctorUpdateAsync([FromRoute] int id, string name, string password, string phoneNumber)
+    public async Task<ActionResult> DoctorUpdateAsync([FromRoute] int id, string name, string phoneNumber)
     {
         try
         {
-            await doctorLogic.DoctorUpdateAsync(id, name, password, phoneNumber);
+            await doctorLogic.DoctorUpdateAsync(id, name, phoneNumber);
             return Ok();
         }
         catch (Exception e)
