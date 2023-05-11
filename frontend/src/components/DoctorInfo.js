@@ -9,13 +9,16 @@ const DoctorInfo = ({ doctorId, onClose }) => {
     async function fetchDoctorData() {
       try {
         const doctorDetails = await fetchDoctorDetailsById(doctorId);
-        setRoomData(doctorDetails);
+        setDoctorData(doctorDetails);
         console.log("Doctor Info:", doctorDetails);
+
+        const updatedDoctorData = { ...doctorData };
+        setDoctorData(updatedDoctorData);
+        console.log("Doctor data:", updatedDoctorData);
       } catch (error) {
-        console.error("Error fetching doctor Info:", error);
+        console.error("Error fetching doctor data:", error);
       }
     }
-
     if (doctorId) {
       fetchDoctorData();
     }
@@ -37,6 +40,7 @@ const DoctorInfo = ({ doctorId, onClose }) => {
           <div className={styles.centerSection}>
             <div className={styles.content}>
               <h2>{doctorData.name}</h2>
+              <p>password: {doctorData.password}</p>
               <p>phoneNumber: {doctorData.phoneNumber}</p>
             </div>
           </div>

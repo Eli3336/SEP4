@@ -42,29 +42,6 @@ export async function fetchRoomDetailsById(roomId) {
   }
 }
 
-export async function fetchDoctorDetailsById(doctorId) {
-  try {
-    const doctorDataUrl = `${API_BASE_URL}/Doctors/${doctorId}`;
-    console.log("fetchDoctorsDetailsById URL:", doctorDataUrl);
-
-    const doctorDataResponse = await fetch(doctorDataUrl);
-    console.log("fetchDoctorDetailsById response:", doctorDataResponse);
-
-    if (!doctorataResponse.ok) {
-      throw new Error(
-        `Error fetching doctor data: ${doctorDataResponse.statusText}`
-      );
-    }
-    const doctorData = await doctorDataResponse.json();
-    console.log("fetchDoctorDetailsById data:", doctorData);
-
-    return doctorData;
-  } catch (error) {
-    console.error("Error in fetchDoctorDetailsById:", error);
-    throw error;
-  }
-}
-
 export async function fetchSensorDataByRoomId(roomId) {
   try {
     const sensorDataUrl = `${API_BASE_URL}/Sensors?roomId=${roomId}`;
@@ -111,6 +88,36 @@ export async function fetchSensorLogById(sensorId) {
   }
 }
 
+export async function getDoctorById(doctorId) {
+  try {
+    const response = await instance.get(`/Doctors/${doctorId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error in getDoctorById:", error);
+    alert(`Failed to get Doctor: ${error.response.data}`);
+    throw error;
+  }
+}
+
+export async function deleteDoctorById(doctortId) {
+  try {
+    const response = await instance.delete(`/Doctors/${doctorId}`);
+    return response;
+  } catch (error) {
+    console.error("Error in deleteDoctorById:", error);
+    alert(`Failed to delete doctor: ${error.response.data}`);
+    throw error;
+  }
+}
+
+export const updateDoctorInfo = async (id, name, password, phoneNumber) => {
+  console.log(`Updating Doctor : ${name} information`);
+  const response = await instance.patch(
+    `/Doctors/${id}?name=${name}&password=${password}&phoneNumber=${phoneNumber}`
+  );
+  console.log("Updated Doctor Info:", response.data);
+  return response.data;
+};
 // receptionist
 export async function createAndAddPatientToRoom(patientInfo, roomId) {
   try {
