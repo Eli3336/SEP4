@@ -293,6 +293,16 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="_c\ReceiverTask.c">
+    <Compile Include="_c\VibeControllerImpl.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="_h\VibeController.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <None Include="FreeRTOS\src\timers.h">
+      <SubType>compile</SubType>
+    </None>
+    <Compile Include="FreeRTOS\src\variantHooks.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="_c\SenderTask.c">

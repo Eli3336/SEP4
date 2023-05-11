@@ -38,4 +38,20 @@ public class ReceptionistEfcDao : IReceptionistDao
         context.Receptionists.Remove(existing);
         await context.SaveChangesAsync();  
     }
+    
+    public async Task ReceptionistUpdateAsync(Receptionist receptionist)
+    {
+        context.Receptionists.Update(receptionist);
+        await context.SaveChangesAsync();
+
+    }
+
+    public async Task<Receptionist?> GetByIdToUpdateAsync(int? id)
+    {
+        Receptionist? found = await context.Receptionists
+            .AsNoTracking()
+            .SingleOrDefaultAsync(r => r.Id == id);
+
+        return found;
+    }
 }
