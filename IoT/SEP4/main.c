@@ -100,32 +100,9 @@ void create_tasks_and_semaphores(void)
 		}
 	}
 
-	xTaskCreate(
-	task1
-	,  "Task1"  // A name just for humans
-	,  configMINIMAL_STACK_SIZE  // This stack size can be checked & adjusted by reading the Stack Highwater
-	,  NULL
-	,  2  // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
-	,  NULL );
 
 }
 
-/*-----------------------------------------------------------*/
-void task1( void *pvParameters )
-{
-	TickType_t xLastWakeTime;
-	const TickType_t xFrequency = 500/portTICK_PERIOD_MS; // 500 ms
-
-	// Initialise the xLastWakeTime variable with the current time.
-	xLastWakeTime = xTaskGetTickCount();
-
-	for(;;)
-	{
-		xTaskDelayUntil( &xLastWakeTime, xFrequency );
-		puts("Task1"); // stdio functions are not reentrant - Should normally be protected by MUTEX
-		PORTA ^= _BV(PA0);
-	}
-}
 
 /*-----------------------------------------------------------*/
 
@@ -155,7 +132,6 @@ int main(void)
 {
 	initialiseSystem(); // Must be done as the very first thing!!
 	printf("Start initiated\n");
-	vTaskStartScheduler(); // Initialise and run the freeRTOS scheduler. Execution should never return from here.
 	stdio_initialise(ser_USART0);
 
 	_createQueues();

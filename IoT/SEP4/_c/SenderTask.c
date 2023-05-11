@@ -1,4 +1,4 @@
-#include "./_h/SenderTask.h"
+#include "SenderTask.h"
 #include <stdio.h>
 #include <stddef.h>
 #include <status_leds.h>
@@ -8,8 +8,8 @@
 
 #define TASK_NAME "SenderTask"
 #define TASK_PRIORITY configMAX_PRIORITIES - 2
-#define LORA_appEUI "F2DDE2E826DE9BA5"
-#define LORA_appKEY "FA15F6404AD2D77F878514403C7422DD"
+#define LORA_appEUI "6BE1FDCE7E214CF9"
+#define LORA_appKEY "EECCD39BD2AB6C6BD107A08E0DBE9DB9"
 
 static void _run(void* params);
 static void _connectToLoRaWAN();
