@@ -293,6 +293,7 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="_c\ReceiverTask.c">
+	</Compile>
     <Compile Include="_c\VibeControllerImpl.c">
       <SubType>compile</SubType>
     </Compile>
