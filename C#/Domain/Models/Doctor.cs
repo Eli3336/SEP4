@@ -9,6 +9,12 @@ public class Doctor : User
     {
         Requests = new List<Request>();
     }
+    
+    public Doctor(string name, string phoneNumber)
+        : base(name, "0000", phoneNumber)
+    {
+        Requests = new List<Request>();
+    }
 
     public Doctor()
     {

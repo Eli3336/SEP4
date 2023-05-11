@@ -22,7 +22,7 @@ public class DoctorLogic : IDoctorLogic
             Password = doctorToCreate.Password,
             PhoneNumber = doctorToCreate.PhoneNumber,
         };
-    
+        ValidateDoctor(toCreate);
         Doctor created = await doctorDao.CreateAsync(toCreate);
     
         return created;
@@ -48,6 +48,43 @@ public class DoctorLogic : IDoctorLogic
                 $"Doctor with ID {id} not found!");
         }
         return doctor;
+    }
+
+    public async Task DoctorUpdateAsync(int id, string name, string phoneNumber)
+    {
+        Doctor? existing = await doctorDao.GetByIdNoTrackingAsync(id);
+        if (existing == null)
+        {
+            throw new Exception($"Doctor with ID {id} not found!");
+        }
+        
+        DoctorUpdateDto dto = new DoctorUpdateDto(id, name, phoneNumber);
+
+        string nameToUse = dto.Name ?? existing.Name;
+        string phoneNumberToUse = dto.PhoneNumber ?? existing.PhoneNumber;
+        
+        
+        Doctor updated = new (nameToUse, phoneNumberToUse)
+        {
+            Id = existing.Id,
+            Password = existing.Password
+        };
+        ValidateDoctor(updated);
+        await doctorDao.DoctorUpdateAsync(updated);
+    }
+
+    private void ValidateDoctor(Doctor doctor)
+    {
+        if (doctor.Name.Contains("0") || doctor.Name.Contains("1") || doctor.Name.Contains("2") || doctor.Name.Contains("3") || doctor.Name.Contains("4") || doctor.Name.Contains("5") || doctor.Name.Contains("6") || doctor.Name.Contains("7") || doctor.Name.Contains("8") || doctor.Name.Contains("9"))
+            throw new Exception("Name cannot contain numbers!");
+        if (doctor.Name.Length < 3)
+            throw new Exception("Name too short!");
+        if (doctor.Name.Length > 255)
+            throw new Exception("Name too long!");
+        if (doctor.PhoneNumber.Length < 6)
+            throw new Exception("Phone number too short!");
+        if (doctor.PhoneNumber.Length > 13)
+            throw new Exception("Phone number too long!");
     }
 }
    
