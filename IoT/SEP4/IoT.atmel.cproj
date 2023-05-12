@@ -293,11 +293,8 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="_c\ReceiverTask.c">
-<<<<<<< Updated upstream
-=======
       <SubType>compile</SubType>
     </Compile>
->>>>>>> Stashed changes
     <Compile Include="_c\VibeControllerImpl.c">
       <SubType>compile</SubType>
     </Compile>
