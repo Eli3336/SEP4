@@ -24,7 +24,7 @@ public class ReceptionistEfcDao : IReceptionistDao
     public async Task<Receptionist?> GetByIdAsync(int id)
     {
         Receptionist? found = await context.Receptionists
-            .SingleOrDefaultAsync(doctor => doctor.Id == id);
+            .SingleOrDefaultAsync(r => r.Id == id);
         return found;
     }
 
