@@ -64,11 +64,11 @@ public class ReceptionistsController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Receptionist>>> GetAllRoomsName()
+    public async Task<ActionResult<IEnumerable<Receptionist>>> GetAllReceptionists()
     {
         try
         {
-            IEnumerable<Receptionist> receptionists= await receptionistLogic.GetAllReceptionistsAsync();
+            IEnumerable<Receptionist?> receptionists= await receptionistLogic.GetAllReceptionistsAsync();
             return Ok(receptionists);
         }
         catch (Exception e)
