@@ -60,4 +60,19 @@ public class PatientsController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+    
+    [HttpPatch("{patientId:int}+{roomId}")]
+    public async Task<ActionResult> MovePatientToGivenRoom([FromRoute]int patientId, [FromRoute]int roomId)
+    {
+        try
+        {
+            await patientLogic.MovePatientToGivenRoom(patientId, roomId);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
 }
