@@ -54,4 +54,11 @@ public class ReceptionistEfcDao : IReceptionistDao
 
         return found;
     }
+
+    public async Task<IEnumerable<Receptionist?>> GetAllReceptionistsAsync()
+    {
+         IQueryable<Receptionist> receptionists = context.Receptionists.AsQueryable();
+         IEnumerable<Receptionist> result = await receptionists.ToListAsync();
+         return result;
+    }
 }
