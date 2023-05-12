@@ -48,6 +48,22 @@ public class ReceptionistsController : ControllerBase
         }
     }
     
+    
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult<Receptionist>> GetById([FromRoute] int id)
+    {
+        try
+        {
+            Receptionist? result = await receptionistLogic.GetByIdAsync(id);
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+    
     [HttpPatch("{id:int}")]
     public async Task<ActionResult> ReceptionistUpdateAsync([FromRoute] int id, string name, string phoneNumber)
     {
