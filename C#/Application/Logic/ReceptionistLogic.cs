@@ -65,6 +65,12 @@ public class ReceptionistLogic : IReceptionistLogic
         await receptionistDao.ReceptionistUpdateAsync(updated);
     }
 
+    public Task<IEnumerable<Receptionist?>> GetAllReceptionistsAsync()
+    {
+        IEnumerable<Receptionist?> receptionists = receptionistDao.GetAllReceptionistsAsync().Result; 
+        return Task.FromResult(receptionists);
+    }
+
     public async Task<Receptionist?> GetByIdAsync(int id)
     {
         Receptionist? receptionist = await receptionistDao.GetByIdAsync(id);

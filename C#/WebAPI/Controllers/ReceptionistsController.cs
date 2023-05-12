@@ -78,4 +78,19 @@ public class ReceptionistsController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+    
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Receptionist>>> GetAllReceptionists()
+    {
+        try
+        {
+            IEnumerable<Receptionist?> receptionists= await receptionistLogic.GetAllReceptionistsAsync();
+            return Ok(receptionists);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
 }
