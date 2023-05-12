@@ -9,4 +9,5 @@ public interface IReceptionistDao
     Task DeleteAsync(int id);
     Task ReceptionistUpdateAsync(Receptionist receptionist);
     Task<Receptionist?> GetByIdToUpdateAsync(int? id);
+    Task<IEnumerable<Receptionist?>> GetAllReceptionistsAsync();
 }
