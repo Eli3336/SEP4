@@ -19,7 +19,7 @@ public class ReceptionistsController : ControllerBase
     }
     
     [HttpPost]
-    public async Task<ActionResult<Patient>> CreateAsync(ReceptionistCreationDto dto)
+    public async Task<ActionResult<Receptionist>> CreateAsync(ReceptionistCreationDto dto)
     {
         try
         {
