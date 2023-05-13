@@ -17,8 +17,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<HospitalContext>();
 builder.Services.AddScoped<ISensorDao, SensorEfcDao>();
 builder.Services.AddScoped<ISensorLogic, SensorLogic>();
+
 builder.Services.AddScoped<IWebClient, LoriotClient>();
 builder.Services.AddHostedService<WebClientBackgroundService>();
+
 builder.Services.AddScoped<IPatientLogic, PatientLogic>();
 builder.Services.AddScoped<IPatientDao, PatientEfcDao>();
 
@@ -30,6 +32,9 @@ builder.Services.AddScoped<IReceptionistDao, ReceptionistEfcDao>();
 
 builder.Services.AddScoped<IRoomDao, RoomEfcDao>();
 builder.Services.AddScoped<IRoomLogic, RoomLogic>();
+
+builder.Services.AddScoped<IRequestDao, RequestEfcDao>();
+builder.Services.AddScoped<IRequestLogic, RequestLogic>();
 
 var app = builder.Build();
 
