@@ -67,7 +67,7 @@ public class PatientLogic : IPatientLogic
         if (room == null)
             throw new Exception("Room not found");
         bool wasFull = room.Availability == "Occupied";
-        await patientDao.DeleteAsync(id);
+        await patientDao.DeleteAsync(patient);
         
         if (wasFull)
         {

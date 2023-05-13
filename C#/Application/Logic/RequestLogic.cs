@@ -32,7 +32,7 @@ public class RequestLogic : IRequestLogic
             throw new Exception(
                 $"Request with ID {id} not found!");
         }
-        await requestDao.DeleteAsync(id);
+        await requestDao.DeleteAsync(request);
     }
 
     public async Task<IEnumerable<Request>> GetAllRequestsToMovePatients()
