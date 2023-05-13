@@ -28,14 +28,9 @@ public class ReceptionistEfcDao : IReceptionistDao
         return found;
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task DeleteAsync(Receptionist receptionist)
     {
-        Receptionist? existing = await GetByIdAsync(id);
-        if (existing == null)
-        {
-            throw new Exception($"Doctor with id {id} not found");
-        }
-        context.Receptionists.Remove(existing);
+        context.Receptionists.Remove(receptionist);
         await context.SaveChangesAsync();  
     }
     

@@ -20,14 +20,9 @@ public class RequestEfcDao: IRequestDao
         return found;
     }
     
-    public async Task DeleteAsync(int id)
+    public async Task DeleteAsync(Request request)
     {
-        Request? existing = await GetByIdAsync(id);
-        if (existing == null)
-        {
-            throw new Exception($"Request with id {id} not found");
-        }
-        context.Request.Remove(existing);
+        context.Request.Remove(request);
         await context.SaveChangesAsync();  
     }
     
