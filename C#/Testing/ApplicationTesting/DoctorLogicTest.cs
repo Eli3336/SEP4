@@ -55,9 +55,6 @@ public class DoctorLogicTest
     [Test]
     public async Task CreateAsync_ReturnsCreatedDoctor_InvalidNameNumber()
     {
-        // Arrange
-        doctorDaoMock.Setup(x => x.CreateAsync(It.IsAny<Doctor>())).ThrowsAsync(new Exception("Name cannot contain numbers!"));
-
         // Act
         var doctor = new DoctorCreationDto()
         {
@@ -67,16 +64,13 @@ public class DoctorLogicTest
         };
 
         // Assert
-        var ex = Assert.Throws<Exception>(() => logic.CreateAsync(doctor));
+        var ex = Assert.ThrowsAsync<Exception>(() => logic.CreateAsync(doctor));
         Assert.AreEqual("Name cannot contain numbers!", ex.Message);
     }
     
     [Test]
     public async Task CreateAsync_ReturnsCreatedDoctor_InvalidNameSmall()
     {
-        // Arrange
-        doctorDaoMock.Setup(x => x.CreateAsync(It.IsAny<Doctor>())).ThrowsAsync(new Exception("Name too small!"));
-
         // Act
         var doctor = new DoctorCreationDto()
             {
@@ -86,16 +80,13 @@ public class DoctorLogicTest
             };
 
         // Assert
-        var ex = Assert.Throws<Exception>(() => logic.CreateAsync(doctor));
-        Assert.AreEqual("Name too small!", ex.Message);
+        var ex = Assert.ThrowsAsync<Exception>(() => logic.CreateAsync(doctor));
+        Assert.AreEqual("Name too short!", ex.Message);
     }
     
     [Test]
     public async Task CreateAsync_ReturnsCreatedDoctor_InvalidNameBig()
     {
-        // Arrange
-        doctorDaoMock.Setup(x => x.CreateAsync(It.IsAny<Doctor>())).ThrowsAsync(new Exception("Name too small!"));
-
         // Act
         var doctor = new DoctorCreationDto()
             {
@@ -105,16 +96,13 @@ public class DoctorLogicTest
             };
 
         // Assert
-        var ex = Assert.Throws<Exception>(() => logic.CreateAsync(doctor));
-        Assert.AreEqual("Name too big!", ex.Message);
+        var ex = Assert.ThrowsAsync<Exception>(() => logic.CreateAsync(doctor));
+        Assert.AreEqual("Name too long!", ex.Message);
     }
     
     [Test]
     public async Task CreateAsync_ReturnsCreatedDoctor_InvalidPasswordSmall()
     {
-        // Arrange
-        doctorDaoMock.Setup(x => x.CreateAsync(It.IsAny<Doctor>())).ThrowsAsync(new Exception("Name too small!"));
-
         // Act
         var doctor = new DoctorCreationDto()
             {
@@ -124,16 +112,13 @@ public class DoctorLogicTest
             };
 
         // Assert
-        var ex = Assert.Throws<Exception>(() => logic.CreateAsync(doctor));
-        Assert.AreEqual("Password too small!", ex.Message);
+        var ex = Assert.ThrowsAsync<Exception>(() => logic.CreateAsync(doctor));
+        Assert.AreEqual("Password too short!", ex.Message);
     }
     
     [Test]
     public async Task CreateAsync_ReturnsCreatedDoctor_InvalidPasswordBig()
     {
-        // Arrange
-        doctorDaoMock.Setup(x => x.CreateAsync(It.IsAny<Doctor>())).ThrowsAsync(new Exception("Name too small!"));
-
         // Act
         var doctor = new DoctorCreationDto()
             {
@@ -143,16 +128,13 @@ public class DoctorLogicTest
             };
 
         // Assert
-        var ex = Assert.Throws<Exception>(() => logic.CreateAsync(doctor));
-        Assert.AreEqual("Password too big!", ex.Message);
+        var ex = Assert.ThrowsAsync<Exception>(() => logic.CreateAsync(doctor));
+        Assert.AreEqual("Password too long!", ex.Message);
     }
     
     [Test]
     public async Task CreateAsync_ReturnsCreatedDoctor_InvalidPhoneNumberSmall()
     {
-        // Arrange
-        doctorDaoMock.Setup(x => x.CreateAsync(It.IsAny<Doctor>())).ThrowsAsync(new Exception("Name too small!"));
-
         // Act
         var doctor = new DoctorCreationDto()
             {
@@ -162,16 +144,13 @@ public class DoctorLogicTest
             };
 
         // Assert
-        var ex = Assert.Throws<Exception>(() => logic.CreateAsync(doctor));
-        Assert.AreEqual("Phone number too small!", ex.Message);
+        var ex = Assert.ThrowsAsync<Exception>(() => logic.CreateAsync(doctor));
+        Assert.AreEqual("Phone number too short!", ex.Message);
     }
     
     [Test]
     public async Task CreateAsync_ReturnsCreatedDoctor_InvalidPhoneNumberBig()
     {
-        // Arrange
-        doctorDaoMock.Setup(x => x.CreateAsync(It.IsAny<Doctor>())).ThrowsAsync(new Exception("Name too small!"));
-
         // Act
         var doctor = new DoctorCreationDto()
             {
@@ -181,8 +160,8 @@ public class DoctorLogicTest
             };
 
         // Assert
-        var ex = Assert.Throws<Exception>(() => logic.CreateAsync(doctor));
-        Assert.AreEqual("Phone number too big!", ex.Message);
+        var ex = Assert.ThrowsAsync<Exception>(() => logic.CreateAsync(doctor));
+        Assert.AreEqual("Phone number too long!", ex.Message);
     }
     
     //get method
