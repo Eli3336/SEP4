@@ -55,9 +55,6 @@ public class ReceptionistLogicTest
     [Test]
     public async Task CreateAsync_ReturnsCreatedReceptionist_InvalidNameNumber()
     {
-        // Arrange
-        receptionistDaoMock.Setup(x => x.CreateAsync(It.IsAny<Receptionist>())).ThrowsAsync(new Exception("Name cannot contain numbers!"));
-
         // Act
         var receptionist = new ReceptionistCreationDto()
         {
@@ -67,16 +64,13 @@ public class ReceptionistLogicTest
         };
 
         // Assert
-        var ex = Assert.Throws<Exception>(() => logic.CreateAsync(receptionist));
+        var ex = Assert.ThrowsAsync<Exception>(() => logic.CreateAsync(receptionist));
         Assert.AreEqual("Name cannot contain numbers!", ex.Message);
     }
     
     [Test]
     public async Task CreateAsync_ReturnsCreatedReceptionist_InvalidNameSmall()
     {
-        // Arrange
-        receptionistDaoMock.Setup(x => x.CreateAsync(It.IsAny<Receptionist>())).ThrowsAsync(new Exception("Name too small!"));
-
         // Act
         var receptionist = new ReceptionistCreationDto()
             {
@@ -86,16 +80,13 @@ public class ReceptionistLogicTest
             };
 
         // Assert
-        var ex = Assert.Throws<Exception>(() => logic.CreateAsync(receptionist));
-        Assert.AreEqual("Name too small!", ex.Message);
+        var ex = Assert.ThrowsAsync<Exception>(() => logic.CreateAsync(receptionist));
+        Assert.AreEqual("Name too short!", ex.Message);
     }
     
     [Test]
     public async Task CreateAsync_ReturnsCreatedReceptionist_InvalidNameBig()
     {
-        // Arrange
-        receptionistDaoMock.Setup(x => x.CreateAsync(It.IsAny<Receptionist>())).ThrowsAsync(new Exception("Name too small!"));
-
         // Act
         var receptionist = new ReceptionistCreationDto()
             {
@@ -105,16 +96,13 @@ public class ReceptionistLogicTest
             };
 
         // Assert
-        var ex = Assert.Throws<Exception>(() => logic.CreateAsync(receptionist));
-        Assert.AreEqual("Name too big!", ex.Message);
+        var ex = Assert.ThrowsAsync<Exception>(() => logic.CreateAsync(receptionist));
+        Assert.AreEqual("Name too long!", ex.Message);
     }
     
     [Test]
     public async Task CreateAsync_ReturnsCreatedReceptionist_InvalidPasswordSmall()
     {
-        // Arrange
-        receptionistDaoMock.Setup(x => x.CreateAsync(It.IsAny<Receptionist>())).ThrowsAsync(new Exception("Name too small!"));
-
         // Act
         var receptionist = new ReceptionistCreationDto()
             {
@@ -124,16 +112,13 @@ public class ReceptionistLogicTest
             };
 
         // Assert
-        var ex = Assert.Throws<Exception>(() => logic.CreateAsync(receptionist));
-        Assert.AreEqual("Password too small!", ex.Message);
+        var ex = Assert.ThrowsAsync<Exception>(() => logic.CreateAsync(receptionist));
+        Assert.AreEqual("Password too short!", ex.Message);
     }
     
     [Test]
     public async Task CreateAsync_ReturnsCreatedReceptionist_InvalidPasswordBig()
     {
-        // Arrange
-        receptionistDaoMock.Setup(x => x.CreateAsync(It.IsAny<Receptionist>())).ThrowsAsync(new Exception("Name too small!"));
-
         // Act
         var receptionist = new ReceptionistCreationDto()
             {
@@ -143,16 +128,13 @@ public class ReceptionistLogicTest
             };
 
         // Assert
-        var ex = Assert.Throws<Exception>(() => logic.CreateAsync(receptionist));
-        Assert.AreEqual("Password too big!", ex.Message);
+        var ex = Assert.ThrowsAsync<Exception>(() => logic.CreateAsync(receptionist));
+        Assert.AreEqual("Password too long!", ex.Message);
     }
     
     [Test]
     public async Task CreateAsync_ReturnsCreatedReceptionist_InvalidPhoneNumberSmall()
     {
-        // Arrange
-        receptionistDaoMock.Setup(x => x.CreateAsync(It.IsAny<Receptionist>())).ThrowsAsync(new Exception("Name too small!"));
-
         // Act
         var receptionist = new ReceptionistCreationDto()
             {
@@ -162,16 +144,13 @@ public class ReceptionistLogicTest
             };
 
         // Assert
-        var ex = Assert.Throws<Exception>(() => logic.CreateAsync(receptionist));
-        Assert.AreEqual("Phone number too small!", ex.Message);
+        var ex = Assert.ThrowsAsync<Exception>(() => logic.CreateAsync(receptionist));
+        Assert.AreEqual("Phone number too short!", ex.Message);
     }
     
     [Test]
     public async Task CreateAsync_ReturnsCreatedReceptionist_InvalidPhoneNumberBig()
     {
-        // Arrange
-        receptionistDaoMock.Setup(x => x.CreateAsync(It.IsAny<Receptionist>())).ThrowsAsync(new Exception("Name too small!"));
-
         // Act
         var receptionist = new ReceptionistCreationDto()
             {
@@ -181,8 +160,8 @@ public class ReceptionistLogicTest
             };
 
         // Assert
-        var ex = Assert.Throws<Exception>(() => logic.CreateAsync(receptionist));
-        Assert.AreEqual("Phone number too big!", ex.Message);
+        var ex = Assert.ThrowsAsync<Exception>(() => logic.CreateAsync(receptionist));
+        Assert.AreEqual("Phone number too long!", ex.Message);
     }
     
     //get method
@@ -214,7 +193,7 @@ public class ReceptionistLogicTest
         receptionistDaoMock.Setup(dao => dao.GetByIdAsync(It.IsAny<int>()))
             .ThrowsAsync(new Exception("Receptionist with ID 10 not found!"));
 
-        var ex = Assert.Throws<Exception>(() => logic.GetByIdAsync(10));
+        var ex = Assert.ThrowsAsync<Exception>(() => logic.GetByIdAsync(10));
         Assert.AreEqual("Receptionist with ID 10 not found!", ex.Message);
     }
 }
