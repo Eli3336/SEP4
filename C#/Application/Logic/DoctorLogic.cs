@@ -81,6 +81,10 @@ public class DoctorLogic : IDoctorLogic
             throw new Exception("Name too short!");
         if (doctor.Name.Length > 255)
             throw new Exception("Name too long!");
+        if (doctor.Password.Length < 3)
+            throw new Exception("Password too short!");
+        if (doctor.Password.Length > 255)
+            throw new Exception("Password too long!");
         if (doctor.PhoneNumber.Length < 6)
             throw new Exception("Phone number too short!");
         if (doctor.PhoneNumber.Length > 13)
