@@ -5,24 +5,25 @@
 #include <Config.h>
 
 #define TASK_NAME "HumiTempTask"
-#define TASK_PRIORITY configMAX_PRIORITIES - 2
+#define TASK_PRIORITY configMAX_PRIORITIES - 3
 
 static void _run(void* params);
 
 static QueueHandle_t _humidityQueue;
 static QueueHandle_t _temperatureQueue;
-static EventGroupHandle_t _actEventGroup;
+static EventGroupHandle_t _doEventGroup;
 static EventGroupHandle_t _doneEventGroup;
-
 static uint16_t _latestHumidity;
 static int16_t _latestTemperature;
 
 void humiTempTask_create(QueueHandle_t humidityQueue, 
 									QueueHandle_t temperatureQueue, 
-									EventGroupHandle_t actEventGroup, 
+									EventGroupHandle_t doEventGroup, 
 									EventGroupHandle_t doneEventGroup) {
 	_humidityQueue = humidityQueue;
 	_temperatureQueue = temperatureQueue;
+	_doEventGroup = doEventGroup;
+	_doneEventGroup = doneEventGroup;
 	
 	xTaskCreate(_run, 
 				TASK_NAME, 
@@ -34,18 +35,17 @@ void humiTempTask_create(QueueHandle_t humidityQueue,
 }
 
 void humiTempTask_initTask(void* params) {
-	
+	hih8120_wakeup();
 }
 
 void humiTempTask_runTask() {
-	/* xEventGroupWaitBits(_actEventGroup, 
+	/* xEventGroupWaitBits(_doEventGroup, 
 					    BIT_HUMIDITY_ACT | BIT_TEMPERATURE_ACT,
 						pdTRUE,	
 						pdFALSE, 
 						portMAX_DELAY
 	);
 	*/
-	
 	if (hih8120_wakeup() == HIH8120_OK) {
 		vTaskDelay(pdMS_TO_TICKS(100));
 		
@@ -53,13 +53,9 @@ void humiTempTask_runTask() {
 			vTaskDelay(pdMS_TO_TICKS(50));
 			_latestHumidity = hih8120_getHumidityPercent_x10();
 			_latestTemperature = hih8120_getTemperature_x10();
-			
-			printf("Temperature Value Is : %d \n",_latestTemperature);
-			printf("Humidity Value Is : %d \n",_latestHumidity);
 		} else {
 			_latestHumidity = CONFIG_INVALID_HUMIDITY_VALUE;
-			_latestTemperature = CONFIG_INVALID_TEMPERATURE_VALUE;
-			
+			_latestTemperature = CONFIG_INVALID_TEMPERATURE_VALUE;			
 		}
 	} else {
 		_latestHumidity = CONFIG_INVALID_HUMIDITY_VALUE;
