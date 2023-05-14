@@ -10,7 +10,7 @@ namespace TestingReq5.ApplicationTesting;
 public class RequestLogicTest
 {
     [Test]
-    public async Task GetAllAdditionalRequests_ReturnsRequestsToMove()
+    public async Task GetAllAdditionalRequests_ReturnsRequests()
     {
         var requestDaoMock = new Mock<IRequestDao>();
         var expectedRequests = new List<Request>
