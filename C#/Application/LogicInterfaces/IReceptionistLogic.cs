@@ -9,4 +9,5 @@ public interface IReceptionistLogic
     Task<Receptionist?> GetByIdAsync(int id);
     Task DeleteAsync(int id);
     Task ReceptionistUpdateAsync(int id, string name, string phoneNumber);
+    Task<IEnumerable<Receptionist?>> GetAllReceptionistsAsync();
 }
