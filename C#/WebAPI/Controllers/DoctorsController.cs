@@ -62,7 +62,7 @@ public class DoctorsController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Doctor>>> GetAllReceptionists()
+    public async Task<ActionResult<IEnumerable<Doctor>>> GetAllDoctors()
     {
         try
         {
