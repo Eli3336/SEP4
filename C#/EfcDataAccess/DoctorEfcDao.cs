@@ -53,4 +53,11 @@ public class DoctorEfcDao : IDoctorDao
         await context.SaveChangesAsync();
 
     }
+    
+    public async Task<IEnumerable<Doctor?>> GetAllDoctorsAsync()
+    {
+        IQueryable<Doctor> doctors = context.Doctors.AsQueryable();
+        IEnumerable<Doctor> result = await doctors.ToListAsync();
+        return result;
+    }
 }

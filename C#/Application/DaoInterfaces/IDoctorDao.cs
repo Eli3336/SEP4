@@ -9,4 +9,6 @@ public interface IDoctorDao
     Task<Doctor?> GetByIdNoTrackingAsync(int id);
     Task DeleteAsync(int id);
     Task DoctorUpdateAsync(Doctor doctor);
+    Task<IEnumerable<Doctor?>> GetAllDoctorsAsync();
+
 }
