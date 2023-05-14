@@ -1,6 +1,7 @@
 ﻿using Application.DaoInterfaces;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EfcDataAccess;
 
@@ -11,6 +12,13 @@ public class RequestEfcDao: IRequestDao
     public RequestEfcDao(HospitalContext context)
     {
         this.context = context;
+    }
+    
+    public async Task<Request> CreateAsync(Request request)
+    {
+        EntityEntry<Request> newRequest = await context.Request.AddAsync(request);
+        await context.SaveChangesAsync();
+        return newRequest.Entity;
     }
     
     public async Task<Request?> GetByIdAsync(int id)

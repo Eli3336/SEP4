@@ -1,4 +1,5 @@
 ﻿using Application.LogicInterfaces;
+using Domain.DTOs;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,6 +15,22 @@ public class RequestsController : ControllerBase
     {
         this.requestLogic = requestLogic;
     }
+    
+    [HttpPost]
+    public async Task<ActionResult<Request>> CreateAsync(RequestCreationDto dto)
+    {
+        try
+        {
+            Request request = await requestLogic.CreateAsync(dto);
+            return Created($"/requests/{request.Id}", request);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+    
     
     [HttpDelete("{id:int}")]
     public async Task<ActionResult> DeleteRequestAsync([FromRoute] int id)
