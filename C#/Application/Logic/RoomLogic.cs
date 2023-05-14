@@ -70,7 +70,7 @@ public class RoomLogic : IRoomLogic
         return room;
     }
     
-    public async Task RoomUpdateAsync(int id, int capacity, string availability)
+    public async Task RoomUpdateAsync(int id, string name, int capacity, string availability)
     {
         Room? existing = await roomDao.GetByIdToUpdateAsync(id);
         if (existing == null)
@@ -78,16 +78,16 @@ public class RoomLogic : IRoomLogic
             throw new Exception($"Room with ID {id} not found!");
         }
         
-        RoomUpdateDto dto = new RoomUpdateDto(id, capacity, availability);
+        RoomUpdateDto dto = new RoomUpdateDto(id, name, capacity, availability);
 
+        string nameToUse = dto.Name ?? existing.Name;
         int capacityToUse = dto.Capacity ?? existing.Capacity;
         string statusToUse = dto.Availability ?? existing.Availability;
         
         
-        Room updated = new (capacityToUse, statusToUse)
+        Room updated = new (nameToUse, capacityToUse, statusToUse)
         {
             Id = existing.Id,
-            Name = existing.Name,
             Patients = existing.Patients,
             Sensors = existing.Sensors
             
@@ -100,6 +100,23 @@ public class RoomLogic : IRoomLogic
     {
         IEnumerable<Room?> rooms = roomDao.GetAllRoomsAsync().Result;
         return Task.FromResult(rooms);
+    }
+
+    public async Task<IEnumerable<Room>> GetAllEmptyRooms()
+    {
+        List<Room> result = new List<Room>();
+        List<Room?> rooms = roomDao.GetAllRoomsAsync().Result.ToList();
+        if (rooms.Count < 1)
+        {
+            return result;
+        }
+        for (int i = 0; i < rooms.Count; i++)
+        {
+            Room room = rooms[i];
+            if (room.Patients.Count == 0)
+                    result.Add(room);
+        }
+        return result;
     }
 
     private void ValidateRoomUpdate(Room room)

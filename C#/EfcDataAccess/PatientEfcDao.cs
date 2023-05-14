@@ -12,14 +12,9 @@ public class PatientEfcDao : IPatientDao
     {
         this.context = context;
     }
-    public async Task DeleteAsync(int id)
+    public async Task DeleteAsync(Patient patient)
     {
-        Patient? existing = await GetByIdAsync(id);
-        if (existing == null)
-        {
-            throw new Exception($"Patient with id {id} not found");
-        }
-        context.Patients.Remove(existing);
+        context.Patients.Remove(patient);
         await context.SaveChangesAsync();    
     }
     
