@@ -11,7 +11,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 # Tests will not work on later versions of DotNet
     steps:
