@@ -19,7 +19,7 @@ public class ReceptionistsController : ControllerBase
     }
     
     [HttpPost]
-    public async Task<ActionResult<Patient>> CreateAsync(ReceptionistCreationDto dto)
+    public async Task<ActionResult<Receptionist>> CreateAsync(ReceptionistCreationDto dto)
     {
         try
         {
@@ -40,6 +40,52 @@ public class ReceptionistsController : ControllerBase
         {
             await receptionistLogic.DeleteAsync(id);
             return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+    
+    
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult<Receptionist>> GetById([FromRoute] int id)
+    {
+        try
+        {
+            Receptionist? result = await receptionistLogic.GetByIdAsync(id);
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+    
+    [HttpPatch("{id:int}")]
+    public async Task<ActionResult> ReceptionistUpdateAsync([FromRoute] int id, string name, string phoneNumber)
+    {
+        try
+        {
+            await receptionistLogic.ReceptionistUpdateAsync(id, name, phoneNumber);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+    
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Receptionist>>> GetAllReceptionists()
+    {
+        try
+        {
+            IEnumerable<Receptionist?> receptionists= await receptionistLogic.GetAllReceptionistsAsync();
+            return Ok(receptionists);
         }
         catch (Exception e)
         {

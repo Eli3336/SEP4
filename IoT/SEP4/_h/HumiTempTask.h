@@ -11,7 +11,7 @@
 
 void humiTempTask_create(QueueHandle_t humidityQueue, 
 									QueueHandle_t temperatureQueue, 
-									EventGroupHandle_t actEventGroup, 
+									EventGroupHandle_t doEventGroup, 
 									EventGroupHandle_t doneEventGroup);
 void humiTempTask_initTask(void* params);
 void humiTempTask_runTask(void);
