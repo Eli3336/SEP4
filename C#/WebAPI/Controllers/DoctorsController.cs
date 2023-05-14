@@ -17,7 +17,7 @@ public class DoctorsController : ControllerBase
     }
     
     [HttpPost]
-    public async Task<ActionResult<Patient>> CreateAsync(DoctorCreationDto dto)
+    public async Task<ActionResult<Doctor>> CreateAsync(DoctorCreationDto dto)
     {
         try
         {
