@@ -7,7 +7,7 @@
 #include <task.h>
 
 #define TASK_NAME "SenderTask"
-#define TASK_PRIORITY configMAX_PRIORITIES - 2
+#define TASK_PRIORITY configMAX_PRIORITIES - 1
  #define LORA_appEUI "6BE1FDCE7E214CF9"
  #define LORA_appKEY "EECCD39BD2AB6C6BD107A08E0DBE9DB9"
 
@@ -26,34 +26,39 @@ void senderTask_create(QueueHandle_t senderQueue) {
 	TASK_PRIORITY,
 	NULL
 	);
-	
+	puts("Sender task created inside SenderTask.c");
 }
 
 void senderTask_initTask(void* params) {
+	vTaskDelay(50UL);
 	lora_driver_resetRn2483(1);
-	vTaskDelay(2);
+	vTaskDelay(100UL);
 	lora_driver_resetRn2483(0);
-	vTaskDelay(150);
 	lora_driver_flushBuffers();
-	
 	_connectToLoRaWAN();
+	puts("Sender Task initialized");
 }
 
 void senderTask_runTask() {
 	lora_driver_payload_t uplinkPayload;
 	xQueueReceive(_senderQueue, &uplinkPayload, portMAX_DELAY);
+	printf("CO2 Value Is : %d \n",mh_z19_getCo2Ppm());
+	printf("Temperature Value Is : %d \n",hih8120_getTemperature_x10());
+	printf("Humidity Value Is : %d \n",hih8120_getHumidityPercent_x10());
 	lora_driver_sendUploadMessage(false, &uplinkPayload);
+	printf("The data has been sent!\n");
 }
 
 static void _run(void* params) {
 	senderTask_initTask(params);
 	
 	while (1) {
-		senderTask_runTask();
+	senderTask_runTask();
 	}
 }
 
 static void _connectToLoRaWAN() {
+	puts("Start Connect To Lorawan");
 	char _out_buf[20];
 	lora_driver_returnCode_t rc;
 	status_leds_slowBlink(led_ST2); // OPTIONAL: Led the green led blink slowly while we are setting up LoRa
@@ -90,6 +95,8 @@ static void _connectToLoRaWAN() {
 		rc = lora_driver_join(LORA_OTAA);
 	
 		printf("Join Network TriesLeft:%d >%s<\n", maxJoinTriesLeft, lora_driver_mapReturnCodeToText(rc));
+		status_leds_ledOn(led_ST2); // OPTIONAL
+
 		if ( rc != LORA_ACCEPTED)
 		{
 			// Make the red led pulse to tell something went wrong
@@ -103,27 +110,4 @@ static void _connectToLoRaWAN() {
 			break;
 		}
 	} while (--maxJoinTriesLeft);
-
-	if (rc == LORA_ACCEPTED)
-	{
-		// Connected to LoRaWAN
-		printf("connection is ACCEPTED %s",LORA_ACCEPTED);
-		// Make the green led steady
-		status_leds_ledOn(led_ST2); // OPTIONAL
-	}
-	else
-	{
-		// Something went wrong
-		// Turn off the green led
-		status_leds_ledOff(led_ST2); // OPTIONAL
-		// Make the red led blink fast to tell something went wrong
-		status_leds_fastBlink(led_ST1); // OPTIONAL
-
-		// Lets stay here
-		while (1)
-		{
-			taskYIELD();
-		}
-	}
-	
 }

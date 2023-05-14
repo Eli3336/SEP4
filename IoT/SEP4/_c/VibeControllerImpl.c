@@ -8,9 +8,9 @@
 #include <Config.h>
 
 #define TASK_NAME "VibeController"
-#define TASK_INTERVAL 300000UL //5´Minutes
-#define TASK_PRIORITY configMAX_PRIORITIES - 1
-#define PORT 1
+#define TASK_INTERVAL 300000UL //3 seconds
+#define TASK_PRIORITY configMAX_PRIORITIES - 2
+#define PORT 2
 
 static void _run(void* params);
 
@@ -18,7 +18,7 @@ static QueueHandle_t _senderQueue;
 static QueueHandle_t _humidityQueue;
 static QueueHandle_t _temperatureQueue;
 static QueueHandle_t _co2Queue;
-static EventGroupHandle_t _actEventGroup;
+static EventGroupHandle_t _doEventGroup;
 static EventGroupHandle_t _doneEventGroup;
 static bool _error = false;
 
@@ -32,7 +32,7 @@ void VibeController_create(QueueHandle_t senderQueue,
 	_humidityQueue = humidityQueue;
 	_temperatureQueue = temperatureQueue;
 	_co2Queue = co2Queue;
-	_actEventGroup = actEventGroup;
+	_doEventGroup = actEventGroup;
 	_doneEventGroup = doneEventGroup;
 	
 	xTaskCreate(_run, 
@@ -45,34 +45,20 @@ void VibeController_create(QueueHandle_t senderQueue,
 }
 
 void VibeController_initTask(void* params) {
+	vTaskDelay(50UL);
+	puts("Controller is initialiazed");
+	vTaskDelay(100UL);
 	
 }
 
 void VibeController_runTask(void) {	
-	EventBits_t uxBits = xEventGroupSetBits(_actEventGroup, BIT_HUMIDITY_ACT | BIT_TEMPERATURE_ACT);
 	
-	if ((uxBits & (BIT_HUMIDITY_ACT | BIT_TEMPERATURE_ACT)) == (BIT_HUMIDITY_ACT | BIT_TEMPERATURE_ACT))
-	{
-		/* If both bits remain set, then there is a big chance that the measurements are incorrect.
-		Set all the validation bits to "Invalid"*/
-		_error = true;
-	}
-
-	EventBits_t waitBits = xEventGroupWaitBits(_doneEventGroup,
-						BIT_HUMIDITY_DONE | BIT_TEMPERATURE_DONE | BIT_CO2_DONE,
-						pdTRUE, 
-						pdTRUE, 
-						pdMS_TO_TICKS(TASK_INTERVAL)
-	);
+	xEventGroupWaitBits(_doneEventGroup, /* The event group being tested. */
+	BIT_CO2_DONE | BIT_HUMIDITY_DONE | BIT_TEMPERATURE_DONE, /* The bits to wait for. */
+	pdTRUE, /* Bits will be cleared before return*/
+	pdTRUE, /* Wait for bits to be set */
+	pdMS_TO_TICKS(3000UL)); /* Maximum time to wait*/
 	
-	if ((waitBits & (BIT_HUMIDITY_DONE | BIT_TEMPERATURE_DONE | BIT_CO2_DONE)) != (BIT_HUMIDITY_DONE | BIT_TEMPERATURE_DONE | BIT_CO2_DONE)) {
-		/*
-			The function has executed due to timeout and the measurements are invalid
-			Set the errorState flag to true
-		*/
-		_error = true;
-	}
-
 	uint16_t humidity;
 	int16_t temperature;
 	uint16_t ppm;
@@ -95,6 +81,7 @@ void VibeController_runTask(void) {
 		
 	if (_error == true)
 	{
+		puts("Error detected");
 		uplinkMessageBuilder_setSystemErrorState();
 	}
 
@@ -102,16 +89,6 @@ void VibeController_runTask(void) {
 	if (message.len > 0) {
 		xQueueSendToBack(_senderQueue, &message, pdMS_TO_TICKS(10000));
 	}
-	
-	/*
-	if (_error == false)
-	{
-		xQueueSendToBack(_servoQueue, &humidity, pdMS_TO_TICKS(10000));
-		xQueueSendToBack(_servoQueue, &temperature, pdMS_TO_TICKS(10000));
-		xQueueSendToBack(_servoQueue, &ppm, pdMS_TO_TICKS(10000));
-		xQueueSendToBack(_servoQueue, &sound, pdMS_TO_TICKS(10000));
-	}
-	*/
 
 	_error = false;
 	TickType_t lastWakeTime = xTaskGetTickCount();
