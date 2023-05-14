@@ -19,13 +19,14 @@ static MessageBufferHandle_t _receiverBuffer;
 void receiverTask_create(MessageBufferHandle_t receiverBuffer) {
 	_receiverBuffer = receiverBuffer;
 	
-	xTaskCreate(_run,
+	/*xTaskCreate(_run,
 	TASK_NAME,
 	configMINIMAL_STACK_SIZE,
 	NULL,
 	TASK_PRIORITY,
 	NULL
 	);
+	*/
 }
 
 void receiverTask_initTask(void* params) {
