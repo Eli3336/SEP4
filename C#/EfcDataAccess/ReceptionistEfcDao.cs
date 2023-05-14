@@ -19,7 +19,6 @@ public class ReceptionistEfcDao : IReceptionistDao
         await context.SaveChangesAsync();
         return newReceptionist.Entity;
     }
-    
 
     public async Task<Receptionist?> GetByIdAsync(int id)
     {

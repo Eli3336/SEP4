@@ -24,7 +24,6 @@ public class DoctorLogic : IDoctorLogic
         };
         ValidateDoctor(toCreate);
         Doctor created = await doctorDao.CreateAsync(toCreate);
-    
         return created;
     }
 
@@ -35,8 +34,7 @@ public class DoctorLogic : IDoctorLogic
         {
             throw new Exception($"Doctor with ID {id} was not found!");
         }
-        
-        await doctorDao.DeleteAsync(id);
+        await doctorDao.DeleteAsync(doctor);
     }
     
     public async Task<Doctor?> GetByIdAsync(int id)
@@ -62,7 +60,6 @@ public class DoctorLogic : IDoctorLogic
 
         string nameToUse = dto.Name ?? existing.Name;
         string phoneNumberToUse = dto.PhoneNumber ?? existing.PhoneNumber;
-        
         
         Doctor updated = new (nameToUse, phoneNumberToUse)
         {
