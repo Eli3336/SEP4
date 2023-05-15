@@ -10,8 +10,6 @@ namespace TestingReq5.ApplicationTesting;
 public class RequestLogicTest
 {
     [Test]
-    
-   
     public async Task CreateAsync_ReturnsCreatedRequest()
     {
         var requestDaoMock = new Mock<IRequestDao>();
