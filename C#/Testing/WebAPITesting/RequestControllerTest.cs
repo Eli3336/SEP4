@@ -20,8 +20,33 @@ public class RequestControllerTest
         controller = new RequestsController(requestLogicMock.Object);
     }
     
-    
+    [Test]
     public async Task CreateAsync_ReturnsCreatedRequest()
+    {
+        // Arrange
+       
+        var expectedRequest = new Request() { 
+            Type = "eddssf",
+            Content = "Etefw4",
+        };
+        requestLogicMock.Setup(x => x.CreateAsync(It.IsAny<RequestCreationDto>())).ReturnsAsync(expectedRequest);
+        
+        // Act
+        var result = await controller.CreateAsync(
+            new RequestCreationDto()
+            {
+                Type = "Edede",
+                Content = "Etefw4",
+            });
+
+        // Assert
+        Assert.IsInstanceOf<CreatedResult>(result.Result);
+        var okResult = (CreatedResult)result.Result;
+        Assert.AreSame(expectedRequest, okResult.Value);
+    }
+    
+    [Test]
+    public async Task CreateAsync_ReturnsCreatedRequestInvalid()
     {
         // Arrange
        
@@ -40,8 +65,6 @@ public class RequestControllerTest
             });
 
         // Assert
-        Assert.IsInstanceOf<CreatedResult>(result.Result);
-        var okResult = (CreatedResult)result.Result;
-        Assert.AreSame(expectedRequest, okResult.Value);
+        Assert.IsNull(result.Value);
     }
 }
