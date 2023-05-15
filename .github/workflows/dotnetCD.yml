@@ -23,6 +23,6 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: ./C#
-          file: ./C#/Dockerfile
+          file: ./C#/WebAPI/Dockerfile
           push: true
           tags: ${{secrets.DOCKER_USERNAME}}/backend_sep4
