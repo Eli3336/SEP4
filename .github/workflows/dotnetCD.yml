@@ -25,4 +25,4 @@ jobs:
           context: ./C#
           file: ./C#/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/C#:latest
+          tags: ${{secrets.DOCKER_USERNAME}}/backend_sep4
