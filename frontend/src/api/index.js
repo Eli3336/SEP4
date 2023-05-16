@@ -88,6 +88,16 @@ export async function fetchSensorLogById(sensorId) {
   }
 }
 
+export async function addDoctor(doctorInfo) {
+  try {
+    const response = await instance.post(doctorInfo);
+    return response.data;
+  } catch (error) {
+    console.error("Error in addDoctor:", error);
+    alert(`Failed to add doctor: ${error.response.data}`);
+    throw error;
+  }
+}
 export async function getDoctorById(doctorId) {
   try {
     const response = await instance.get(`/Doctors/${doctorId}`);
@@ -101,7 +111,7 @@ export async function getDoctorById(doctorId) {
 
 export async function deleteDoctorById(doctortId) {
   try {
-    const response = await instance.delete(`/Doctors/${doctorId}`);
+    const response = await instance.delete(`/Doctors/${doctortId}`);
     return response;
   } catch (error) {
     console.error("Error in deleteDoctorById:", error);

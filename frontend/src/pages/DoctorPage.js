@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import DoctorLayout from "@/layouts/DoctorLayout";
 import DoctorInfo from "@/components/DoctorInfo";
 import { fetchDoctorDetailsById } from "../api";
+import { addDoctor, deleteDoctorById } from "../api";
 import { updateDoctor } from "../api"; // Import the updateDoctor function
 const DoctorPage = ({ doctor }) => {
   const [doctorInfo, setDoctorInfo] = useState({
@@ -36,6 +37,29 @@ const DoctorPage = ({ doctor }) => {
     }
   };
 
+  const addDoctor = async () => {
+    try {
+      await addDoctor(
+        doctorInfo.id,
+        doctorInfo.name,
+        doctorInfo.password,
+        doctorInfo.phoneNumber
+      );
+      alert("Doctor added successfully");
+    } catch (error) {
+      console.error("Error adding doctor:", error);
+      alert("Failed to add doctor");
+    }
+  };
+  const handleRemoveDoctor = async () => {
+    try {
+      await deleteDoctorById(doctorInfo.id);
+      alert("doctor removed successfully");
+    } catch (error) {
+      console.error("Error removing doctor:", error);
+      alert("Failed to remove doctor");
+    }
+  };
   return (
     <DoctorLayout>
       <div>
