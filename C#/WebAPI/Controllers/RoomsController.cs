@@ -47,7 +47,7 @@ public class RoomsController : ControllerBase
     }
     
     [HttpGet("Empty")]
-    public async Task<ActionResult<IEnumerable<Room>>> GetAllEmptyRoomsIdToUpdate()
+    public async Task<ActionResult<IEnumerable<Room>>> GetAllEmptyRoomsToUpdate()
     {
         try
         {

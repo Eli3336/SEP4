@@ -61,6 +61,21 @@ public class DoctorsController : ControllerBase
         }
     }
     
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Doctor>>> GetAllDoctors()
+    {
+        try
+        {
+            IEnumerable<Doctor?> doctors= await doctorLogic.GetAllDoctorsAsync();
+            return Ok(doctors);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+    
     [HttpPatch("{id:int}")]
     public async Task<ActionResult> DoctorUpdateAsync([FromRoute] int id, string name, string phoneNumber)
     {

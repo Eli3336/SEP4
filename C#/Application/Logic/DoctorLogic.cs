@@ -86,5 +86,11 @@ public class DoctorLogic : IDoctorLogic
         if (doctor.PhoneNumber.Length > 13)
             throw new Exception("Phone number too long!");
     }
+    
+    public Task<IEnumerable<Doctor?>> GetAllDoctorsAsync()
+    {
+        IEnumerable<Doctor?> doctors = doctorDao.GetAllDoctorsAsync().Result; 
+        return Task.FromResult(doctors);
+    }
 }
    

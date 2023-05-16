@@ -14,13 +14,9 @@ public class SensorValueEfcDao : ILoriotDao
         this.context = context;
     }
 
-    public async Task<SensorValue> CreateAsync(SensorValueDto sensorValuedto, int id)
-
-
+    public async Task<SensorValue> CreateAsync(SensorValueDto sensorValueDto, int id)
     {
-
-        SensorValue? sensorValue = new SensorValue(sensorValuedto.value, sensorValuedto.timeStamp);
-        
+        SensorValue? sensorValue = new SensorValue(sensorValueDto.value, sensorValueDto.timeStamp);
         
         EntityEntry<SensorValue> newSensorValue = await context.SensorValue.AddAsync(sensorValue);
         var sensor = await context.Sensors.Include(s => s.Values)
