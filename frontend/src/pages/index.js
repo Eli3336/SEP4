@@ -8,7 +8,8 @@ const HomePage = () => {
       <p>
         Please select a role to continue: <Link href="/user">User</Link>,{" "}
         <Link href="/assign-room">Receptionist</Link>, or{" "}
-        <Link href="/room-management">Admin</Link>
+        <Link href="/room-management">Admin - room managment</Link>
+        <Link href="/receptionist-management">Admin - receptionist</Link>
       </p>
     </div>
   );
