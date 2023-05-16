@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\tstfa\SEP4\SEP4\IoT\SEP4\Tests\CMakeFiles\a467659191bba44b5cbd5cc98e462f39\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{3B6C3231-2BC7-34AB-A67C-B73D046BAF05}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

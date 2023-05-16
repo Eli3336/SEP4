@@ -1,0 +1,3 @@
+C:/Users/tstfa/SEP4/SEP4/IoT/SEP4/Tests/CMakeFiles/MyProject.dir
+C:/Users/tstfa/SEP4/SEP4/IoT/SEP4/Tests/CMakeFiles/ALL_BUILD.dir
+C:/Users/tstfa/SEP4/SEP4/IoT/SEP4/Tests/CMakeFiles/ZERO_CHECK.dir
