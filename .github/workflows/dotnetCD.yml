@@ -1,0 +1,28 @@
+name: .NET main CD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  push-docker-image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Login to Docker Hub
+        env:
+         DOCKER_USER: ${{secrets.DOCKER_USERNAME}}
+         DOCKER_PASSWORD: ${{secrets.DOCKER_TOKEN}}
+        run:
+         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Build and Push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./C#
+          file: ./C#/WebAPI/Dockerfile
+          push: true
+          tags: ${{secrets.DOCKER_USERNAME}}/backend_sep4

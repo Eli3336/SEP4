@@ -14,11 +14,10 @@ public class PatientsController : ControllerBase
     public PatientsController(IPatientLogic patientLogic)
     {
         this.patientLogic = patientLogic;
-      
     }
     
     [HttpPost]
-    public async Task<ActionResult<Patient>> CreateAndAddToRoomAsync(PatientCreationDto dto, int roomId)
+    public async Task<ActionResult<Patient>> CreateAndAddToRoomAsync(int roomId, PatientCreationDto dto)
     {
         try
         {
@@ -47,13 +46,28 @@ public class PatientsController : ControllerBase
         }
     }
     
-    [HttpGet("{id:long}")]
+    [HttpGet("{id:int}")]
     public async Task<ActionResult<Patient>> GetById([FromRoute] int id)
     {
         try
         {
-            Patient result = await patientLogic.GetByIdAsync(id);
+            Patient? result = await patientLogic.GetByIdAsync(id);
             return Ok(result);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+    
+    [HttpPatch("{patientId:int}+{roomId}")]
+    public async Task<ActionResult> MovePatientToGivenRoom([FromRoute]int patientId, [FromRoute]int roomId)
+    {
+        try
+        {
+            await patientLogic.MovePatientToGivenRoom(patientId, roomId);
+            return Ok();
         }
         catch (Exception e)
         {

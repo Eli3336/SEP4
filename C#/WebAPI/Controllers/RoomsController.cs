@@ -15,8 +15,7 @@ public class RoomsController : ControllerBase
     {
         this.roomLogic = roomLogic;
     }
-    
-    
+
     [HttpPost]
     public async Task<ActionResult<Room>> CreateAsync(RoomCreationDto dto)
     {
@@ -46,9 +45,23 @@ public class RoomsController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+    
+    [HttpGet("Empty")]
+    public async Task<ActionResult<IEnumerable<Room>>> GetAllEmptyRoomsToUpdate()
+    {
+        try
+        {
+            IEnumerable<Room> rooms = await roomLogic.GetAllEmptyRooms();
+            return Ok(rooms);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
 
     [HttpGet ("{id:int}")]
-
     public async Task<ActionResult<Room?>> GetRoomDetailsByIdAsync([FromRoute] int id)
     {
         try
@@ -62,5 +75,19 @@ public class RoomsController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
-
+    
+    [HttpPatch("{id:int}")]
+    public async Task<ActionResult> RoomUpdateAsync([FromRoute] int id, string name, int capacity, string availability)
+    {
+        try
+        {
+            await roomLogic.RoomUpdateAsync(id, name, capacity, availability);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
 }

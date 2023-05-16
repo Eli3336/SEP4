@@ -1,20 +1,18 @@
 import React from "react";
-import Head from "next/head";
-import BuildingPlanClient from "@/components/BuildingPlanClient";
+import Link from "next/link";
 
-export default function Home() {
+const HomePage = () => {
   return (
-    <>
-      <Head>
-        <title>My Building Plan</title>
-        <meta name="description" content="Interactive building plan" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <main>
-        <h1>Building Plan</h1>
-        <BuildingPlanClient />
-      </main>
-    </>
+    <div>
+      <h1>Welcome to the Building Plan Application</h1>
+      <p>
+        Please select a role to continue: <Link href="/user">User</Link>,{" "}
+        <Link href="/assign-room">Receptionist</Link>,{" "}
+        <Link href="/room-management">Admin</Link> or{" "}
+        <Link href="/doctor">Doctor</Link>
+      </p>
+    </div>
   );
-}
+};
+
+export default HomePage;

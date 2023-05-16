@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using Application.LogicInterfaces;
+﻿using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;

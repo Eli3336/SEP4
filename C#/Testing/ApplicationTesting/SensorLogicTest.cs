@@ -20,9 +20,9 @@ public class SensorLogicTest
             DownBreakpoint = 2,
             Values = new List<SensorValue>
             {
-                new SensorValue { valueId = 1,value = 1, timeStamp = new DateTime()},
-                new SensorValue { valueId = 1,value = 1, timeStamp = new DateTime() },
-                new SensorValue {valueId = 1,value = 1, timeStamp = new DateTime()}
+                new SensorValue { ValueId = 1,Value = 1, TimeStamp = new DateTime()},
+                new SensorValue { ValueId = 1,Value = 1, TimeStamp = new DateTime() },
+                new SensorValue {ValueId = 1,Value = 1, TimeStamp = new DateTime()}
             }
         };
         sensorDaoMock.Setup(dao => dao.CreateAsync(It.IsAny<Sensor>()))
@@ -35,9 +35,9 @@ public class SensorLogicTest
             Type = "Temperature",
             Values = new List<SensorValue>
             {
-                new SensorValue { valueId = 1,value = 1, timeStamp = new DateTime()},
-                new SensorValue { valueId = 1,value = 1, timeStamp = new DateTime() },
-                new SensorValue {valueId = 1,value = 1, timeStamp = new DateTime()}
+                new SensorValue { ValueId = 1,Value = 1, TimeStamp = new DateTime()},
+                new SensorValue { ValueId = 1,Value = 1, TimeStamp = new DateTime() },
+                new SensorValue {ValueId = 1,Value = 1, TimeStamp = new DateTime()}
             }
         };
 
@@ -55,8 +55,8 @@ public class SensorLogicTest
         var sensorDaoMock = new Mock<ISensorDao>();
         var expectedSensorValues = new List<SensorValue>
         {
-            new SensorValue { valueId = 1,value = 1, timeStamp = new DateTime()},
-            new SensorValue { valueId = 1,value = 1, timeStamp = new DateTime() },
+            new SensorValue { ValueId = 1,Value = 1, TimeStamp = new DateTime()},
+            new SensorValue { ValueId = 1,Value = 1, TimeStamp = new DateTime() },
         };
         sensorDaoMock.Setup(dao => dao.GetSensorsValuesAsync(It.IsAny<int?>()))
             .ReturnsAsync(expectedSensorValues);
@@ -68,9 +68,9 @@ public class SensorLogicTest
         Assert.IsNotNull(sensorValues);
         Assert.AreEqual(expectedSensorValues.Count, sensorValues.Count());
         Assert.IsTrue(expectedSensorValues.All(expected => sensorValues.Any(actual =>
-            actual.valueId == expected.valueId &&
-            actual.value == expected.value &&
-            actual.timeStamp == expected.timeStamp)));
+            actual.ValueId == expected.ValueId &&
+            actual.Value == expected.Value &&
+            actual.TimeStamp == expected.TimeStamp)));
     }
 
     [Test]
@@ -80,8 +80,8 @@ public class SensorLogicTest
         var sensorDaoMock = new Mock<ISensorDao>();
         var expectedSensorValueLog = new List<SensorValue>
         {
-            new SensorValue { valueId = 1, value = 20, timeStamp = DateTime.Now.AddMinutes(-1) },
-            new SensorValue { valueId = 1, value = 25, timeStamp = DateTime.Now },
+            new SensorValue { ValueId = 1, Value = 20, TimeStamp = DateTime.Now.AddMinutes(-1) },
+            new SensorValue { ValueId = 1, Value = 25, TimeStamp = DateTime.Now },
         };
         sensorDaoMock.Setup(dao => dao.GetLogOfSensorValuesAsync(It.IsAny<int?>()))
             .ReturnsAsync(expectedSensorValueLog);
@@ -95,9 +95,8 @@ public class SensorLogicTest
         Assert.IsNotNull(sensorValueLog);
         Assert.AreEqual(expectedSensorValueLog.Count, sensorValueLog.Count());
         Assert.IsTrue(expectedSensorValueLog.All(expected => sensorValueLog.Any(actual =>
-            actual.valueId == expected.valueId &&
-            actual.value == expected.value &&
-            actual.timeStamp == expected.timeStamp)));
+            actual.ValueId == expected.ValueId &&
+            actual.Value == expected.Value &&
+            actual.TimeStamp == expected.TimeStamp)));
     }
-
 }

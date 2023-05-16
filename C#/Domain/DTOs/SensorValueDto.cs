@@ -2,8 +2,6 @@
 
 public class SensorValueDto
 {
-    
-
     public double value { get; set; }
     public DateTime timeStamp { get; set; }
     
@@ -13,8 +11,5 @@ public class SensorValueDto
             this.timeStamp = timeStamp;
         }
 
-    public SensorValueDto()
-    {
-        throw new NotImplementedException();
-    }
+    public SensorValueDto(){}
 }
