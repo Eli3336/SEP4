@@ -181,10 +181,10 @@ public class ReceptionistLogicTest
         var result = await logic.GetByIdAsync(1);
 
         Assert.IsNotNull(result);
-        Assert.AreEqual(result.Id, expectedReceptionist.Id);
-        Assert.AreEqual(result.Name, expectedReceptionist.Name);
-        Assert.AreEqual(result.Password, expectedReceptionist.Password);
-        Assert.AreEqual(result.PhoneNumber, expectedReceptionist.PhoneNumber);
+        Assert.AreEqual(expectedReceptionist.Id, result.Id);
+        Assert.AreEqual(expectedReceptionist.Name, result.Name);
+        Assert.AreEqual(expectedReceptionist.Password, result.Password);
+        Assert.AreEqual(expectedReceptionist.PhoneNumber, result.PhoneNumber);
     }
 
     [Test]
@@ -195,5 +195,121 @@ public class ReceptionistLogicTest
 
         var ex = Assert.ThrowsAsync<Exception>(() => logic.GetByIdAsync(10));
         Assert.AreEqual("Receptionist with ID 10 not found!", ex.Message);
+    }
+    
+    //update method
+    
+    [Test]
+    public async Task ReceptionistUpdateAsync_Ok()
+    {
+        Receptionist expectedReceptionist = new Receptionist
+        {
+            Id = 1,
+            Name = "Ana",
+            Password = "1234",
+            PhoneNumber = "50123456"
+        };
+        receptionistDaoMock.Setup(dao => dao.GetByIdToUpdateAsync(It.IsAny<int>())).ReturnsAsync(expectedReceptionist).Verifiable();
+        receptionistDaoMock.Setup(dao => dao.ReceptionistUpdateAsync(It.IsAny<Receptionist>())).Verifiable();
+        
+        await logic.ReceptionistUpdateAsync(1, "Anna", "50123456");
+        receptionistDaoMock.Verify(dao => dao.GetByIdToUpdateAsync(It.IsAny<int>()), Times.Once);
+        receptionistDaoMock.Verify(dao => dao.ReceptionistUpdateAsync(It.IsAny<Receptionist>()), Times.Once);
+    }
+    
+    [Test]
+    public async Task ReceptionistUpdateAsync_NotFoundId()
+    { 
+        Receptionist? expectedReceptionist = null;
+        
+        receptionistDaoMock.Setup(dao => dao.GetByIdToUpdateAsync(It.IsAny<int>())).ReturnsAsync(expectedReceptionist);
+        
+        var ex = Assert.ThrowsAsync<Exception>(() => logic.ReceptionistUpdateAsync(1, "Anna", "50123456"));
+        Assert.AreEqual("Receptionist with ID 1 not found!", ex.Message);
+    }
+    
+    [Test]
+    public async Task ReceptionistUpdateAsync_NameInvalidNumbers()
+    { 
+        Receptionist expectedReceptionist = new Receptionist
+        {
+            Id = 1,
+            Name = "Ana",
+            Password = "1234",
+            PhoneNumber = "50123456"
+        };
+        receptionistDaoMock.Setup(dao => dao.GetByIdToUpdateAsync(It.IsAny<int>())).ReturnsAsync(expectedReceptionist).Verifiable();
+        
+        var ex = Assert.ThrowsAsync<Exception>(() => logic.ReceptionistUpdateAsync(1, "Anna2", "50123456"));
+        Assert.AreEqual("Name cannot contain numbers!", ex.Message);
+        receptionistDaoMock.Verify(dao => dao.GetByIdToUpdateAsync(It.IsAny<int>()), Times.Once);
+    }
+    
+    [Test]
+    public async Task ReceptionistUpdateAsync_NameInvalidShort()
+    { 
+        Receptionist expectedReceptionist = new Receptionist
+        {
+            Id = 1,
+            Name = "Ana",
+            Password = "1234",
+            PhoneNumber = "50123456"
+        };
+        receptionistDaoMock.Setup(dao => dao.GetByIdToUpdateAsync(It.IsAny<int>())).ReturnsAsync(expectedReceptionist).Verifiable();
+        
+        var ex = Assert.ThrowsAsync<Exception>(() => logic.ReceptionistUpdateAsync(1, "An", "50123456"));
+        Assert.AreEqual("Name too short!", ex.Message);
+        receptionistDaoMock.Verify(dao => dao.GetByIdToUpdateAsync(It.IsAny<int>()), Times.Once);
+    }
+    
+    [Test]
+    public async Task ReceptionistUpdateAsync_NameInvalidLong()
+    { 
+        Receptionist expectedReceptionist = new Receptionist
+        {
+            Id = 1,
+            Name = "Ana",
+            Password = "1234",
+            PhoneNumber = "50123456"
+        };
+        receptionistDaoMock.Setup(dao => dao.GetByIdToUpdateAsync(It.IsAny<int>())).ReturnsAsync(expectedReceptionist).Verifiable();
+        
+        var ex = Assert.ThrowsAsync<Exception>(() => logic.ReceptionistUpdateAsync(1, "AnnaqwertyuiopoiuydgshansbdhsgsbduehsjalAnnaqwertyuiopoiuydgshansbdhsgsbduehsjalAnnaqwertyuiopoiuydgshansbdhsgsbduehsjalAnnaqwertyuiopoiuydgshansbdhsgsbduehsjalAnnaqwertyuiopoiuydgshansbdhsgsbduehsjalAnnaqwertyuiopoiuydgshansbdhsgsbduehsjalAnnaqwertyuiopoiuydgshansbdhsgsbduehsjal", "50123456"));
+        Assert.AreEqual("Name too long!", ex.Message);
+        receptionistDaoMock.Verify(dao => dao.GetByIdToUpdateAsync(It.IsAny<int>()), Times.Once);
+    }
+    
+    [Test]
+    public async Task ReceptionistUpdateAsync_PhoneNumberInvalidShort()
+    { 
+        Receptionist expectedReceptionist = new Receptionist
+        {
+            Id = 1,
+            Name = "Ana",
+            Password = "1234",
+            PhoneNumber = "50123456"
+        };
+        receptionistDaoMock.Setup(dao => dao.GetByIdToUpdateAsync(It.IsAny<int>())).ReturnsAsync(expectedReceptionist).Verifiable();
+        
+        var ex = Assert.ThrowsAsync<Exception>(() => logic.ReceptionistUpdateAsync(1, "Anna", "50"));
+        Assert.AreEqual("Phone number too short!", ex.Message);
+        receptionistDaoMock.Verify(dao => dao.GetByIdToUpdateAsync(It.IsAny<int>()), Times.Once);
+    }
+    
+    [Test]
+    public async Task ReceptionistUpdateAsync_PhoneNumberInvalidLong()
+    { 
+        Receptionist expectedReceptionist = new Receptionist
+        {
+            Id = 1,
+            Name = "Ana",
+            Password = "1234",
+            PhoneNumber = "50123456"
+        };
+        receptionistDaoMock.Setup(dao => dao.GetByIdToUpdateAsync(It.IsAny<int>())).ReturnsAsync(expectedReceptionist).Verifiable();
+        
+        var ex = Assert.ThrowsAsync<Exception>(() => logic.ReceptionistUpdateAsync(1, "Anna", "1234567891123456789"));
+        Assert.AreEqual("Phone number too long!", ex.Message);
+        receptionistDaoMock.Verify(dao => dao.GetByIdToUpdateAsync(It.IsAny<int>()), Times.Once);
     }
 }

@@ -201,4 +201,36 @@ public class ReceptionistsControllerTest
         Assert.AreEqual(500, badResult.StatusCode);
         Assert.IsNull(result.Value);
     }
+    
+    //update method
+    
+    [Test]
+    public async Task ReceptionistUpdateAsync_ReturnsOkStatus()
+    {
+        // Arrange
+        receptionistLogicMock.Setup(mock => mock.ReceptionistUpdateAsync(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>())).Verifiable();
+
+        // Act
+        var result = await controller.ReceptionistUpdateAsync(1, "Ana", "50123456");
+
+        // Assert
+        Assert.IsInstanceOf<OkResult>(result);
+        receptionistLogicMock.Verify(logic => logic.ReceptionistUpdateAsync(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+    }
+    
+    [Test]
+    public async Task ReceptionistUpdateAsync_ReturnsException()
+    {
+        // Arrange
+        receptionistLogicMock.Setup(mock => mock.ReceptionistUpdateAsync(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>())).ThrowsAsync(new Exception("Receptionist with ID 1 not found!")).Verifiable();
+
+        // Act
+        var result = await controller.ReceptionistUpdateAsync(1, "Ana", "50123456");
+
+        // Assert
+        Assert.IsInstanceOf<ObjectResult>(result);
+        var badResult = (ObjectResult)result;
+        Assert.AreEqual(500, badResult.StatusCode); 
+        receptionistLogicMock.Verify(logic => logic.ReceptionistUpdateAsync(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+    }
 }
