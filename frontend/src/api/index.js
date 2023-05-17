@@ -41,6 +41,7 @@ export async function fetchRoomDetailsById(roomId) {
     throw error;
   }
 }
+
 export async function fetchSensorDataByRoomId(roomId) {
   try {
     const sensorDataUrl = `${API_BASE_URL}/Sensors?roomId=${roomId}`;
@@ -87,61 +88,38 @@ export async function fetchSensorLogById(sensorId) {
   }
 }
 
-// receptionist ------------------------------------------------------------
-export async function createReceptionist(receptionistInfo) {
+export async function getDoctorById(doctorId) {
   try {
-    const response = await instance.post(
-      `/Receptionists`,
-      receptionistInfo
-    );
+    const response = await instance.get(`/Doctors/${doctorId}`);
     return response.data;
   } catch (error) {
-    console.error("Error in createReceptionist:", error);
-    alert(`Failed to create receptionist: ${error.response.data}`);
+    console.error("Error in getDoctorById:", error);
+    alert(`Failed to get Doctor: ${error.response.data}`);
     throw error;
   }
 }
 
-export async function getReceptionistById(receptionistId) {
+export async function deleteDoctorById(doctortId) {
   try {
-    const response = await instance.get(`/Receptionists/${receptionistId}`);
-    return response.data;
-  } catch (error) {
-    console.error("Error in getReceptionistById:", error);
-    alert(`Failed to get Receptionist: ${error.response.data}`);
-    throw error;
-  }
-}
-
-export const updateReceptionist = async (id, name, phoneNumber) => {
-  try {
-
-    console.log(
-      `Updating receotionist ${id} with name ${name} and phone number ${phoneNumber}`
-    );
-    const response = await instance.patch(
-      `/Receptionists/${id}?name=${name}&number=${phoneNumber}`
-    );
-    console.log("Updated receptionist:", response.data);
-    return response.data;
-  } catch (error) {
-    console.error("Error updating receptionist:", error);
-    throw error;
-  }
-};
-
-export async function deleteReceptionistById(receptionistId) {
-  try {
-    const response = await instance.delete(`/Receptionists/${receptionistId}`);
+    const response = await instance.delete(`/Doctors/${doctorId}`);
     return response;
   } catch (error) {
-    console.error("Error in deleteReceptionistById:", error);
-    alert(`Failed to delete receptionist: ${error.response.data}`);
+    console.error("Error in deleteDoctorById:", error);
+    alert(`Failed to delete doctor: ${error.response.data}`);
     throw error;
   }
 }
 
+export const updateDoctorInfo = async (id, name, phoneNumber) => {
+  console.log(`Updating Doctor : ${name} information`);
+  const response = await instance.patch(
+    `/Doctors/${id}?name=${name}&phoneNumber=${phoneNumber}`
+  );
+  console.log("Updated Doctor Info:", response.data);
+  return response.data;
+};
 
+// receptionist
 export async function createAndAddPatientToRoom(patientInfo, roomId) {
   try {
     const response = await instance.post(
@@ -199,3 +177,85 @@ export const updateRoom = async (id, capacity, availability) => {
     throw error;
   }
 };
+
+export async function createRequest(requestDto) {
+  try {
+    const response = await instance.post(`/Requests`, requestDto);
+    return response.data;
+  } catch (error) {
+    console.error("Error in createRequest:", error);
+    alert(`Failed to create request: ${error.response.data}`);
+    throw error;
+  }
+}
+
+export async function getAllRequestsToMovePatients() {
+  try {
+    const response = await instance.get(`/ToMove`);
+    return response.data;
+  } catch (error) {
+    console.error("Error in getAllRequestsToMovePatients:", error);
+    alert(`Failed to get requests: ${error.response.data}`);
+    throw error;
+  }
+}
+
+export async function getAllAdditionalRequests() {
+  try {
+    const response = await instance.get(`/Additional`);
+    return response.data;
+  } catch (error) {
+    console.error("Error in getAllAdditionalRequests:", error);
+    alert(`Failed to get requests: ${error.response.data}`);
+    throw error;
+  }
+}
+
+export async function createReceptionist(receptionistInfo) {
+  try {
+    const response = await instance.post("/Receptionists", receptionistInfo);
+    return response.data;
+  } catch (error) {
+    console.error("Error in createReceptionist:", error);
+    alert(`Failed to create receptionist: ${error.response.data}`);
+    throw error;
+  }
+}
+
+export async function getReceptionistById(receptionistId) {
+  try {
+    const response = await instance.get(`/Receptionists/${receptionistId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error in getReceptionistById:", error);
+    alert(`Failed to get Receptionist: ${error.response.data}`);
+    throw error;
+  }
+}
+
+export const updateReceptionist = async (id, name, phoneNumber) => {
+  try {
+    console.log(
+      `Updating receptionist ${id} with name ${name} and phone number ${phoneNumber}`
+    );
+    const response = await instance.patch(
+      `/Receptionists/${id}?name=${name}&number=${phoneNumber}`
+    );
+    console.log("Updated receptionist:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating receptionist:", error);
+    throw error;
+  }
+};
+
+export async function deleteReceptionistById(receptionistId) {
+  try {
+    const response = await instance.delete(`/Receptionists/${receptionistId}`);
+    return response;
+  } catch (error) {
+    console.error("Error in deleteReceptionistById:", error);
+    alert(`Failed to delete receptionist: ${error.response.data}`);
+    throw error;
+  }
+}

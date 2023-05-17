@@ -1,11 +1,10 @@
-// src/layouts/ReceptionistLayout.js
+// src/layouts/DoctorLayout.js
 import React from "react";
 import Head from "next/head";
-import BuildingPlanClient from "@/components/BuildingPlanClient";
 import NavBar from "@/components/NavBar";
-import ReceptionistNavBar from "@/components/ReceptionistNavBar"; // import the new NavBar
+import BuildingPlanClient from "@/components/BuildingPlanClient";
 
-const ReceptionistLayout = ({ children }) => {
+const DoctorLayout = ({ children }) => {
   return (
     <>
       <Head>
@@ -15,15 +14,13 @@ const ReceptionistLayout = ({ children }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <NavBar />
-      <ReceptionistNavBar /> {/* add the new NavBar */}
       <main>
         <h1>Building Plan</h1>
         <BuildingPlanClient />
-        <h2>Assign Patient to Room</h2>
         {children}
       </main>
     </>
   );
 };
 
-export default ReceptionistLayout;
+export default DoctorLayout;
