@@ -5,5 +5,5 @@ namespace Application.DaoInterfaces;
 
 public interface ILoriotDao
 {
-    Task<SensorValue> CreateAsync(SensorValueDto sensorValue, int id);
+    Task<SensorValue> CreateAsync(SensorValueDto sensorValueDto, int id);
 }

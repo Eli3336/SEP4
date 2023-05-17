@@ -1,5 +1,5 @@
-#include "./_h/UplinkMessageBuilder.h"
-#include "./_h/Configuration.h"
+#include "UplinkMessageBuilder.h"
+#include "Config.h"
 
 static uint16_t _humidity;
 static uint16_t _temperature;

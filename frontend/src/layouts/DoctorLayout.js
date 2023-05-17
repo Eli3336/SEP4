@@ -1,4 +1,3 @@
-// src/layouts/DoctorLayout.js
 import React from "react";
 import Head from "next/head";
 import NavBar from "@/components/NavBar";
