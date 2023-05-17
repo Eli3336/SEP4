@@ -1,6 +1,6 @@
+// DoctorInfo.js
 import React, { useState, useEffect } from "react";
-import styles from "../styles/Home.module.css";
-import { fetchDoctorDetailsById } from "@/api";
+import { getDoctorById } from "@/api";
 
 const DoctorInfo = ({ doctorId, onClose }) => {
   const [doctorData, setDoctorData] = useState(null);
@@ -8,13 +8,8 @@ const DoctorInfo = ({ doctorId, onClose }) => {
   useEffect(() => {
     async function fetchDoctorData() {
       try {
-        const doctorDetails = await fetchDoctorDetailsById(doctorId);
+        const doctorDetails = await getDoctorById(doctorId);
         setDoctorData(doctorDetails);
-        console.log("Doctor Info:", doctorDetails);
-
-        const updatedDoctorData = { ...doctorData };
-        setDoctorData(updatedDoctorData);
-        console.log("Doctor data:", updatedDoctorData);
       } catch (error) {
         console.error("Error fetching doctor data:", error);
       }
@@ -30,18 +25,17 @@ const DoctorInfo = ({ doctorId, onClose }) => {
 
   return (
     doctorData && (
-      <div className={styles.container} onClick={handleClose}>
+      <div onClick={handleClose}>
         <div
-          className={styles.modal}
           onClick={(e) => {
             e.stopPropagation();
           }}
         >
-          <div className={styles.centerSection}>
-            <div className={styles.content}>
+          <div>
+            <div>
               <h2>{doctorData.name}</h2>
-              <p>password: {doctorData.password}</p>
-              <p>phoneNumber: {doctorData.phoneNumber}</p>
+              <p>Password: {doctorData.password}</p>
+              <p>Phone Number: {doctorData.phoneNumber}</p>
             </div>
           </div>
         </div>

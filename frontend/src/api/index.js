@@ -88,7 +88,7 @@ export async function fetchSensorLogById(sensorId) {
   }
 }
 
-export async function addDoctor(doctorInfo) {
+export async function createDoctor(doctorInfo) {
   try {
     const response = await instance.post(doctorInfo);
     return response.data;
