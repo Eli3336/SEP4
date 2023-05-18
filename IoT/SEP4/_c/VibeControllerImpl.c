@@ -55,9 +55,8 @@ void VibeController_initTask(void* params) {
 
 void VibeController_runTask(void) {	
 		
-		xEventGroupSetBits(_doEventGroup,BIT_HUMIDITY_ACT);
-		xEventGroupSetBits(_doEventGroup,BIT_TEMPERATURE_ACT);
-		xEventGroupSetBits(_doEventGroup,BIT_CO2_ACT);
+		xEventGroupSetBits(_doEventGroup,BIT_HUMIDITY_ACT |BIT_TEMPERATURE_ACT|BIT_CO2_ACT);
+		
 
 	uint16_t humidity;
 	int16_t temperature;

@@ -48,7 +48,6 @@ void co2Task_runTask() {
 	}
 		
 	
-	xEventGroupSetBits(_doneEventGroup, BIT_CO2_DONE);
 }
 
 static void _co2CallBack(uint16_t ppm){

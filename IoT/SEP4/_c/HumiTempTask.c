@@ -64,7 +64,7 @@ void humiTempTask_runTask() {
 	
 	xQueueSendToBack(_humidityQueue, &_latestHumidity, portMAX_DELAY);
 	xQueueSendToBack(_temperatureQueue, &_latestTemperature, portMAX_DELAY);
-	xEventGroupSetBits(_doneEventGroup, BIT_HUMIDITY_DONE | BIT_TEMPERATURE_DONE);
+	
 }
 
 static void _run(void* params) {
