@@ -3,6 +3,7 @@ import React from "react";
 import Head from "next/head";
 import BuildingPlanClient from "@/components/BuildingPlanClient";
 import NavBar from "@/components/NavBar";
+import ReceptionistNavBar from "@/components/ReceptionistNavBar"; // import the new NavBar
 
 const ReceptionistLayout = ({ children }) => {
   return (
@@ -14,6 +15,7 @@ const ReceptionistLayout = ({ children }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <NavBar />
+      <ReceptionistNavBar /> {/* add the new NavBar */}
       <main>
         <h1>Building Plan</h1>
         <BuildingPlanClient />

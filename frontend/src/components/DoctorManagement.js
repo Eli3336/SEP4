@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import { createDoctor, deleteDoctorById, updateDoctorInfo } from "../api";
 
 const DoctorManagement = () => {
@@ -46,11 +47,14 @@ const DoctorManagement = () => {
     } catch (error) {
       console.error("Error deleting doctor:", error);
       alert("Failed to delete doctor");
+
+
     }
   };
 
   return (
     <div>
+
       <h2>Create Doctor</h2>
       <input
         type="text"
@@ -101,6 +105,7 @@ const DoctorManagement = () => {
         onChange={(e) => setDoctorId(e.target.value)}
       />
       <button onClick={handleRemoveDoctor}>Delete Doctor</button>
+
     </div>
   );
 };
