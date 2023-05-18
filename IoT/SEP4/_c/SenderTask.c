@@ -7,7 +7,7 @@
 #include <task.h>
 
 #define TASK_NAME "SenderTask"
-#define TASK_PRIORITY configMAX_PRIORITIES - 1
+#define TASK_PRIORITY 3
  #define LORA_appEUI "6BE1FDCE7E214CF9"
  #define LORA_appKEY "EECCD39BD2AB6C6BD107A08E0DBE9DB9"
 
@@ -30,23 +30,30 @@ void senderTask_create(QueueHandle_t senderQueue) {
 }
 
 void senderTask_initTask(void* params) {
-	vTaskDelay(50UL);
-	lora_driver_resetRn2483(1);
-	vTaskDelay(100UL);
-	lora_driver_resetRn2483(0);
-	lora_driver_flushBuffers();
-	_connectToLoRaWAN();
+		vTaskDelay(50UL);
+		lora_driver_resetRn2483(1);
+		vTaskDelay(100UL);
+		lora_driver_resetRn2483(0);
+		lora_driver_flushBuffers();
+		_connectToLoRaWAN();
+
 	puts("Sender Task initialized");
 }
 
 void senderTask_runTask() {
 	lora_driver_payload_t uplinkPayload;
 	xQueueReceive(_senderQueue, &uplinkPayload, portMAX_DELAY);
-	printf("CO2 Value Is : %d \n",mh_z19_getCo2Ppm());
-	printf("Temperature Value Is : %d \n",hih8120_getTemperature_x10());
-	printf("Humidity Value Is : %d \n",hih8120_getHumidityPercent_x10());
+	
+		int i;
+		
+		for(i=0;i <uplinkPayload.len;i++)
+		{
+			printf("%02X ",uplinkPayload.bytes[i]);
+			
+		}
+		printf("\n");
 	lora_driver_sendUploadMessage(false, &uplinkPayload);
-	printf("The data has been sent!\n");
+	
 }
 
 static void _run(void* params) {
@@ -93,7 +100,7 @@ static void _connectToLoRaWAN() {
 	
 	do {
 		rc = lora_driver_join(LORA_OTAA);
-	
+		
 		printf("Join Network TriesLeft:%d >%s<\n", maxJoinTriesLeft, lora_driver_mapReturnCodeToText(rc));
 		status_leds_ledOn(led_ST2); // OPTIONAL
 
@@ -103,7 +110,7 @@ static void _connectToLoRaWAN() {
 			status_leds_longPuls(led_ST1); // OPTIONAL
 			// Wait 5 sec and lets try again
 			vTaskDelay(pdMS_TO_TICKS(5000UL));
-			printf("the connection status is : Denied \n");
+			
 		}
 		else
 		{

@@ -21,6 +21,7 @@
 #include <Config.h>
 #include <HumiTempTask.h>
 
+
 // Queues
 static QueueHandle_t _humidityQueue;
 static QueueHandle_t _temperatureQueue;
@@ -30,6 +31,8 @@ static QueueHandle_t _senderQueue;
 
 static EventGroupHandle_t _actEventGroup = NULL;
 static EventGroupHandle_t _doneEventGroup = NULL;
+
+
 
 static SemaphoreHandle_t _mutex;
 
@@ -56,6 +59,7 @@ static void _initDrivers(void) {
 	 lora_driver_initialise(ser_USART1, _messageBuffer);
 	puts("Initializing drivers...");
 	// + servo drivers
+
 	mh_z19_initialise(ser_USART3);
 	hih8120_initialise();
 }
@@ -68,22 +72,26 @@ static void _createTasks(void) {
 	humiTempTask_create(_humidityQueue, _temperatureQueue, _actEventGroup, _doneEventGroup);
 }
 
+
+
 int main(void)
 {
-	stdio_initialise(ser_USART0);
-	puts("Start initiated");
 
-	_createQueues();
+	stdio_initialise(ser_USART0);
 	_initDrivers();
+	puts("Start initiated");
+	
+	_createQueues();
+	
 	_createEventGroups();
 	_createTasks();
 	_createMutexes();
 	config_create(_mutex);
 
 	puts("Launching IoT device...");
-
+	vTaskStartScheduler();
 	while (1)
 	{
-		vTaskStartScheduler();
+		
 	}
 }
