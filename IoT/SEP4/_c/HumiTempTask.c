@@ -5,7 +5,7 @@
 #include <Config.h>
 
 #define TASK_NAME "HumiTempTask"
-#define TASK_PRIORITY configMAX_PRIORITIES - 3
+#define TASK_PRIORITY 2
 
 static void _run(void* params);
 
@@ -39,13 +39,13 @@ void humiTempTask_initTask(void* params) {
 }
 
 void humiTempTask_runTask() {
-	/* xEventGroupWaitBits(_doEventGroup, 
+	 xEventGroupWaitBits(_doEventGroup, 
 					    BIT_HUMIDITY_ACT | BIT_TEMPERATURE_ACT,
 						pdTRUE,	
 						pdFALSE, 
 						portMAX_DELAY
 	);
-	*/
+	
 	if (hih8120_wakeup() == HIH8120_OK) {
 		vTaskDelay(pdMS_TO_TICKS(100));
 		
@@ -64,7 +64,7 @@ void humiTempTask_runTask() {
 	
 	xQueueSendToBack(_humidityQueue, &_latestHumidity, portMAX_DELAY);
 	xQueueSendToBack(_temperatureQueue, &_latestTemperature, portMAX_DELAY);
-	xEventGroupSetBits(_doneEventGroup, BIT_HUMIDITY_DONE | BIT_TEMPERATURE_DONE);
+	
 }
 
 static void _run(void* params) {

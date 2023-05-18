@@ -9,7 +9,7 @@
 
 #define TASK_NAME "VibeController"
 #define TASK_INTERVAL 300000UL //3 seconds
-#define TASK_PRIORITY configMAX_PRIORITIES - 2
+#define TASK_PRIORITY 4
 #define PORT 2
 
 static void _run(void* params);
@@ -42,6 +42,8 @@ void VibeController_create(QueueHandle_t senderQueue,
 				TASK_PRIORITY, 
 				NULL
 	);
+	
+	
 }
 
 void VibeController_initTask(void* params) {
@@ -52,13 +54,10 @@ void VibeController_initTask(void* params) {
 }
 
 void VibeController_runTask(void) {	
-	
-	xEventGroupWaitBits(_doneEventGroup, /* The event group being tested. */
-	BIT_CO2_DONE | BIT_HUMIDITY_DONE | BIT_TEMPERATURE_DONE, /* The bits to wait for. */
-	pdTRUE, /* Bits will be cleared before return*/
-	pdTRUE, /* Wait for bits to be set */
-	pdMS_TO_TICKS(3000UL)); /* Maximum time to wait*/
-	
+		
+		xEventGroupSetBits(_doEventGroup,BIT_HUMIDITY_ACT |BIT_TEMPERATURE_ACT|BIT_CO2_ACT);
+		
+
 	uint16_t humidity;
 	int16_t temperature;
 	uint16_t ppm;
@@ -78,6 +77,7 @@ void VibeController_runTask(void) {
 	uplinkMessageBuilder_setHumidityData(humidity);
 	uplinkMessageBuilder_setTemperatureData(temperature);
 	uplinkMessageBuilder_setCO2Data(ppm);
+	
 		
 	if (_error == true)
 	{
