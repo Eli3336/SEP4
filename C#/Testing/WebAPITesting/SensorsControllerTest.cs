@@ -53,8 +53,8 @@ public class SensorsControllerTest
         });
 
         // Assert
-        Assert.IsInstanceOf<CreatedAtActionResult>(result.Result);
-        var createdResult = (CreatedAtActionResult)result.Result;
+        Assert.IsInstanceOf<CreatedResult>(result.Result);
+        var createdResult = (CreatedResult)result.Result;
         Assert.AreEqual(expectedSensor, createdResult.Value);
     }
 

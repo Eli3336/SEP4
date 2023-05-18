@@ -17,7 +17,7 @@ public class PatientsController : ControllerBase
     }
     
     [HttpPost]
-    public async Task<ActionResult<Patient>> CreateAndAddToRoomAsync(PatientCreationDto dto, int roomId)
+    public async Task<ActionResult<Patient>> CreateAndAddToRoomAsync(int roomId, PatientCreationDto dto)
     {
         try
         {

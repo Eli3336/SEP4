@@ -22,6 +22,7 @@ public class ReceptionistLogic : IReceptionistLogic
             Password = receptionistToCreate.Password,
             PhoneNumber = receptionistToCreate.PhoneNumber,
         };
+        ValidateReceptionist(toCreate);
         Receptionist created = await receptionistDao.CreateAsync(toCreate);
         return created;
     }
@@ -55,7 +56,7 @@ public class ReceptionistLogic : IReceptionistLogic
             Password = existing.Password,
             PhoneNumber = phoneNumberToUse
         };
-        ValidateReceptionistUpdate(updated);
+        ValidateReceptionist(updated);
         await receptionistDao.ReceptionistUpdateAsync(updated);
     }
 
@@ -76,7 +77,7 @@ public class ReceptionistLogic : IReceptionistLogic
         return receptionist;
     }
     
-    private void ValidateReceptionistUpdate(Receptionist receptionist)
+    private void ValidateReceptionist(Receptionist receptionist)
     {
        if (receptionist.Name.Contains("0") || receptionist.Name.Contains("1") || receptionist.Name.Contains("2") || receptionist.Name.Contains("3") || receptionist.Name.Contains("4") || receptionist.Name.Contains("5") || receptionist.Name.Contains("6") || receptionist.Name.Contains("7") || receptionist.Name.Contains("8") || receptionist.Name.Contains("9"))
             throw new Exception("Name cannot contain numbers!");
@@ -84,6 +85,10 @@ public class ReceptionistLogic : IReceptionistLogic
             throw new Exception("Name too short!");
        if (receptionist.Name.Length > 255)
             throw new Exception("Name too long!");
+       if (receptionist.Password.Length < 3)
+           throw new Exception("Password too short!");
+       if (receptionist.Password.Length > 255)
+           throw new Exception("Password too long!");
        if (receptionist.PhoneNumber.Length < 6)
             throw new Exception("Phone number too short!"); 
        if (receptionist.PhoneNumber.Length > 13)

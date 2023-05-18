@@ -19,7 +19,6 @@ public class ReceptionistEfcDao : IReceptionistDao
         await context.SaveChangesAsync();
         return newReceptionist.Entity;
     }
-    
 
     public async Task<Receptionist?> GetByIdAsync(int id)
     {
@@ -38,7 +37,6 @@ public class ReceptionistEfcDao : IReceptionistDao
     {
         context.Receptionists.Update(receptionist);
         await context.SaveChangesAsync();
-
     }
 
     public async Task<Receptionist?> GetByIdToUpdateAsync(int? id)
@@ -46,7 +44,6 @@ public class ReceptionistEfcDao : IReceptionistDao
         Receptionist? found = await context.Receptionists
             .AsNoTracking()
             .SingleOrDefaultAsync(r => r.Id == id);
-
         return found;
     }
 

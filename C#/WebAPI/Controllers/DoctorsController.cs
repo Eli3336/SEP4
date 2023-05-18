@@ -17,7 +17,7 @@ public class DoctorsController : ControllerBase
     }
     
     [HttpPost]
-    public async Task<ActionResult<Patient>> CreateAsync(DoctorCreationDto dto)
+    public async Task<ActionResult<Doctor>> CreateAsync(DoctorCreationDto dto)
     {
         try
         {
@@ -53,6 +53,21 @@ public class DoctorsController : ControllerBase
         {
             Doctor? result = await doctorLogic.GetByIdAsync(id);
             return Ok(result);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+    
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Doctor>>> GetAllDoctors()
+    {
+        try
+        {
+            IEnumerable<Doctor?> doctors= await doctorLogic.GetAllDoctorsAsync();
+            return Ok(doctors);
         }
         catch (Exception e)
         {

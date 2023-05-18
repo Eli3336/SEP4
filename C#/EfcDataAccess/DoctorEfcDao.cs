@@ -36,14 +36,9 @@ public class DoctorEfcDao : IDoctorDao
         return found;
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task DeleteAsync(Doctor doctor)
     {
-        Doctor? existing = await GetByIdAsync(id);
-        if (existing == null)
-        {
-            throw new Exception($"Doctor with id {id} not found");
-        }
-        context.Doctors.Remove(existing);
+        context.Doctors.Remove(doctor);
         await context.SaveChangesAsync();  
     }
     
@@ -52,5 +47,12 @@ public class DoctorEfcDao : IDoctorDao
         context.Doctors.Update(doctor);
         await context.SaveChangesAsync();
 
+    }
+    
+    public async Task<IEnumerable<Doctor?>> GetAllDoctorsAsync()
+    {
+        IQueryable<Doctor> doctors = context.Doctors.AsQueryable();
+        IEnumerable<Doctor> result = await doctors.ToListAsync();
+        return result;
     }
 }

@@ -5,6 +5,7 @@
 #include <semphr.h>
 #include <stdio_driver.h>
 #include <serial.h>
+#include <SenderTask.h>
 
 // Needed for LoRaWAN
 #include <lora_driver.h>
@@ -15,6 +16,7 @@
 #include <event_groups.h>
 #include <mh_z19.h>
 #include <message_buffer.h>
+#include <hih8120.h>
 
 #include <VibeController.h>
 #include <CO2Task.h>
@@ -89,7 +91,9 @@ int main(void)
 	config_create(_mutex);
 
 	puts("Launching IoT device...");
+  
 	vTaskStartScheduler();
+  
 	while (1)
 	{
 		

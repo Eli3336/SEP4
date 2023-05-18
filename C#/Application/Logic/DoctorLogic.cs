@@ -24,7 +24,6 @@ public class DoctorLogic : IDoctorLogic
         };
         ValidateDoctor(toCreate);
         Doctor created = await doctorDao.CreateAsync(toCreate);
-    
         return created;
     }
 
@@ -35,8 +34,7 @@ public class DoctorLogic : IDoctorLogic
         {
             throw new Exception($"Doctor with ID {id} was not found!");
         }
-        
-        await doctorDao.DeleteAsync(id);
+        await doctorDao.DeleteAsync(doctor);
     }
     
     public async Task<Doctor?> GetByIdAsync(int id)
@@ -63,7 +61,6 @@ public class DoctorLogic : IDoctorLogic
         string nameToUse = dto.Name ?? existing.Name;
         string phoneNumberToUse = dto.PhoneNumber ?? existing.PhoneNumber;
         
-        
         Doctor updated = new (nameToUse, phoneNumberToUse)
         {
             Id = existing.Id,
@@ -81,10 +78,20 @@ public class DoctorLogic : IDoctorLogic
             throw new Exception("Name too short!");
         if (doctor.Name.Length > 255)
             throw new Exception("Name too long!");
+        if (doctor.Password.Length < 3)
+            throw new Exception("Password too short!");
+        if (doctor.Password.Length > 255)
+            throw new Exception("Password too long!");
         if (doctor.PhoneNumber.Length < 6)
             throw new Exception("Phone number too short!");
         if (doctor.PhoneNumber.Length > 13)
             throw new Exception("Phone number too long!");
+    }
+    
+    public Task<IEnumerable<Doctor?>> GetAllDoctorsAsync()
+    {
+        IEnumerable<Doctor?> doctors = doctorDao.GetAllDoctorsAsync().Result; 
+        return Task.FromResult(doctors);
     }
 }
    

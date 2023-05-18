@@ -24,7 +24,7 @@ public class RoomLogicTest
             var roomToCreate = new RoomCreationDto
         {
             Name = "Test Room",
-            Capacity = 10,
+            Capacity = 3,
             Availability = "Available",
             Sensors = toSensor
         };

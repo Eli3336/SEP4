@@ -1,5 +1,6 @@
 ﻿using Application.DaoInterfaces;
 using Application.LogicInterfaces;
+using Domain.DTOs;
 using Domain.Models;
 
 namespace Application.Logic;
@@ -11,6 +12,28 @@ public class RequestLogic : IRequestLogic
     public RequestLogic(IRequestDao requestDao)
     {
         this.requestDao = requestDao;
+    }
+    
+    public async Task<Request> CreateAsync(RequestCreationDto requestToCreate)
+    {
+        Request toCreate = new Request()
+        {
+            Type = requestToCreate.Type,
+            Content = requestToCreate.Content,
+        };
+        ValidateRequest(toCreate);
+        Request created = await requestDao.CreateAsync(toCreate);
+        return created;
+    }
+    
+    private void ValidateRequest(Request request)
+    {
+        if(!(request.Type.Equals("Move") || request.Type.Equals("Additional")))
+            throw new Exception("Invalid request type! Request type must be 'Move' or 'Additional'.");
+        if (request.Content.Length < 3)
+            throw new Exception("Request too short!");
+        if (request.Content.Length > 255)
+            throw new Exception("Request too long!");
     }
 
     public async Task<Request?> GetByIdAsync(int id)
