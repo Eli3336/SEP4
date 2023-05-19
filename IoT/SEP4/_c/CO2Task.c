@@ -2,12 +2,12 @@
 #include <task.h>
 #include <stdint.h>
 #include <mh_z19.h>
-#include <Config.h>
+#include <DataHolder.h>
 #include <HumiTempTask.h>
 #include <stdio.h>
 
 #define TASK_NAME "CO2Task"
-#define TASK_PRIORITY 2
+#define TASK_PRIORITY 3
 
 static void _co2CallBack(uint16_t ppm);
 static void _run(void* params);
@@ -38,12 +38,12 @@ void co2Task_runTask() {
 	xEventGroupWaitBits(_doEventGroup,
 	BIT_CO2_ACT,
 	pdTRUE,
-	pdFALSE,
+	pdTRUE,
 	portMAX_DELAY
 	);
 	
 	if ((mh_z19_takeMeassuring()) != MHZ19_OK) {
-		ppm = CONFIG_INVALID_CO2_VALUE;
+		ppm = INVALID_CO2_VALUE;
 		_co2CallBack(ppm);
 	}
 		

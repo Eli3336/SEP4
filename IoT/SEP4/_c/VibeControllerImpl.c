@@ -5,11 +5,11 @@
 #include <lora_driver.h>
 #include <task.h>
 #include <stdbool.h>
-#include <Config.h>
+#include <DataHolder.h>
 
 #define TASK_NAME "VibeController"
 #define TASK_INTERVAL 300000UL //3 seconds
-#define TASK_PRIORITY 4
+#define TASK_PRIORITY 5
 #define PORT 2
 
 static void _run(void* params);
@@ -55,7 +55,7 @@ void VibeController_initTask(void* params) {
 
 void VibeController_runTask(void) {	
 		
-		xEventGroupSetBits(_doEventGroup,BIT_HUMIDITY_ACT |BIT_TEMPERATURE_ACT|BIT_CO2_ACT);
+	xEventGroupSetBits(_doEventGroup, BIT_HUMIDITY_ACT | BIT_TEMPERATURE_ACT | BIT_CO2_ACT);
 		
 
 	uint16_t humidity;
@@ -63,15 +63,15 @@ void VibeController_runTask(void) {
 	uint16_t ppm;
 	if (xQueueReceive(_humidityQueue, &humidity, pdMS_TO_TICKS(10000)) != pdTRUE)
 	{
-		humidity = CONFIG_INVALID_HUMIDITY_VALUE;
+		humidity = INVALID_HUMIDITY_VALUE;
 	};
 	if (xQueueReceive(_temperatureQueue, &temperature, pdMS_TO_TICKS(10000)) != pdTRUE)
 	{
-		temperature = CONFIG_INVALID_TEMPERATURE_VALUE;
+		temperature = INVALID_TEMPERATURE_VALUE;
 	}
 	if (xQueueReceive(_co2Queue, &ppm, pdMS_TO_TICKS(10000)) != pdTRUE)
 	{
-		ppm = CONFIG_INVALID_CO2_VALUE;
+		ppm = INVALID_CO2_VALUE;
 	}
 		
 	uplinkMessageBuilder_setHumidityData(humidity);

@@ -5,28 +5,32 @@
 #include <lora_driver.h>
 #include <stdint.h>
 #include <task.h>
+#include <ReceiverTask.h>
+#include <event_groups.h>
 
 #define TASK_NAME "SenderTask"
-#define TASK_PRIORITY 3
- #define LORA_appEUI "6BE1FDCE7E214CF9"
- #define LORA_appKEY "EECCD39BD2AB6C6BD107A08E0DBE9DB9"
+#define TASK_PRIORITY 4
+#define LORA_appEUI "6BE1FDCE7E214CF9"
+#define LORA_appKEY "EECCD39BD2AB6C6BD107A08E0DBE9DB9"
 
 static void _run(void* params);
 static void _connectToLoRaWAN();
 
+static EventGroupHandle_t _receiveEventGroup;
+
 static QueueHandle_t _senderQueue;
 
-void senderTask_create(QueueHandle_t senderQueue) {
+void senderTask_create(QueueHandle_t senderQueue, EventGroupHandle_t receiveEventGroup) {
 	_senderQueue = senderQueue;
+	_receiveEventGroup = receiveEventGroup;
 	
-	 xTaskCreate(_run,
+	xTaskCreate(_run,
 	TASK_NAME,
 	configMINIMAL_STACK_SIZE,
 	NULL,
 	TASK_PRIORITY,
 	NULL
 	);
-	puts("Sender task created inside SenderTask.c");
 }
 
 void senderTask_initTask(void* params) {
@@ -41,26 +45,20 @@ void senderTask_initTask(void* params) {
 }
 
 void senderTask_runTask() {
-// 	lora_driver_payload_t uplinkPayload;
-// 	xQueueReceive(_senderQueue, &uplinkPayload, portMAX_DELAY);
-// 	printf("CO2 Value Is : %d \n",mh_z19_getCo2Ppm());
-// 	printf("Temperature Value Is : %d \n",hih8120_getTemperature_x10());
-// 	printf("Humidity Value Is : %d \n",hih8120_getHumidityPercent_x10());
-// 	lora_driver_sendUploadMessage(false, &uplinkPayload);
-// 	printf("The data has been sent!\n");
-void senderTask_runTask() {
 	lora_driver_payload_t uplinkPayload;
 	xQueueReceive(_senderQueue, &uplinkPayload, portMAX_DELAY);
-		int i;
+	int i;
 		
-		for(i=0;i <uplinkPayload.len;i++)
-		{
-			printf("%02X ",uplinkPayload.bytes[i]);
+	printf("Payload to send: \n");
+	for(i=0;i <uplinkPayload.len;i++)
+	{
+		printf("%02X ",uplinkPayload.bytes[i]);
 			
-		}
-		printf("\n");
+	}
+	printf("\n");
+		xEventGroupSetBits(_receiveEventGroup, BIT_RECEIVER_ACT);
 	lora_driver_sendUploadMessage(false, &uplinkPayload);
-	
+
 }
 
 static void _run(void* params) {

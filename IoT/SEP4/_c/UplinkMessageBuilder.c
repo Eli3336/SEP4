@@ -1,5 +1,5 @@
 #include "UplinkMessageBuilder.h"
-#include "Config.h"
+#include "DataHolder.h"
 
 static uint16_t _humidity;
 static uint16_t _temperature;
@@ -29,34 +29,16 @@ uplinkMessageBuilder_buildUplinkMessage(uint8_t port) {
 void uplinkMessageBuilder_setHumidityData(uint16_t data) {
 	_humidity = data;
 	printf("the Hum is : %d \n",data);
-	
-	if (data == CONFIG_INVALID_HUMIDITY_VALUE) {
-		_validationBits |= 0 << 3;
-	} else {
-		_validationBits |=1 << 3;
-	}
 }
 
 void uplinkMessageBuilder_setTemperatureData(uint16_t data) {
 	_temperature = data;
 	printf("the temp value is: %d \n",data);
-	
-	if (data == CONFIG_INVALID_TEMPERATURE_VALUE) {
-		_validationBits |= 0 << 2;
-		} else {
-		_validationBits |=1 << 2;
-	}
 }
 
 void uplinkMessageBuilder_setCO2Data(uint16_t data) {
 	_co2 = data;
 	printf("the Co2 value is: %d \n ",data);
-	
-	if (data == CONFIG_INVALID_CO2_VALUE) {
-		_validationBits |= 0 << 1;
-		} else {
-		_validationBits |=1 << 1;
-	}
 }
 
 void uplinkMessageBuilder_setSystemErrorState() {

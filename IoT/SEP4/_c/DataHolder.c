@@ -1,4 +1,4 @@
-#include <Config.h>
+#include <DataHolder.h>
 #include <semphr.h>
 
 #define CHECK_BIT(variable, position) variable & (1 << position)
@@ -13,24 +13,24 @@ static uint16_t _ppmLOW;
 static uint16_t _ppmHIGH;
 
 
-void config_create(SemaphoreHandle_t mutex) {
+void dataHolder_create(SemaphoreHandle_t mutex) {
 	_mutex = mutex;
 	
-	_humidityLOW = CONFIG_INVALID_HUMIDITY_VALUE;
-	_humidityHIGH = CONFIG_INVALID_HUMIDITY_VALUE;
-	_temperatureLOW = CONFIG_INVALID_TEMPERATURE_VALUE;
-	_temperatureHIGH = CONFIG_INVALID_TEMPERATURE_VALUE;
-	_ppmLOW = CONFIG_INVALID_CO2_VALUE;
-	_ppmHIGH = CONFIG_INVALID_CO2_VALUE;
+	_humidityLOW = INVALID_HUMIDITY_VALUE;
+	_humidityHIGH = INVALID_HUMIDITY_VALUE;
+	_temperatureLOW = INVALID_TEMPERATURE_VALUE;
+	_temperatureHIGH = INVALID_TEMPERATURE_VALUE;
+	_ppmLOW = INVALID_CO2_VALUE;
+	_ppmHIGH = INVALID_CO2_VALUE;
 }
 
-void config_setThresholds(lora_driver_payload_t payload) {
+void dataHolder_setBreakpoints(lora_driver_payload_t payload) {
 	if (xSemaphoreTake(_mutex, pdMS_TO_TICKS(3000)) == pdTRUE) {
-	
+		
 		if (CHECK_BIT(payload.bytes[14], 1)) {
 			_ppmLOW = (payload.bytes[10] << 8) + payload.bytes[11];
 		}
-	
+		
 		if (CHECK_BIT(payload.bytes[14], 2)) {
 			_ppmHIGH = (payload.bytes[8] << 8) + payload.bytes[9];
 		}
@@ -38,15 +38,15 @@ void config_setThresholds(lora_driver_payload_t payload) {
 		if (CHECK_BIT(payload.bytes[14], 3)) {
 			_temperatureLOW = (payload.bytes[6] << 8) + payload.bytes[7];
 		}
-	
+		
 		if(CHECK_BIT(payload.bytes[14], 4)) {
 			_temperatureHIGH = (payload.bytes[4] << 8) + payload.bytes[5];
 		}
-	
+		
 		if(CHECK_BIT(payload.bytes[14], 5)) {
 			_humidityLOW = (payload.bytes[2] << 8) + payload.bytes[3];
 		}
-	
+		
 		if(CHECK_BIT(payload.bytes[14], 6)) {
 			_humidityHIGH = (payload.bytes[0] << 8) + payload.bytes[1];
 		}
@@ -55,7 +55,7 @@ void config_setThresholds(lora_driver_payload_t payload) {
 	}
 }
 
-uint16_t config_getLowHumidityThreshold() {
+uint16_t getHumidityBreakpointLow() {
 	if (xSemaphoreTake(_mutex, pdMS_TO_TICKS(3000)) == pdTRUE) {
 		int16_t temp = _humidityLOW;
 		xSemaphoreGive(_mutex);
@@ -63,7 +63,7 @@ uint16_t config_getLowHumidityThreshold() {
 	}
 }
 
-int16_t config_getLowTemperatureThreshold() {
+int16_t getTemperatureBreakpointLow() {
 	if (xSemaphoreTake(_mutex, pdMS_TO_TICKS(3000)) == pdTRUE) {
 		int16_t temp = _temperatureLOW;
 		xSemaphoreGive(_mutex);
@@ -71,7 +71,7 @@ int16_t config_getLowTemperatureThreshold() {
 	}
 }
 
-uint16_t config_getLowCO2Threshold() {
+uint16_t getCo2BreakpointLow() {
 	if (xSemaphoreTake(_mutex, pdMS_TO_TICKS(3000)) == pdTRUE) {
 		int16_t temp = _ppmLOW;
 		xSemaphoreGive(_mutex);
@@ -79,7 +79,7 @@ uint16_t config_getLowCO2Threshold() {
 	}
 }
 
-uint16_t config_getHighHumidityThreshold() {
+uint16_t getHumidityBreakpointHigh() {
 	if (xSemaphoreTake(_mutex, pdMS_TO_TICKS(3000)) == pdTRUE) {
 		int16_t temp = _humidityHIGH;
 		xSemaphoreGive(_mutex);
@@ -87,7 +87,7 @@ uint16_t config_getHighHumidityThreshold() {
 	}
 }
 
-int16_t config_getHighTemperatureThreshold() {
+int16_t getTemperatureBreakpointHigh() {
 	if (xSemaphoreTake(_mutex, pdMS_TO_TICKS(3000)) == pdTRUE) {
 		int16_t temp = _temperatureHIGH;
 		xSemaphoreGive(_mutex);
@@ -95,7 +95,7 @@ int16_t config_getHighTemperatureThreshold() {
 	}
 }
 
-uint16_t config_getHighCO2Threshold() {
+uint16_t getCo2BreakpointHigh() {
 	if (xSemaphoreTake(_mutex, pdMS_TO_TICKS(3000)) == pdTRUE) {
 		int16_t temp = _ppmHIGH;
 		xSemaphoreGive(_mutex);
