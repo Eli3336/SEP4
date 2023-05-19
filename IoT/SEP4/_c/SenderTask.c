@@ -41,14 +41,6 @@ void senderTask_initTask(void* params) {
 }
 
 void senderTask_runTask() {
-// 	lora_driver_payload_t uplinkPayload;
-// 	xQueueReceive(_senderQueue, &uplinkPayload, portMAX_DELAY);
-// 	printf("CO2 Value Is : %d \n",mh_z19_getCo2Ppm());
-// 	printf("Temperature Value Is : %d \n",hih8120_getTemperature_x10());
-// 	printf("Humidity Value Is : %d \n",hih8120_getHumidityPercent_x10());
-// 	lora_driver_sendUploadMessage(false, &uplinkPayload);
-// 	printf("The data has been sent!\n");
-void senderTask_runTask() {
 	lora_driver_payload_t uplinkPayload;
 	xQueueReceive(_senderQueue, &uplinkPayload, portMAX_DELAY);
 		int i;
