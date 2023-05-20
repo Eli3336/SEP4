@@ -39,7 +39,7 @@ void senderTask_initTask(void* params) {
 		vTaskDelay(100UL);
 		lora_driver_resetRn2483(0);
 		lora_driver_flushBuffers();
-		_connectToLoRaWAN();
+		//_connectToLoRaWAN();
 
 	puts("Sender Task initialized");
 }
@@ -56,9 +56,9 @@ void senderTask_runTask() {
 			
 	}
 	printf("\n");
-		xEventGroupSetBits(_receiveEventGroup, BIT_RECEIVER_ACT);
 	lora_driver_sendUploadMessage(false, &uplinkPayload);
-
+	vTaskDelay(pdMS_TO_TICKS(100));
+	xEventGroupSetBits(_receiveEventGroup, BIT_RECEIVER_ACT);
 }
 
 static void _run(void* params) {

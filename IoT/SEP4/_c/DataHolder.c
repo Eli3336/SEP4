@@ -9,8 +9,8 @@ static uint16_t _humidityLOW;
 static uint16_t _humidityHIGH;
 static int16_t _temperatureLOW;
 static int16_t _temperatureHIGH;
-static uint16_t _ppmLOW;
-static uint16_t _ppmHIGH;
+static uint16_t _co2LOW;
+static uint16_t _co2HIGH;
 
 
 void dataHolder_create(SemaphoreHandle_t mutex) {
@@ -20,35 +20,37 @@ void dataHolder_create(SemaphoreHandle_t mutex) {
 	_humidityHIGH = INVALID_HUMIDITY_VALUE;
 	_temperatureLOW = INVALID_TEMPERATURE_VALUE;
 	_temperatureHIGH = INVALID_TEMPERATURE_VALUE;
-	_ppmLOW = INVALID_CO2_VALUE;
-	_ppmHIGH = INVALID_CO2_VALUE;
+	_co2LOW = INVALID_CO2_VALUE;
+	_co2HIGH = INVALID_CO2_VALUE;
 }
 
 void dataHolder_setBreakpoints(lora_driver_payload_t payload) {
 	if (xSemaphoreTake(_mutex, pdMS_TO_TICKS(3000)) == pdTRUE) {
 		
-		if (CHECK_BIT(payload.bytes[14], 1)) {
-			_ppmLOW = (payload.bytes[10] << 8) + payload.bytes[11];
+		// Checks for breakpoints to be set in byte 0. (flag)
+		// HumiLow
+		if(CHECK_BIT(payload.bytes[0], 0)) {
+			_humidityLOW = (payload.bytes[1] << 8) + payload.bytes[2];
 		}
-		
-		if (CHECK_BIT(payload.bytes[14], 2)) {
-			_ppmHIGH = (payload.bytes[8] << 8) + payload.bytes[9];
+		// HumiHigh
+		if(CHECK_BIT(payload.bytes[0], 1)) {
+			_humidityHIGH = (payload.bytes[3] << 8) + payload.bytes[4];
 		}
-		
-		if (CHECK_BIT(payload.bytes[14], 3)) {
-			_temperatureLOW = (payload.bytes[6] << 8) + payload.bytes[7];
+		// TempLow
+		if(CHECK_BIT(payload.bytes[0], 2)) {
+			_temperatureLOW = (payload.bytes[5] << 8) + payload.bytes[6];
 		}
-		
-		if(CHECK_BIT(payload.bytes[14], 4)) {
-			_temperatureHIGH = (payload.bytes[4] << 8) + payload.bytes[5];
+		// TempHigh
+		if(CHECK_BIT(payload.bytes[0], 3)) {
+			_temperatureHIGH = (payload.bytes[7] << 8) + payload.bytes[8];
 		}
-		
-		if(CHECK_BIT(payload.bytes[14], 5)) {
-			_humidityLOW = (payload.bytes[2] << 8) + payload.bytes[3];
+		// Co2Low
+		if(CHECK_BIT(payload.bytes[0], 4)) {
+			_ppmLOW = (payload.bytes[9] << 8) + payload.bytes[10];
 		}
-		
-		if(CHECK_BIT(payload.bytes[14], 6)) {
-			_humidityHIGH = (payload.bytes[0] << 8) + payload.bytes[1];
+		// Co2High
+		if(CHECK_BIT(payload.bytes[0], 5)) {
+			_ppmHIGH = (payload.bytes[11] << 8) + payload.bytes[12];
 		}
 		
 		xSemaphoreGive(_mutex);

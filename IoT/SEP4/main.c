@@ -53,6 +53,7 @@ static void _createQueues(void) {
 static void _createEventGroups(void) {
 	_actEventGroup = xEventGroupCreate();
 	_doneEventGroup = xEventGroupCreate();
+	_receiveEventGroup = xEventGroupCreate();
 }
 
 static void _createMutexes(void){
@@ -68,7 +69,7 @@ static void _initDrivers(void) {
 }
 
 static void _createTasks(void) {
-	senderTask_create(_senderQueue, _actEventGroup);
+	senderTask_create(_senderQueue, _receiveEventGroup);
 	VibeController_create(_senderQueue, _humidityQueue, _temperatureQueue, _co2Queue, _actEventGroup, _doneEventGroup);
 	co2Task_create(_co2Queue, _actEventGroup, _doneEventGroup);
 	humiTempTask_create(_humidityQueue, _temperatureQueue, _actEventGroup, _doneEventGroup);
