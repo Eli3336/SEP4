@@ -75,4 +75,19 @@ public class PatientsController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+    
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Patient>>> GetAllPatients()
+    {
+        try
+        {
+            IEnumerable<Patient?> patients= await patientLogic.GetAllPatientsAsync();
+            return Ok(patients);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
 }
