@@ -1,4 +1,8 @@
-﻿POST https://localhost:7130/auth/login
+﻿POST https://localhost:7216/auth/login
 Content-Type: application/json
 
-{ "Username" : "trmo", "Password" : "onetwo3FOUR" }
+{ "Username" : "Test", "Password" : "test123" }
+
+###
+
+GET https://localhost:7216/test/authorized
