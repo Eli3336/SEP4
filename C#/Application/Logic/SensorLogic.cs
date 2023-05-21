@@ -63,17 +63,17 @@ public class SensorLogic : ISensorLogic
     
     private void ValidateSensorUpdate(Sensor sensor)
     {
-        if (sensor.Type.Equals("Temperature") && sensor.DownBreakpoint<-50 && sensor.UpBreakpoint > 50)
+        if (sensor.Type.Equals("Temperature") && (sensor.DownBreakpoint<-50 || sensor.UpBreakpoint > 50 || sensor.UpBreakpoint < sensor.DownBreakpoint))
         {
-            throw new ArgumentException("The Temperature is invalid!");
+            throw new Exception("The Temperature is invalid!");
         }
-        if (sensor.Type.Equals("Humidity") && sensor.DownBreakpoint<10 && sensor.UpBreakpoint > 80)
+        if (sensor.Type.Equals("Humidity") && (sensor.DownBreakpoint<10 || sensor.UpBreakpoint > 80 || sensor.UpBreakpoint < sensor.DownBreakpoint))
         {
-            throw new ArgumentException("The humidity is invalid!");
+            throw new Exception("The humidity is invalid!");
         }
-        if (sensor.Type.Equals("CO2") && sensor.DownBreakpoint<400 && sensor.UpBreakpoint > 2100)
+        if (sensor.Type.Equals("CO2") && (sensor.DownBreakpoint<400 || sensor.UpBreakpoint > 2100 || sensor.UpBreakpoint < sensor.DownBreakpoint))
         {
-            throw new ArgumentException("The CO2 level is invalid!");
+            throw new Exception("The CO2 level is invalid!");
         }
     }
 
