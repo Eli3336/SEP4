@@ -46,11 +46,11 @@ void dataHolder_setBreakpoints(lora_driver_payload_t payload) {
 		}
 		// Co2Low
 		if(CHECK_BIT(payload.bytes[0], 4)) {
-			_ppmLOW = (payload.bytes[9] << 8) + payload.bytes[10];
+			_co2LOW = (payload.bytes[9] << 8) + payload.bytes[10];
 		}
 		// Co2High
 		if(CHECK_BIT(payload.bytes[0], 5)) {
-			_ppmHIGH = (payload.bytes[11] << 8) + payload.bytes[12];
+			_co2HIGH = (payload.bytes[11] << 8) + payload.bytes[12];
 		}
 		
 		xSemaphoreGive(_mutex);
@@ -75,7 +75,7 @@ int16_t getTemperatureBreakpointLow() {
 
 uint16_t getCo2BreakpointLow() {
 	if (xSemaphoreTake(_mutex, pdMS_TO_TICKS(3000)) == pdTRUE) {
-		int16_t temp = _ppmLOW;
+		int16_t temp = _co2LOW;
 		xSemaphoreGive(_mutex);
 		return temp;
 	}
@@ -99,7 +99,7 @@ int16_t getTemperatureBreakpointHigh() {
 
 uint16_t getCo2BreakpointHigh() {
 	if (xSemaphoreTake(_mutex, pdMS_TO_TICKS(3000)) == pdTRUE) {
-		int16_t temp = _ppmHIGH;
+		int16_t temp = _co2HIGH;
 		xSemaphoreGive(_mutex);
 		return temp;
 	}
