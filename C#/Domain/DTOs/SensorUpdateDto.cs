@@ -1,19 +1,19 @@
 namespace Domain.DTOs;
 
-public class RoomUpdateDto
+public class SensorUpdateDto
 {
     public int Id { get; set; }
-    public string? Name { get; set; }
-    public int? Capacity { get; set; }
-    public string? Availability { get; set; }
-    
-    public RoomUpdateDto(){}
+    public double? UpBreakPoint { get; set; }
+    public double? DownBreakPoint { get; set; }
 
-    public RoomUpdateDto(int id, string? name, int? capacity, string? availability)
+
+    public SensorUpdateDto(){}
+
+    public SensorUpdateDto(int id,  double? upBreakPoint, double? downBreakPoint)
     {
         Id = id;
-        Name = name;
-        Capacity = capacity;
-        Availability = availability;
+        UpBreakPoint = upBreakPoint;
+        DownBreakPoint = downBreakPoint;
+
     }
 }
