@@ -1,3 +1,4 @@
+import AssignPatient from "@/components/AssignPatient";
 import axios from "axios";
 
 const API_BASE_URL = "https://localhost:7216";
@@ -161,6 +162,28 @@ export async function getPatientById(patientId) {
   } catch (error) {
     console.error("Error in getPatientById:", error);
     alert(`Failed to get patient: ${error.response.data}`);
+    throw error;
+  }
+}
+
+export async function getAllPatients() {
+  try {
+    const response = await instance.get(`/Patients`);
+    return response.data;
+  } catch (error) {
+    console.error("Error in getAllPatients:", error);
+    alert(`Failed to get patients: ${error.response.data}`);
+    throw error;
+  }
+}
+
+export async function getAllAAvailableRooms() {
+  try {
+    const response = await instance.get(`/Rooms/?availability="Available"`);
+    return response.data;
+  } catch (error) {
+    console.error("Error in getAllAAvailableRooms:", error);
+    alert(`Failed to get AllA Available Rooms: ${error.response.data}`);
     throw error;
   }
 }

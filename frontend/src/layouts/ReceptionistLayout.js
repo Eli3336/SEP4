@@ -4,6 +4,7 @@ import Head from "next/head";
 import BuildingPlanClient from "@/components/BuildingPlanClient";
 import NavBar from "@/components/NavBar";
 import ReceptionistNavBar from "@/components/ReceptionistNavBar"; // import the new NavBar
+import MovePatient from "@/components/MovePatient";
 
 const ReceptionistLayout = ({ children }) => {
   return (
@@ -21,6 +22,7 @@ const ReceptionistLayout = ({ children }) => {
         <BuildingPlanClient />
         <h2>Assign Patient to Room</h2>
         {children}
+        <MovePatient />
       </main>
     </>
   );
