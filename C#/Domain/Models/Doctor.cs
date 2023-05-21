@@ -5,13 +5,13 @@ public class Doctor : User
     public List<Request> Requests { get; set; }
 
     public Doctor(string name, string password, string phoneNumber)
-        : base(name, password, phoneNumber)
+        : base(name, password, phoneNumber, "Doctor")
     {
         Requests = new List<Request>();
     }
     
     public Doctor(string name, string phoneNumber)
-        : base(name, "0000", phoneNumber)
+        : base(name, "0000", phoneNumber, "Doctor" )
     {
         Requests = new List<Request>();
     }
