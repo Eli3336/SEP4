@@ -71,9 +71,9 @@ public class SensorLogic : ISensorLogic
         {
             throw new ArgumentException("The humidity is invalid!");
         }
-        if (sensor.Type.Equals("CO2") && sensor.DownBreakpoint< && sensor.UpBreakpoint > 80)
+        if (sensor.Type.Equals("CO2") && sensor.DownBreakpoint<400 && sensor.UpBreakpoint > 2100)
         {
-            throw new ArgumentException("The room can only be Available or Under maintenance. Please choose one or check for typos!");
+            throw new ArgumentException("The CO2 level is invalid!");
         }
     }
 

@@ -70,5 +70,21 @@ public class SensorEfcDao : ISensorDao
         }
         else throw new Exception("Sensor with given Id not found.");
     }
+    
+    public async Task SensorUpdateAsync(Sensor sensor)
+    {
+        context.Sensors.Update(sensor);
+        await context.SaveChangesAsync();
+
+    }
+    
+    public async Task<Sensor?> GetByIdToUpdateAsync(int? id)
+    {
+        Sensor? found = await context.Sensors
+            .AsNoTracking()
+            .SingleOrDefaultAsync(p => p.Id == id);
+
+        return found;
+    }
 }
 
