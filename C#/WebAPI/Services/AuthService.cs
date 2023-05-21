@@ -1,10 +1,12 @@
 using System.ComponentModel.DataAnnotations;
+using Application.DaoInterfaces;
 using Domain.Models;
 using EfcDataAccess;
 using Shared;
 using Shared.DTOs;
+using WebAPI.Services;
 
-namespace Shop.Services;
+namespace WebAPI.Services;
 
 
 public class AuthService:IAuthService
@@ -31,7 +33,7 @@ public class AuthService:IAuthService
             throw new Exception("User not found");
         }
 
-        if (!existingUser.password.Equals(password))
+        if (!existingUser.Password.Equals(password))
         {
             throw new Exception("Password mismatch");
         }
@@ -39,32 +41,5 @@ public class AuthService:IAuthService
         return existingUser;
     }
 
-    public async Task<User> RegisterUser(UserCreationDto dto)
-    {
-
-        if (await userDao.GetByUsernameAsync(dto.UserName) != null)
-        {
-            throw new ValidationException("Username already exists");
-        }
-        
-        if (string.IsNullOrEmpty(dto.UserName))
-        {
-            throw new ValidationException("Username cannot be null");
-        }
-
-        if (string.IsNullOrEmpty(dto.Password))
-        {
-            throw new ValidationException("Password cannot be null");
-        }
-
-        User user;
-        if(dto.UserName.Equals("admin"))
-            user = new User(dto.Name, dto.PhoneNumber, dto.UserName, dto.Password,"administrator");
-        else
-            user = new User(dto.Name, dto.PhoneNumber, dto.UserName, dto.Password, "");
-        
-        users.Add(user);
-        User userToCreate = await userDao.CreateAsync(user);
-        return userToCreate;
-    }
+    
 }

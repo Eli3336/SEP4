@@ -1,13 +1,13 @@
+using Domain.DTOs;
 using Domain.Models;
 using Shared;
 using Shared.DTOs;
 
-namespace ShopApplication.DaoInterfaces;
+namespace Application.DaoInterfaces;
 
 public interface IUserDao
 {
-    Task<User> CreateAsync(User user);
     Task<User?> GetByUsernameAsync(string userName);
-    Task<IEnumerable<User>> GetAsync(SearchUserParametersDto? searchParameters);
+    Task<IEnumerable<User>> GetAsync(SearchUserParameterDto? searchParameters);
     Task<string> Seed();
 }

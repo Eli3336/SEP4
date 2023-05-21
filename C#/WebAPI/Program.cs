@@ -6,9 +6,11 @@ using Domain.Auth;
 using EfcDataAccess;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using ShopApplication.LogicInterfaces;
 using WebAPI.IoTGate;
 using WebAPI.IoTGate.Background;
 using WebAPI.IoTGate.Interface;
+using WebAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +41,9 @@ builder.Services.AddScoped<IRoomLogic, RoomLogic>();
 
 builder.Services.AddScoped<IRequestDao, RequestEfcDao>();
 builder.Services.AddScoped<IRequestLogic, RequestLogic>();
+builder.Services.AddScoped<IUserDao, UserEfcDao>();
+builder.Services.AddScoped<IUserLogic, UserLogic>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {

@@ -1,9 +1,8 @@
-using Shared;
-using Shared.DTOs;
+using Domain.Models;
 
-namespace Shop.Services;
+
+namespace WebAPI.Services;
 public interface IAuthService
 {
     Task<User> ValidateUser(string username, string password);
-    Task<User> RegisterUser(UserCreationDto dto);
 }
