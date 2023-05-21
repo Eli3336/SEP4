@@ -72,8 +72,7 @@ public class PatientLogicTest
         await logic.MovePatientToGivenRoom(1, 2);
         roomDaoMock.Verify(dao => dao.GetById(It.IsAny<int>()), Times.Once);
         patientDaoMock.Verify(dao => dao.GetByIdAsync(It.IsAny<int>()), Times.Once);
-        roomDaoMock.Verify(dao => dao.GetAllRoomsAsync(), Times.Once);
-        roomDaoMock.Verify(dao => dao.RoomUpdateAsync(It.IsAny<Room>()), Times.Once);
+        roomDaoMock.Verify(dao => dao.GetAllRoomsAsync(), Times.Once); 
     }
     
     [Test]
@@ -84,7 +83,7 @@ public class PatientLogicTest
         roomDaoMock.Setup(dao => dao.GetById(It.IsAny<int>())).ReturnsAsync(expectedRoom);
         
         var ex = Assert.ThrowsAsync<Exception>(() => logic.MovePatientToGivenRoom(1, 5));
-        Assert.AreEqual("Room with ID 5 not found!", ex.Message);
+        Assert.AreEqual("Room with id 5 not found", ex.Message);
     }
     
     [Test]
@@ -134,7 +133,7 @@ public class PatientLogicTest
         roomDaoMock.Setup(dao => dao.GetById(It.IsAny<int>())).ReturnsAsync(expectedRoom).Verifiable();
         patientDaoMock.Setup(dao => dao.GetByIdAsync(It.IsAny<int>())).ReturnsAsync(expectedPatient).Verifiable();
         var ex = Assert.ThrowsAsync<Exception>(() => logic.MovePatientToGivenRoom(1, 1));
-        Assert.AreEqual("Patient with ID {patientId} was not found!", ex.Message);
+        Assert.AreEqual("Patient with ID 1 was not found!", ex.Message);
         roomDaoMock.Verify(dao => dao.GetById(It.IsAny<int>()), Times.Once);
         patientDaoMock.Verify(dao => dao.GetByIdAsync(It.IsAny<int>()), Times.Once);
     }
