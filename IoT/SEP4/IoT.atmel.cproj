@@ -292,10 +292,16 @@
     <Compile Include="FreeRTOS\src\timers.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="_c\DataHolder.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="_c\ReceiverTask.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="_c\VibeControllerImpl.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="_h\DataHolder.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="_h\VibeController.h">
@@ -328,16 +334,10 @@
     <Compile Include="_c\CO2Task.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="_c\Config.c">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="_c\HumiTempTask.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="_h\CO2Task.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="_h\Config.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="_h\HumiTempTask.h">

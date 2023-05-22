@@ -20,8 +20,9 @@
 
 #include <VibeController.h>
 #include <CO2Task.h>
-#include <Config.h>
+#include <DataHolder.h>
 #include <HumiTempTask.h>
+#include <ReceiverTask.h>
 
 
 // Queues
@@ -33,6 +34,7 @@ static QueueHandle_t _senderQueue;
 
 static EventGroupHandle_t _actEventGroup = NULL;
 static EventGroupHandle_t _doneEventGroup = NULL;
+static EventGroupHandle_t _receiveEventGroup = NULL;
 
 
 
@@ -51,6 +53,7 @@ static void _createQueues(void) {
 static void _createEventGroups(void) {
 	_actEventGroup = xEventGroupCreate();
 	_doneEventGroup = xEventGroupCreate();
+	_receiveEventGroup = xEventGroupCreate();
 }
 
 static void _createMutexes(void){
@@ -61,34 +64,32 @@ static void _initDrivers(void) {
 	 lora_driver_initialise(ser_USART1, _messageBuffer);
 	puts("Initializing drivers...");
 	// + servo drivers
-
 	mh_z19_initialise(ser_USART3);
 	hih8120_initialise();
 }
 
 static void _createTasks(void) {
-	senderTask_create(_senderQueue);
-	puts("Created Sender task");
+	senderTask_create(_senderQueue, _receiveEventGroup);
 	VibeController_create(_senderQueue, _humidityQueue, _temperatureQueue, _co2Queue, _actEventGroup, _doneEventGroup);
 	co2Task_create(_co2Queue, _actEventGroup, _doneEventGroup);
 	humiTempTask_create(_humidityQueue, _temperatureQueue, _actEventGroup, _doneEventGroup);
+	receiverTask_create(_messageBuffer, _receiveEventGroup);
 }
 
 
 
 int main(void)
 {
-
+	printf("_____START_____");
 	stdio_initialise(ser_USART0);
 	_initDrivers();
-	puts("Start initiated");
 	
 	_createQueues();
 	
 	_createEventGroups();
 	_createTasks();
 	_createMutexes();
-	config_create(_mutex);
+	dataHolder_create(_mutex);
 
 	puts("Launching IoT device...");
   

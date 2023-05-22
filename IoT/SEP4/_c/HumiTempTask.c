@@ -2,10 +2,10 @@
 #include <stdint.h>
 #include <task.h>
 #include <hih8120.h>
-#include <Config.h>
+#include <DataHolder.h>
 
 #define TASK_NAME "HumiTempTask"
-#define TASK_PRIORITY 2
+#define TASK_PRIORITY 3
 
 static void _run(void* params);
 
@@ -42,7 +42,7 @@ void humiTempTask_runTask() {
 	 xEventGroupWaitBits(_doEventGroup, 
 					    BIT_HUMIDITY_ACT | BIT_TEMPERATURE_ACT,
 						pdTRUE,	
-						pdFALSE, 
+						pdTRUE, 
 						portMAX_DELAY
 	);
 	
@@ -54,12 +54,12 @@ void humiTempTask_runTask() {
 			_latestHumidity = hih8120_getHumidityPercent_x10();
 			_latestTemperature = hih8120_getTemperature_x10();
 		} else {
-			_latestHumidity = CONFIG_INVALID_HUMIDITY_VALUE;
-			_latestTemperature = CONFIG_INVALID_TEMPERATURE_VALUE;			
+			_latestHumidity = INVALID_HUMIDITY_VALUE;
+			_latestTemperature = INVALID_TEMPERATURE_VALUE;			
 		}
 	} else {
-		_latestHumidity = CONFIG_INVALID_HUMIDITY_VALUE;
-		_latestTemperature = CONFIG_INVALID_TEMPERATURE_VALUE;
+		_latestHumidity = INVALID_HUMIDITY_VALUE;
+		_latestTemperature = INVALID_TEMPERATURE_VALUE;
 	}
 	
 	xQueueSendToBack(_humidityQueue, &_latestHumidity, portMAX_DELAY);
