@@ -10,7 +10,6 @@ public class HospitalContext : DbContext
      public DbSet<Patient> Patients { get; set; }
      public DbSet<SensorValue> SensorValue { get; set; }
      public DbSet<Doctor> Doctors { get; set; }
-     
      public DbSet<Admin> Admins { get; set; }
      public DbSet<Receptionist> Receptionists { get; set; }
      public DbSet<Request> Request { get; set; }

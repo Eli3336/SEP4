@@ -1,9 +1,7 @@
 using Domain.DTOs;
 using Domain.Models;
-using Shared;
-using Shared.DTOs;
 
-namespace ShopApplication.LogicInterfaces;
+namespace Application.LogicInterfaces;
 
 public interface IUserLogic
 {

@@ -1,7 +1,5 @@
 using Domain.DTOs;
 using Domain.Models;
-using Shared;
-using Shared.DTOs;
 
 namespace Application.DaoInterfaces;
 

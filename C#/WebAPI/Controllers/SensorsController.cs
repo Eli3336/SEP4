@@ -61,7 +61,7 @@ public class SensorsController : ControllerBase
         }
     }
     [HttpPatch("{id:int}")]
-    public async Task<ActionResult> RoomUpdateAsync([FromRoute] int id, double upbreakpoint, double downbreakpoint)
+    public async Task<ActionResult> SensorUpdateAsync([FromRoute] int id, double upbreakpoint, double downbreakpoint)
     {
         try
         {

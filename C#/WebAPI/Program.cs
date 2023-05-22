@@ -6,7 +6,6 @@ using Domain.Auth;
 using EfcDataAccess;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using ShopApplication.LogicInterfaces;
 using WebAPI.IoTGate;
 using WebAPI.IoTGate.Background;
 using WebAPI.IoTGate.Interface;

@@ -1,9 +1,7 @@
 using Application.DaoInterfaces;
 using Domain.DTOs;
 using Domain.Models;
-using Shared;
-using Shared.DTOs;
-using ShopApplication.LogicInterfaces;
+using Application.LogicInterfaces;
 
 namespace Application.Logic;
 
