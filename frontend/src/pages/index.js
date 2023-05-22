@@ -1,3 +1,4 @@
+// pages/index.js
 import React from "react";
 import Link from "next/link";
 
@@ -7,8 +8,9 @@ const HomePage = () => {
       <h1>Welcome to the Building Plan Application</h1>
       <p>
         Please select a role to continue: <Link href="/user">User</Link>,{" "}
-        <Link href="/assign-room">Receptionist</Link>, or{" "}
-        <Link href="/room-management">Admin</Link>
+        <Link href="/assign-room">Receptionist</Link>,{" "}
+        <Link href="/room-management">Admin</Link> or{" "}
+        <Link href="/DoctorManagementPage">Doctor</Link>
       </p>
     </div>
   );

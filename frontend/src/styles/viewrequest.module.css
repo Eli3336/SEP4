@@ -1,0 +1,12 @@
+.circle {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: #ddd;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 20px;
+  color: #000;
+  margin-left: 10px;
+  cursor: pointer; /* optional: change the mouse cursor when hovering over the circle */
+}

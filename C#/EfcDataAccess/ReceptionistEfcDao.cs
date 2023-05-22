@@ -24,18 +24,36 @@ public class ReceptionistEfcDao : IReceptionistDao
     public async Task<Receptionist?> GetByIdAsync(int id)
     {
         Receptionist? found = await context.Receptionists
-            .SingleOrDefaultAsync(doctor => doctor.Id == id);
+            .SingleOrDefaultAsync(r => r.Id == id);
         return found;
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task DeleteAsync(Receptionist receptionist)
     {
-        Receptionist? existing = await GetByIdAsync(id);
-        if (existing == null)
-        {
-            throw new Exception($"Doctor with id {id} not found");
-        }
-        context.Receptionists.Remove(existing);
+        context.Receptionists.Remove(receptionist);
         await context.SaveChangesAsync();  
+    }
+    
+    public async Task ReceptionistUpdateAsync(Receptionist receptionist)
+    {
+        context.Receptionists.Update(receptionist);
+        await context.SaveChangesAsync();
+
+    }
+
+    public async Task<Receptionist?> GetByIdToUpdateAsync(int? id)
+    {
+        Receptionist? found = await context.Receptionists
+            .AsNoTracking()
+            .SingleOrDefaultAsync(r => r.Id == id);
+
+        return found;
+    }
+
+    public async Task<IEnumerable<Receptionist?>> GetAllReceptionistsAsync()
+    {
+         IQueryable<Receptionist> receptionists = context.Receptionists.AsQueryable();
+         IEnumerable<Receptionist> result = await receptionists.ToListAsync();
+         return result;
     }
 }

@@ -21,6 +21,11 @@ const NavBar = () => {
             <a>Admin</a>
           </Link>
         </li>
+        <li>
+          <Link href="/DoctorManagementPage">
+            <a>Doctor</a>
+          </Link>
+        </li>
       </ul>
       <style jsx>{`
         nav {
