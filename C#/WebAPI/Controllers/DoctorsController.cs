@@ -1,12 +1,14 @@
 using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+
 public class DoctorsController : ControllerBase
 {
     private readonly IDoctorLogic doctorLogic;
@@ -16,7 +18,7 @@ public class DoctorsController : ControllerBase
         this.doctorLogic = doctorLogic;
     }
     
-    [HttpPost]
+    [HttpPost, Authorize("BeDoctor")]
     public async Task<ActionResult<Doctor>> CreateAsync(DoctorCreationDto dto)
     {
         try
@@ -31,7 +33,7 @@ public class DoctorsController : ControllerBase
         }
     }
 
-    [HttpDelete("{id:int}")]
+    [HttpDelete("{id:int}"), Authorize("BeDoctor")]
     public async Task<ActionResult> DeleteAsync([FromRoute] int id)
     {
         try
@@ -46,7 +48,7 @@ public class DoctorsController : ControllerBase
         }
     }
     
-    [HttpGet("{id:int}")]
+    [HttpGet("{id:int}"), Authorize("BeDoctor")]
     public async Task<ActionResult<Doctor>> GetById([FromRoute] int id)
     {
         try
@@ -61,7 +63,7 @@ public class DoctorsController : ControllerBase
         }
     }
     
-    [HttpGet]
+    [HttpGet, Authorize("BeDoctor")]
     public async Task<ActionResult<IEnumerable<Doctor>>> GetAllDoctors()
     {
         try
@@ -76,7 +78,7 @@ public class DoctorsController : ControllerBase
         }
     }
     
-    [HttpPatch("{id:int}")]
+    [HttpPatch("{id:int}"), Authorize("BeDoctor")]
     public async Task<ActionResult> DoctorUpdateAsync([FromRoute] int id, string name, string phoneNumber)
     {
         try

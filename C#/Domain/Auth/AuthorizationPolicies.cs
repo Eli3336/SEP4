@@ -13,13 +13,13 @@ public static class AuthorizationPolicies
                 a.RequireAuthenticatedUser());
     
             options.AddPolicy("BeDoctor", a =>
-                a.RequireAuthenticatedUser().RequireClaim("Role", "Doctor"));
+                a.RequireAuthenticatedUser().RequireClaim("role", "doctor"));
     
             options.AddPolicy("BeReceptionist", a =>
-                a.RequireAuthenticatedUser().RequireClaim("Role", "Receptionist"));
+                a.RequireAuthenticatedUser().RequireClaim("role", "receptionist"));
             
             options.AddPolicy("BeAdministrator", a =>
-                a.RequireAuthenticatedUser().RequireClaim("Role", "Administrator"));
+                a.RequireAuthenticatedUser().RequireClaim("role", "administrator"));
     
             
         });

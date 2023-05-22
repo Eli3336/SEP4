@@ -1,8 +1,9 @@
 ﻿POST https://localhost:7216/auth/login
 Content-Type: application/json
 
-{ "Username" : "Test", "Password" : "test123" }
+{ "Username" : "testing", "Password" : "testingson" }
 
 ###
 
-GET https://localhost:7216/test/authorized
+GET https://localhost:7216/Doctors
+Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJiNTQ4MjNkMy0zMWI4LTQ2MjItOTBiNi05NDgyYzExMTcxZTMiLCJpYXQiOiI1LzIyLzIwMjMgMTI6NDM6NTkgQU0iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdGluZyIsImV4cCI6MTY4NDcxOTgzOSwiaXNzIjoiSldUQXV0aGVudGljYXRpb25TZXJ2ZXIiLCJhdWQiOiJKV1RTZXJ2aWNlRnJvbnRFbmQifQ.Wgm0aQ_CpEaxb-61GqDF0q7bgU7kixek_ve4QBeR7ow2v4-_XOdn0em66PY-RlysaukqqJVKCNqhVNgTWLfGnQ

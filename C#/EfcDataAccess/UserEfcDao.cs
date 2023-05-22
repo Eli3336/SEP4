@@ -16,20 +16,43 @@ public class UserEfcDao : IUserDao
     }
     public async Task<User?> GetByUsernameAsync(string userName)
     {
-        User? existing;
-            
-          existing=  await context.Doctors.FirstOrDefaultAsync(u =>
-            u.Name.ToLower().Equals(userName.ToLower())
-        );
-          if (existing == null)
-          {
-              existing = await context.Receptionists.FirstOrDefaultAsync(u =>
-                  u.Name.ToLower().Equals(userName.ToLower()));
-          }
-          else
-              existing = await context.Admins.FirstOrDefaultAsync(u =>
-                u.Name.ToLower().Equals(userName.ToLower())
-            );
+        User? existing = null;
+        
+        IQueryable<Doctor> doctors = context.Doctors.AsQueryable();
+        IEnumerable<Doctor> result = await doctors.ToListAsync();
+        
+        IQueryable<Receptionist> receptionists = context.Receptionists.AsQueryable();
+        IEnumerable<Receptionist> receptionistsList = await receptionists.ToListAsync();
+        
+        IQueryable<Admin> admins = context.Admins.AsQueryable();
+        IEnumerable<Admin> adminsList = await admins.ToListAsync();
+        
+        foreach (var doctor in result)
+        {
+
+            if (doctor.Name == userName)
+            {
+                existing = doctor;
+            }
+        }
+        
+        foreach (var receptionist in receptionistsList)
+        {
+
+            if (receptionist.Name == userName)
+            {
+                existing = receptionist;
+            }
+        }
+        foreach (var administrator in adminsList)
+        {
+
+            if (administrator.Name == userName)
+            {
+                existing = administrator;
+            }
+        }
+        
         
         return existing;    }
 
