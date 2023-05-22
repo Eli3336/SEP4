@@ -1,10 +1,16 @@
+using System.Text;
 using Application.DaoInterfaces;
 using Application.Logic;
 using Application.LogicInterfaces;
+using Domain.Auth;
 using EfcDataAccess;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using ShopApplication.LogicInterfaces;
 using WebAPI.IoTGate;
 using WebAPI.IoTGate.Background;
 using WebAPI.IoTGate.Interface;
+using WebAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +41,26 @@ builder.Services.AddScoped<IRoomLogic, RoomLogic>();
 
 builder.Services.AddScoped<IRequestDao, RequestEfcDao>();
 builder.Services.AddScoped<IRequestLogic, RequestLogic>();
+builder.Services.AddScoped<IUserDao, UserEfcDao>();
+builder.Services.AddScoped<IUserLogic, UserLogic>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+    };
+});
+
+AuthorizationPolicies.AddPolicies(builder.Services);
+
 
 var app = builder.Build();
 
@@ -45,6 +71,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseCors(x => x
     .AllowAnyMethod()
     .AllowAnyHeader()
@@ -53,7 +82,6 @@ app.UseCors(x => x
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
 
 app.MapControllers();
 
