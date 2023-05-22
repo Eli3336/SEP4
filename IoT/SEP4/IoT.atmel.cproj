@@ -292,6 +292,9 @@
     <Compile Include="FreeRTOS\src\timers.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="_c\CounterTask.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="_c\DataHolder.c">
       <SubType>compile</SubType>
     </Compile>
@@ -343,6 +346,9 @@
     <Compile Include="_h\HumiTempTask.h">
       <SubType>compile</SubType>
     </Compile>
+    <None Include="_h\Counter.h">
+      <SubType>compile</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="drivers\" />

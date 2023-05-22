@@ -105,3 +105,33 @@ uint16_t getCo2BreakpointHigh() {
 	}
 }
 
+void addPPM(uint16_t ppm)
+{
+	PpmPool+=ppm;
+	PpmCount++;
+}
+
+
+void addTemperture(uint16_t temperature)
+{
+	TempPool+=temperature;
+	TempCount++;
+}
+
+
+void addHumidity(uint16_t humidity)
+{
+	HumPool+=humidity;
+	HumCount++;
+}
+
+void resetAllCounterValues(void){
+	TempCount=0;
+	TempPool=0;
+	HumCount=0;
+	HumPool=0;
+	PpmCount=0;
+	PpmPool=0;
+	
+}
+

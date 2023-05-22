@@ -57,9 +57,9 @@ void servoTask_runTask() {
 	
 	// Only open or close the window if the stored thresholds are not set to
 	// the default temperature threshold values - the invalid temperature value.
-	if (lowThreshold != CONFIG_INVALID_TEMPERATURE_VALUE && temperature < lowThreshold) {
+	if (lowThreshold != INVALID_TEMPERATURE_VALUE && temperature < lowThreshold) {
 		rc_servo_setPosition(SERVO_PORT, SERVO_POS_CLOSED);
-		} else if (highThreshold != CONFIG_INVALID_TEMPERATURE_VALUE && temperature > highThreshold) {
+		} else if (highThreshold != INVALID_TEMPERATURE_VALUE && temperature > highThreshold) {
 		rc_servo_setPosition(SERVO_PORT, SERVO_POS_OPEN);
 		} else {
 		rc_servo_setPosition(SERVO_PORT, SERVO_POS_MIDDLE);

@@ -9,6 +9,12 @@
 #define INVALID_TEMPERATURE_VALUE -999
 #define INVALID_CO2_VALUE -998
 
+int TempPool;
+int TempCount;
+int HumPool;
+int HumCount;
+int PpmPool;
+int PpmCount;
 
 void dataHolder_create(SemaphoreHandle_t mutex);
 void dataHolder_setBreakpoints(lora_driver_payload_t payload);
