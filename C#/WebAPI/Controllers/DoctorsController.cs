@@ -18,7 +18,7 @@ public class DoctorsController : ControllerBase
         this.doctorLogic = doctorLogic;
     }
     
-    [HttpPost, Authorize("BeDoctor")]
+    [HttpPost]
     public async Task<ActionResult<Doctor>> CreateAsync(DoctorCreationDto dto)
     {
         try
@@ -33,7 +33,7 @@ public class DoctorsController : ControllerBase
         }
     }
 
-    [HttpDelete("{id:int}"), Authorize("BeDoctor")]
+    [HttpDelete("{id:int}")]
     public async Task<ActionResult> DeleteAsync([FromRoute] int id)
     {
         try
@@ -48,7 +48,7 @@ public class DoctorsController : ControllerBase
         }
     }
     
-    [HttpGet("{id:int}"), Authorize("BeDoctor")]
+    [HttpGet("{id:int}")]
     public async Task<ActionResult<Doctor>> GetById([FromRoute] int id)
     {
         try
@@ -63,7 +63,7 @@ public class DoctorsController : ControllerBase
         }
     }
     
-    [HttpGet, Authorize("BeDoctor")]
+    [HttpGet]
     public async Task<ActionResult<IEnumerable<Doctor>>> GetAllDoctors()
     {
         try
@@ -78,7 +78,7 @@ public class DoctorsController : ControllerBase
         }
     }
     
-    [HttpPatch("{id:int}"), Authorize("BeDoctor")]
+    [HttpPatch("{id:int}")]
     public async Task<ActionResult> DoctorUpdateAsync([FromRoute] int id, string name, string phoneNumber)
     {
         try
