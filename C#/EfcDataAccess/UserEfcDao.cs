@@ -21,9 +21,13 @@ public class UserEfcDao : IUserDao
           existing=  await context.Doctors.FirstOrDefaultAsync(u =>
             u.Name.ToLower().Equals(userName.ToLower())
         );
-        existing = await context.Receptionists.FirstOrDefaultAsync(u =>
-            u.Name.ToLower().Equals(userName.ToLower()));
-        existing = await context.Admins.FirstOrDefaultAsync(u =>
+          if (existing == null)
+          {
+              existing = await context.Receptionists.FirstOrDefaultAsync(u =>
+                  u.Name.ToLower().Equals(userName.ToLower()));
+          }
+          else
+              existing = await context.Admins.FirstOrDefaultAsync(u =>
                 u.Name.ToLower().Equals(userName.ToLower())
             );
         
