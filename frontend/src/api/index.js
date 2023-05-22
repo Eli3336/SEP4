@@ -179,11 +179,10 @@ export async function getAllPatients() {
 
 export async function getAllAAvailableRooms() {
   try {
-    const response = await instance.get(`/Rooms/?availability="Available"`);
+    const response = await instance.get(`/Rooms/Empty`);
     return response.data;
   } catch (error) {
     console.error("Error in getAllAAvailableRooms:", error);
-    alert(`Failed to get AllA Available Rooms: ${error.response.data}`);
     throw error;
   }
 }

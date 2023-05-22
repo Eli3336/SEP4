@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
 import {
+  getPatientById,
   getAllPatients,
   getAllAAvailableRooms,
   createAndAddPatientToRoom,
@@ -13,8 +14,30 @@ const MovePatient = () => {
   const [roomId, setRoomId] = useState("");
   const [patientId, setPatientId] = useState("");
   const [patientData, setPatientData] = useState(null);
-  const patientNames = getAllPatients.map((patient) => patient.name);
-  const availableRooms = getAllAAvailableRooms.map((room) => room.name);
+  const [patientNames, setPatientNames] = useState([]);
+  const [availableRooms, setAvailableRooms] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const patients = await getAllPatients();
+        const rooms = await getAllAAvailableRooms();
+        setPatientNames(
+          patients.map((patient) => ({
+            value: patient.id,
+            label: patient.name,
+          }))
+        );
+        setAvailableRooms(
+          rooms.map((room) => ({ value: room.id, label: room.name }))
+        );
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+    fetchData();
+  }, []);
+
   useEffect(() => {
     async function fetchPatientData() {
       try {
@@ -28,6 +51,7 @@ const MovePatient = () => {
       fetchPatientData();
     }
   }, [patientId]);
+
   const handleMovePatient = async () => {
     try {
       await createAndAddPatientToRoom(patientData, roomId);
@@ -45,21 +69,19 @@ const MovePatient = () => {
       <div>
         <Dropdown
           options={patientNames}
-          value={patientNames[0]}
-          onChange={(e) => setPatientId(e.target.value)}
+          onChange={(e) => setPatientId(e.value)}
           placeholder="Select a patient"
         />
-        ;
       </div>
       <div>
         <Dropdown
           options={availableRooms}
-          onChange={(e) => setRoomId(e.target.value)}
-          value={availableRooms}
+          onChange={(e) => setRoomId(e.value)}
           placeholder="Select a room"
         />
       </div>
       <button onClick={handleMovePatient}>Move Patient</button>
+      <RoomInfo roomId={roomId} />
     </div>
   );
 };
