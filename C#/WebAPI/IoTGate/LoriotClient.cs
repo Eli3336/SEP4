@@ -15,7 +15,8 @@ namespace WebAPI.IoTGate;
 public class LoriotClient : IWebClient
 {
     private readonly RoomEfcDao _roomEfcDao = new RoomEfcDao(new HospitalContext());
-    private  SensorValueEfcDao _sensorEfcDao= new SensorValueEfcDao(new HospitalContext());
+    private  SensorValueEfcDao _sensorValueEfcDao= new SensorValueEfcDao(new HospitalContext());
+    private  SensorEfcDao _sensorEfcDao= new SensorEfcDao(new HospitalContext());
     private readonly ClientWebSocket _clientWebSocket;
 
     private readonly string _uriAddress = "wss://iotnet.cibicom.dk/app?token=vnoVQgAAABFpb3RuZXQudGVyYWNvbS5kawcinBwAkIjcdx98hF2KBE8=";
@@ -127,9 +128,9 @@ public class LoriotClient : IWebClient
             
                 //get data and convert
                List<SensorValueDto> getRecord = ReceivedData(strResult);
-                await _sensorEfcDao.CreateAsync(getRecord[0], 1);
-               await _sensorEfcDao.CreateAsync(getRecord[1], 2);
-               await _sensorEfcDao.CreateAsync(getRecord[2], 3);
+                await _sensorValueEfcDao.CreateAsync(getRecord[0], 1);
+               await _sensorValueEfcDao.CreateAsync(getRecord[1], 2);
+               await _sensorValueEfcDao.CreateAsync(getRecord[2], 3);
             }
         }
         catch (Exception e)
@@ -138,8 +139,77 @@ public class LoriotClient : IWebClient
         }
     }
 
-    public Task WSSendData()
+public async Task WSSendData()
+{
+    try
     {
-        throw new NotImplementedException();
+        _eui = "0004A30B00ED3752";
+
+        Console.WriteLine("WS-CLIENT--------->START");
+
+        // Retrieve sensor data including breakpoints from the database for a specific sensor (e.g., sensor with ID 1)
+        Sensor sensorTemp = await _sensorEfcDao.GetById(1);
+        Sensor sensorHumidity = await _sensorEfcDao.GetById(2);
+        Sensor sensorCo2 = await _sensorEfcDao.GetById(3);
+
+        // Create a DownLinkStream object
+        DownLinkStream downLinkStream = new DownLinkStream
+        {
+            cmd = "tx",
+            EUI = _eui,
+            port = 2,
+            data = ""
+        };
+
+        // Convert humidity breakpoints to hex string
+        string humidityHex = ConvertBreakpointsToHex(sensorHumidity.DownBreakpoint, sensorHumidity.UpBreakpoint);
+        downLinkStream.data += humidityHex;
+
+        // Convert temperature breakpoints to hex string
+        string temperatureHex = ConvertBreakpointsToHex(sensorTemp.DownBreakpoint, sensorTemp.UpBreakpoint);
+        downLinkStream.data += temperatureHex;
+
+        // Convert CO2 breakpoints to hex string
+        string co2Hex = ConvertBreakpointsToHex(sensorCo2.DownBreakpoint, sensorCo2.UpBreakpoint);
+        downLinkStream.data += co2Hex;
+
+        // Convert the DownLinkStream object to a JSON object
+        string payloadJson = JsonConvert.SerializeObject(downLinkStream);
+
+        // Convert the payload to a byte array
+        byte[] payloadBytes = Encoding.UTF8.GetBytes(payloadJson);
+
+        // Connect to the WebSocket server if not connected
+        if (_clientWebSocket.State != WebSocketState.Open)
+            await ConnectClientAsync();
+
+        // Send the payload as a binary message to the server
+        await _clientWebSocket.SendAsync(new ArraySegment<byte>(payloadBytes), WebSocketMessageType.Binary, true, CancellationToken.None);
+
+        // If needed, you can handle the server's response here
     }
+    catch (Exception e)
+    {
+        Console.WriteLine(e.Message);
+    }
+}
+
+private string ConvertBreakpointsToHex(double? down, double? up)
+{
+    string hex = "";
+
+    if (down.HasValue && up.HasValue)
+    {
+        byte[] downBytes = BitConverter.GetBytes(down.Value);
+        byte[] upBytes = BitConverter.GetBytes(up.Value);
+
+        hex += BitConverter.ToString(downBytes).Replace("-", "");
+        hex += BitConverter.ToString(upBytes).Replace("-", "");
+    }
+
+    return hex;
+}
+
+
+
 }

@@ -15,6 +15,8 @@ public class WebClientBackgroundService : BackgroundService
             {
                 await _webClient.WSGetData();
                 await Task.Delay(TimeSpan.FromMinutes(0.5), stoppingToken);
+                await _webClient.WSSendData();
+                await Task.Delay(TimeSpan.FromMinutes(0.5), stoppingToken);
             }
             
         }
