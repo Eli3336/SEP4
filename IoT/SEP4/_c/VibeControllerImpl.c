@@ -15,11 +15,11 @@
 static void _run(void* params);
 
 static QueueHandle_t _senderQueue;
+static EventGroupHandle_t _actEventGroup;
 
-
-void VibeController_create(QueueHandle_t senderQueue){
+void VibeController_create(QueueHandle_t senderQueue, EventGroupHandle_t actEventGroup){
 	_senderQueue = senderQueue;
-	
+	_actEventGroup = actEventGroup;
 	xTaskCreate(_run, 
 			    TASK_NAME, 
 				configMINIMAL_STACK_SIZE, 
@@ -57,11 +57,14 @@ void VibeController_runTask(void) {
 		uplinkMessageBuilder_setSystemErrorState();
 	}
 	else{
-		
-		
-	uplinkMessageBuilder_setHumidityData(HumPool/HumCount);
-	uplinkMessageBuilder_setTemperatureData(TempPool/TempCount);
-	uplinkMessageBuilder_setCO2Data(PpmPool/PpmCount);
+			AvgHum =HumPool/HumCount;
+			AvgTemp=TempPool/TempCount;
+			AvgPpm=PpmPool/TempCount;
+			uplinkMessageBuilder_setHumidityData(AvgHum);
+			uplinkMessageBuilder_setTemperatureData(AvgTemp);
+			uplinkMessageBuilder_setCO2Data(AvgPpm);
+			
+			xEventGroupSetBits(_actEventGroup,BIT_WINDOW_ACT);
 	
 	}
 	lora_driver_payload_t message = uplinkMessageBuilder_buildUplinkMessage(PORT);
