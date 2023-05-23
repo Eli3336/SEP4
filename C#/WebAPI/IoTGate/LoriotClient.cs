@@ -33,13 +33,14 @@ public class LoriotClient : IWebClient
         
         var details = JObject.Parse(receivedJson);
         char[] array = details["data"].Value<String>().ToCharArray();
+        Console.WriteLine(array);
         float humidity = Convert.ToInt16(array[0].ToString()+array[1].ToString()+array[2].ToString()+array[3].ToString(),16);
         float temperature= Convert.ToInt16(array[4].ToString()+array[5].ToString()+array[6].ToString()+array[7].ToString(),16);
         float co2 = Convert.ToInt16(array[8].ToString()+array[9].ToString()+array[10].ToString()+array[11].ToString(),16);
-        float flag = Convert.ToInt16(array[12].ToString()+array[13].ToString()+array[14].ToString()+array[15].ToString(),16);
+        float flag = Convert.ToInt16(array[12].ToString()+array[13].ToString(),16);
 
         
-        Console.WriteLine(humidity + " " + temperature + " " + co2 +" " + flag);
+        Console.WriteLine(humidity + " " + temperature + " " + co2 +" " + flag + " " +array.Length);
         
         humidity = humidity / 10;
         temperature = temperature / 10;
@@ -104,24 +105,23 @@ public class LoriotClient : IWebClient
     {
         try
         {
-            IEnumerable<Room> rooms = await _roomEfcDao.GetAllRoomsAsync();
-            Console.WriteLine(rooms);
-            foreach (var room in rooms)
-            {
-                _eui = "0004A30B00ED3752";
-                
-                Console.WriteLine("WS-CLIENT--------->START");
-                DownLinkStream upLinkStream = new()
-                {
-                    cmd = "tx",
-                    EUI = _eui,
-                    port = 2,
-                    data = "EFC"
-                };
-                string payloadJson = JsonConvert.SerializeObject(upLinkStream);
-                //send
-                await _clientWebSocket.SendAsync(Encoding.UTF8.GetBytes(payloadJson), WebSocketMessageType.Text, true, CancellationToken.None);
+            //IEnumerable<Room> rooms = await _roomEfcDao.GetAllRoomsAsync();
+            //Console.WriteLine(rooms);
             
+                // _eui = "0004A30B00ED3752";
+                //
+                // Console.WriteLine("WS-CLIENT--------->START");
+                // DownLinkStream upLinkStream = new()
+                // {
+                //     cmd = "tx",
+                //     EUI = _eui,
+                //     port = 2,
+                //     data = "EFC"
+                // };
+                // string payloadJson = JsonConvert.SerializeObject(upLinkStream);
+                // //send
+                // await _clientWebSocket.SendAsync(Encoding.UTF8.GetBytes(payloadJson), WebSocketMessageType.Text, true, CancellationToken.None);
+                //
                 Byte[] buffer = new byte[500];
                 var x = await _clientWebSocket.ReceiveAsync(buffer,CancellationToken.None);
                 var strResult = Encoding.UTF8.GetString(buffer);
@@ -131,11 +131,12 @@ public class LoriotClient : IWebClient
                 await _sensorValueEfcDao.CreateAsync(getRecord[0], 1);
                await _sensorValueEfcDao.CreateAsync(getRecord[1], 2);
                await _sensorValueEfcDao.CreateAsync(getRecord[2], 3);
-            }
+            
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
+            Console.WriteLine("smth went wrong");
         }
     }
 
@@ -145,12 +146,12 @@ public async Task WSSendData()
     {
         _eui = "0004A30B00ED3752";
 
-        Console.WriteLine("WS-CLIENT--------->START");
+        Console.WriteLine("WS-CLIENT--------->START-Sending");
 
         // Retrieve sensor data including breakpoints from the database for a specific sensor (e.g., sensor with ID 1)
-        Sensor sensorTemp = await _sensorEfcDao.GetById(1);
-        Sensor sensorHumidity = await _sensorEfcDao.GetById(2);
-        Sensor sensorCo2 = await _sensorEfcDao.GetById(3);
+        // Sensor sensorTemp = await _sensorEfcDao.GetById(1);
+        // Sensor sensorHumidity = await _sensorEfcDao.GetById(2);
+        // Sensor sensorCo2 = await _sensorEfcDao.GetById(3);
 
         // Create a DownLinkStream object
         DownLinkStream downLinkStream = new DownLinkStream
@@ -162,51 +163,64 @@ public async Task WSSendData()
         };
 
         // Convert humidity breakpoints to hex string
-        string humidityHex = ConvertBreakpointsToHex(sensorHumidity.DownBreakpoint, sensorHumidity.UpBreakpoint);
+        //string humidityHex = ConvertBreakpointsToHex(sensorHumidity.DownBreakpoint, sensorHumidity.UpBreakpoint);
+        string humidityHex = ConvertBreakpointsToHex(20, 25);
+
         downLinkStream.data += humidityHex;
 
         // Convert temperature breakpoints to hex string
-        string temperatureHex = ConvertBreakpointsToHex(sensorTemp.DownBreakpoint, sensorTemp.UpBreakpoint);
+        // string temperatureHex = ConvertBreakpointsToHex(sensorTemp.DownBreakpoint, sensorTemp.UpBreakpoint);
+        string temperatureHex = ConvertBreakpointsToHex(21, 24);
         downLinkStream.data += temperatureHex;
 
         // Convert CO2 breakpoints to hex string
-        string co2Hex = ConvertBreakpointsToHex(sensorCo2.DownBreakpoint, sensorCo2.UpBreakpoint);
+        // string co2Hex = ConvertBreakpointsToHex(sensorCo2.DownBreakpoint, sensorCo2.UpBreakpoint);
+        string co2Hex = ConvertBreakpointsToHex(44, 234);
         downLinkStream.data += co2Hex;
-
+        
+        Console.WriteLine(downLinkStream.data); 
+        
         // Convert the DownLinkStream object to a JSON object
         string payloadJson = JsonConvert.SerializeObject(downLinkStream);
 
         // Convert the payload to a byte array
-        byte[] payloadBytes = Encoding.UTF8.GetBytes(payloadJson);
+        //byte[] payloadBytes = Encoding.UTF8.GetBytes(payloadJson);
 
         // Connect to the WebSocket server if not connected
         if (_clientWebSocket.State != WebSocketState.Open)
             await ConnectClientAsync();
 
         // Send the payload as a binary message to the server
-        await _clientWebSocket.SendAsync(new ArraySegment<byte>(payloadBytes), WebSocketMessageType.Binary, true, CancellationToken.None);
-
+        await _clientWebSocket.SendAsync(Encoding.UTF8.GetBytes(payloadJson), WebSocketMessageType.Text, true, CancellationToken.None);
+        
         // If needed, you can handle the server's response here
     }
     catch (Exception e)
     {
         Console.WriteLine(e.Message);
+        //Console.WriteLine("smth went wrong");
     }
 }
 
-private string ConvertBreakpointsToHex(double? down, double? up)
+private string ConvertBreakpointsToHex(float? down, float? up)
 {
     string hex = "";
 
     if (down.HasValue && up.HasValue)
     {
-        byte[] downBytes = BitConverter.GetBytes(down.Value);
-        byte[] upBytes = BitConverter.GetBytes(up.Value);
+        short downShort = (short)down.Value;
+        short upShort = (short)up.Value;
 
-        hex += BitConverter.ToString(downBytes).Replace("-", "");
-        hex += BitConverter.ToString(upBytes).Replace("-", "");
+        byte[] downBytes = BitConverter.GetBytes(downShort);
+        byte[] upBytes = BitConverter.GetBytes(upShort);
+
+        
+        hex += downBytes[0].ToString("X2");
+        hex += upBytes[0].ToString("X2");
+
     }
-
+   
+    Console.WriteLine(hex);
     return hex;
 }
 
