@@ -23,6 +23,7 @@
 #include <DataHolder.h>
 #include <HumiTempTask.h>
 #include <ReceiverTask.h>
+#include <Counter.h>
 
 
 // Queues
@@ -70,9 +71,10 @@ static void _initDrivers(void) {
 
 static void _createTasks(void) {
 	senderTask_create(_senderQueue, _receiveEventGroup);
-	VibeController_create(_senderQueue, _humidityQueue, _temperatureQueue, _co2Queue, _actEventGroup, _doneEventGroup);
-	co2Task_create(_co2Queue, _actEventGroup, _doneEventGroup);
-	humiTempTask_create(_humidityQueue, _temperatureQueue, _actEventGroup, _doneEventGroup);
+	VibeController_create(_senderQueue);
+	counter_create( _humidityQueue, _temperatureQueue, _co2Queue, _actEventGroup);
+	co2Task_create(_co2Queue, _actEventGroup);
+	humiTempTask_create(_humidityQueue, _temperatureQueue, _actEventGroup,_doneEventGroup);
 	receiverTask_create(_messageBuffer, _receiveEventGroup);
 }
 
