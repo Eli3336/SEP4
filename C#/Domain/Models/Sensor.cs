@@ -25,4 +25,12 @@ public class Sensor
         DownBreakpoint = downBreakpoint;
         Values = values;
     }
+    
+    public Sensor(double? upBreakpoint, double? downBreakpoint)
+    {
+        UpBreakpoint = upBreakpoint;
+        DownBreakpoint = downBreakpoint;
+    }
+    
+   
 }

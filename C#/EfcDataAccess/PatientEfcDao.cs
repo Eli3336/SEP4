@@ -31,4 +31,11 @@ public class PatientEfcDao : IPatientDao
         await context.SaveChangesAsync();
         return newPatient.Entity;
     }
+    
+    public async Task<IEnumerable<Patient?>> GetAllPatientsAsync()
+    {
+        IQueryable<Patient> patients = context.Patients.AsQueryable();
+        IEnumerable<Patient> result = await patients.ToListAsync();
+        return result;
+    }
 }
