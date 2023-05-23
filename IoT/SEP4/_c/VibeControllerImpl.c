@@ -4,6 +4,7 @@
 #include <task.h>
 #include <stdbool.h>
 #include <DataHolder.h>
+#include <stdio.h>
 
 
 #define TASK_NAME "VibeController"
