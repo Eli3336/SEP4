@@ -36,6 +36,7 @@ void humiTempTask_create(QueueHandle_t humidityQueue,
 
 void humiTempTask_initTask(void* params) {
 	hih8120_wakeup();
+	vTaskDelay(pdMS_TO_TICKS(100));
 }
 
 void humiTempTask_runTask() {
