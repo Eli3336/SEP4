@@ -1,12 +1,8 @@
 #include "ReceiverTask.h"
-#include <task.h>
 #include <message_buffer.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stddef.h>
-#include <lora_driver.h>
 #include <DataHolder.h>
 #include <event_groups.h>
+#include <Hal.h>
 
 #define TASK_NAME "ReceiverTask"
 #define TASK_PRIORITY 5
@@ -29,9 +25,6 @@ void receiverTask_create(MessageBufferHandle_t receiverBuffer, EventGroupHandle_
 	NULL
 	);
 	puts("receiver task created");
-}
-
-void receiverTask_initTask(void* params) {
 }
 
 void receiverTask_runTask(void) {

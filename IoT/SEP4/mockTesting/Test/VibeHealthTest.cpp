@@ -5,8 +5,14 @@
 extern "C"
 {
 	// include header files
+	#include <CO2Task.h>
+	#include <HumiTempTask.h>
+	#include <UplinkMessageBuilder.h>
+	#include <DataHolder.h>
+	#include <VibeController.h>
+
 }
-/*
+
 FAKE_VALUE_FUNC(lora_driver_payload_t, uplinkMessageBuilder_buildUplinkMessage, uint8_t);
 FAKE_VOID_FUNC(uplinkMessageBuilder_setHumidityData, uint16_t);
 FAKE_VOID_FUNC(uplinkMessageBuilder_setTemperatureData, uint16_t);
@@ -244,4 +250,4 @@ TEST_F(VibeHealthTest, Task_CallsDelayUntilWithFiveMinuteDelay) {
 	//Assert
 	EXPECT_EQ(1, xTaskDelayUntil_fake.call_count);
 	EXPECT_EQ(pdMS_TO_TICKS(300000UL), xTaskDelayUntil_fake.arg1_val);
-}*/
+}

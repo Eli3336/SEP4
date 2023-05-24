@@ -8,9 +8,7 @@
 #include <ServoTask.h>
 #include <Config.h>
 #include <rc_servo.h>
-#include <stdio.h>
-#include <stdint.h>
-#include <task.h>
+#include <Hal.h>
 
 #define TASK_NAME "ServoTask"
 #define TASK_PRIORITY configMAX_PRIORITIES - 2
@@ -35,10 +33,7 @@ void servoTask_create(QueueHandle_t servoQueue) {
 	);
 }
 
-void servoTask_initTask(void* params) {
-	// Default the starting window position to be between open and closed.
-	rc_servo_setPosition(SERVO_PORT, SERVO_POS_MIDDLE);
-}
+
 
 void servoTask_runTask() {
 	uint16_t humidity;
