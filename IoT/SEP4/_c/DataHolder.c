@@ -4,6 +4,7 @@
 #define CHECK_BIT(variable, position) variable & (1 << position)
 
 static SemaphoreHandle_t _mutex;
+extern SemaphoreHandle_t mutexAvgValues;
 
 static uint16_t _humidityLOW;
 static uint16_t _humidityHIGH;
@@ -11,7 +12,6 @@ static int16_t _temperatureLOW;
 static int16_t _temperatureHIGH;
 static uint16_t _co2LOW;
 static uint16_t _co2HIGH;
-
 
 void dataHolder_create(SemaphoreHandle_t mutex) {
 	_mutex = mutex;
@@ -107,31 +107,85 @@ uint16_t getCo2BreakpointHigh() {
 
 void addPPM(uint16_t ppm)
 {
-	PpmPool+=ppm;
-	PpmCount++;
+	co2Pool+=ppm;
+	co2Count++;
 }
 
 
 void addTemperture(uint16_t temperature)
 {
-	TempPool+=temperature;
-	TempCount++;
+	tempPool+=temperature;
+	tempCount++;
 }
 
 
 void addHumidity(uint16_t humidity)
 {
-	HumPool+=humidity;
-	HumCount++;
+	humPool+=humidity;
+	humCount++;
 }
 
-void resetAllCounterValues(void){
-	TempCount=0;
-	TempPool=0;
-	HumCount=0;
-	HumPool=0;
-	PpmCount=0;
-	PpmPool=0;
+void resetAllCounterValues(){
+	tempCount=0;
+	tempPool=0;
+	humCount=0;
+	humPool=0;
+	co2Count=0;
+	co2Pool=0;
 	
 }
 
+uint16_t getHumAvg() {
+	if(xSemaphoreTake(mutexAvgValues, pdMS_TO_TICKS(1000)) == pdTRUE)
+	{
+		return avgHum;
+		xSemaphoreGive(mutexAvgValues);
+	}
+}
+
+uint16_t getCo2Avg() {
+	if(xSemaphoreTake(mutexAvgValues, pdMS_TO_TICKS(1000)) == pdTRUE)
+	{
+		return avgCo2;
+		xSemaphoreGive(mutexAvgValues);
+	}
+}
+
+int16_t getTempAvg() {
+	if(xSemaphoreTake(mutexAvgValues, pdMS_TO_TICKS(1000)) == pdTRUE)
+	{
+		return avgTemp;
+		xSemaphoreGive(mutexAvgValues);
+	}
+}
+
+void calculateAvg() {
+	if(xSemaphoreTake(mutexAvgValues, pdMS_TO_TICKS(1000)) == pdTRUE)
+	{
+		if(humCount != 0)
+		{
+			avgHum = humPool / humCount;
+		}
+		else
+		{
+			avgHum = INVALID_HUMIDITY_VALUE;
+		}
+		if(tempCount != 0)
+		{
+			avgTemp = tempPool / tempCount;
+		}
+		else
+		{
+			avgTemp = INVALID_TEMPERATURE_VALUE;
+		}
+		if(co2Count != 0)
+		{
+			avgCo2 = co2Pool / co2Count;
+		}
+		else
+		{
+			avgCo2 = INVALID_CO2_VALUE;
+		}
+		xSemaphoreGive(mutexAvgValues);
+	}
+}

@@ -9,12 +9,12 @@
   #include <queue.h>
   #include <event_groups.h>
   
- int TempPool;
- int TempCount;
- int HumPool;
- int HumCount;
- int PpmPool;
- int PpmCount;
+ int tempPool;
+ int tempCount;
+ int humPool;
+ int humCount;
+ int co2Pool;
+ int co2Count;
  
  void Counter_initTask(void* params);
  void counter_create(QueueHandle_t humidityQueue,

@@ -41,6 +41,7 @@ static EventGroupHandle_t _receiveEventGroup = NULL;
 
 
 static SemaphoreHandle_t _mutex;
+SemaphoreHandle_t mutexAvgValues;
 
 static MessageBufferHandle_t _messageBuffer;
 
@@ -60,6 +61,7 @@ static void _createEventGroups(void) {
 
 static void _createMutexes(void){
 	_mutex = xSemaphoreCreateMutex();
+	mutexAvgValues = xSemaphoreCreateMutex();
 }
 
 static void _initDrivers(void) {
