@@ -97,5 +97,35 @@ public class SensorsControllerTest
         var okResult = (OkObjectResult)result.Result;
         Assert.AreEqual(expectedLog, okResult.Value);
     }
+    
+    [Test]
+    public async Task SensorUpdateAsync_ReturnsOkStatus()
+    {
+        // Arrange
+        sensorLogicMock.Setup(mock => mock.SensorUpdateAsync(It.IsAny<int>(), It.IsAny<double>(), It.IsAny<double>())).Verifiable();
+
+        // Act
+        var result = await controller.SensorUpdateAsync(1, 25, 21);
+
+        // Assert
+        Assert.IsInstanceOf<OkResult>(result);
+        sensorLogicMock.Verify(logic => logic.SensorUpdateAsync(It.IsAny<int>(), It.IsAny<double>(), It.IsAny<double>()), Times.Once);
+    }
+    
+    [Test]
+    public async Task ReceptionistUpdateAsync_ReturnsException()
+    {
+        // Arrange
+        sensorLogicMock.Setup(mock => mock.SensorUpdateAsync(It.IsAny<int>(), It.IsAny<double>(), It.IsAny<double>())).ThrowsAsync(new Exception("Sensor with ID 1 not found!")).Verifiable();
+
+        // Act
+        var result = await controller.SensorUpdateAsync(1, 25, 21);
+
+        // Assert
+        Assert.IsInstanceOf<ObjectResult>(result);
+        var badResult = (ObjectResult)result;
+        Assert.AreEqual(500, badResult.StatusCode); 
+        sensorLogicMock.Verify(logic => logic.SensorUpdateAsync(It.IsAny<int>(), It.IsAny<double>(), It.IsAny<double>()), Times.Once);
+    }
 }
 
