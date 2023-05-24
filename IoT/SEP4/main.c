@@ -35,28 +35,22 @@ static QueueHandle_t _senderQueue;
 // also receiver task
 
 static EventGroupHandle_t _actEventGroup = NULL;
-static EventGroupHandle_t _doneEventGroup = NULL;
-static EventGroupHandle_t _receiveEventGroup = NULL;
-
-
 
 static SemaphoreHandle_t _mutex;
 SemaphoreHandle_t mutexAvgValues;
 
-static MessageBufferHandle_t _messageBuffer;
+MessageBufferHandle_t messageBuffer;
 
 static void _createQueues(void) {
 	_co2Queue = xQueueCreate(10, sizeof(uint16_t));
 	_humidityQueue = xQueueCreate(10, sizeof(uint16_t));
 	_temperatureQueue = xQueueCreate(10, sizeof(int16_t));
 	_senderQueue= xQueueCreate(10,sizeof(lora_driver_payload_t));
-	_messageBuffer = xMessageBufferCreate(sizeof(lora_driver_payload_t)*5);
+	messageBuffer = xMessageBufferCreate(sizeof(lora_driver_payload_t)*5);
 }
 
 static void _createEventGroups(void) {
 	_actEventGroup = xEventGroupCreate();
-	_doneEventGroup = xEventGroupCreate();
-	_receiveEventGroup = xEventGroupCreate();
 }
 
 static void _createMutexes(void){
@@ -65,7 +59,7 @@ static void _createMutexes(void){
 }
 
 static void _initDrivers(void) {
-	 lora_driver_initialise(ser_USART1, _messageBuffer);
+	 lora_driver_initialise(ser_USART1, messageBuffer);
 	puts("Initializing drivers...");
 	// + servo drivers
 	mh_z19_initialise(ser_USART3);
@@ -73,12 +67,12 @@ static void _initDrivers(void) {
 }
 
 static void _createTasks(void) {
-	senderTask_create(_senderQueue, _receiveEventGroup);
+	senderTask_create(_senderQueue);
 	VibeController_create(_senderQueue,_actEventGroup);
 	counter_create( _humidityQueue, _temperatureQueue, _co2Queue, _actEventGroup);
 	co2Task_create(_co2Queue, _actEventGroup);
-	humiTempTask_create(_humidityQueue, _temperatureQueue, _actEventGroup,_doneEventGroup);
-	receiverTask_create(_messageBuffer, _receiveEventGroup);
+	humiTempTask_create(_humidityQueue, _temperatureQueue, _actEventGroup);
+	receiverTask_create();
 	servoTask_create(_actEventGroup);
 }
 

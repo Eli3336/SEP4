@@ -7,20 +7,18 @@
 #include <stdio.h>
 
 #define TASK_NAME "CO2Task"
-#define TASK_PRIORITY 3
+#define TASK_PRIORITY 1
 
 static void _co2CallBack(uint16_t ppm);
 static void _run(void* params);
 
 static QueueHandle_t _co2Queue;
 static EventGroupHandle_t _doEventGroup;
-static EventGroupHandle_t _doneEventGroup;
 static uint16_t ppm;
 
-void co2Task_create(QueueHandle_t co2Queue, EventGroupHandle_t doEventGroup, EventGroupHandle_t doneEventGroup) {
+void co2Task_create(QueueHandle_t co2Queue, EventGroupHandle_t doEventGroup) {
 	_co2Queue = co2Queue;
 	_doEventGroup = doEventGroup;
-	_doneEventGroup = doneEventGroup;
 	
 	xTaskCreate(_run,
 	TASK_NAME,
