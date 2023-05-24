@@ -10,18 +10,27 @@
 #define INVALID_CO2_VALUE 0
 #define BIT_WINDOW_ACT 1 << 3
 
-int TempPool;
-int TempCount;
-int HumPool;
-int HumCount;
-int PpmPool;
-int PpmCount;
-int AvgTemp;
-int AvgHum;
-int AvgPpm;
+int tempPool;
+int tempCount;
+int humPool;
+int humCount;
+int co2Pool;
+int co2Count;
+
+int16_t avgTemp;
+uint16_t avgHum;
+uint16_t avgCo2;
 
 void dataHolder_create(SemaphoreHandle_t mutex);
 void dataHolder_setBreakpoints(lora_driver_payload_t payload);
+void addPPM(uint16_t ppm);
+void addTemperture(uint16_t temperature);
+void addHumidity(uint16_t humidity);
+void resetAllCounterValues();
+uint16_t getHumAvg();
+uint16_t getCo2Avg();
+int16_t getTempAvg();
+void calculateAvg();
 
 uint16_t getHumidityBreakpointLow();
 uint16_t getHumidityBreakpointHigh();

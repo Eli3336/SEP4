@@ -43,15 +43,14 @@ void servoTask_initTask(void* params) {
 }
 
 void servoTask_runTask() {
-
-	
-
 	xEventGroupWaitBits(_actEventGroup,
 	BIT_WINDOW_ACT,
 	pdTRUE,
 	pdTRUE,
 	portMAX_DELAY
 	);
+	
+	uint16_t tempCo2Avg = getCo2Avg();
 	
 	//rc_servo_setPosition(SERVO_PORT,SERVO_POS_CLOSED);
 	
@@ -64,9 +63,9 @@ void servoTask_runTask() {
 	
 	
 	
-	if (LowPpm != INVALID_CO2_VALUE && AvgPpm < LowPpm) {
+	if (LowPpm != INVALID_CO2_VALUE && tempCo2Avg < LowPpm) {
 		rc_servo_setPosition(SERVO_PORT, SERVO_POS_CLOSED);
-		} else if (HighPpm != INVALID_CO2_VALUE && AvgPpm > HighPpm) {
+		} else if (HighPpm != INVALID_CO2_VALUE && tempCo2Avg > HighPpm) {
 		rc_servo_setPosition(SERVO_PORT, SERVO_POS_OPEN);
 		} else {
 		rc_servo_setPosition(SERVO_PORT, SERVO_POS_MIDDLE);
