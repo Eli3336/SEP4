@@ -60,4 +60,18 @@ public class SensorsController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+    [HttpPatch("{id:int}")]
+    public async Task<ActionResult> SensorUpdateAsync([FromRoute] int id, double upbreakpoint, double downbreakpoint)
+    {
+        try
+        {
+            await sensorLogic.SensorUpdateAsync(id, upbreakpoint, downbreakpoint);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
 }

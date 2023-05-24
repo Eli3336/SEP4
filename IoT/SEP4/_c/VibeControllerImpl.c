@@ -1,40 +1,25 @@
 #include <VibeController.h>
-#include <CO2Task.h>
-#include <HumiTempTask.h>
 #include <UplinkMessageBuilder.h>
 #include <lora_driver.h>
 #include <task.h>
 #include <stdbool.h>
-#include <Config.h>
+#include <DataHolder.h>
+#include <stdio.h>
+
 
 #define TASK_NAME "VibeController"
 #define TASK_INTERVAL 300000UL //3 seconds
-#define TASK_PRIORITY configMAX_PRIORITIES - 2
+#define TASK_PRIORITY 6
 #define PORT 2
 
 static void _run(void* params);
 
 static QueueHandle_t _senderQueue;
-static QueueHandle_t _humidityQueue;
-static QueueHandle_t _temperatureQueue;
-static QueueHandle_t _co2Queue;
-static EventGroupHandle_t _doEventGroup;
-static EventGroupHandle_t _doneEventGroup;
-static bool _error = false;
+static EventGroupHandle_t _actEventGroup;
 
-void VibeController_create(QueueHandle_t senderQueue, 
-				      QueueHandle_t humidityQueue, 
-					  QueueHandle_t temperatureQueue, 
-					  QueueHandle_t co2Queue,
-					  EventGroupHandle_t actEventGroup, 
-					  EventGroupHandle_t doneEventGroup){
+void VibeController_create(QueueHandle_t senderQueue, EventGroupHandle_t actEventGroup){
 	_senderQueue = senderQueue;
-	_humidityQueue = humidityQueue;
-	_temperatureQueue = temperatureQueue;
-	_co2Queue = co2Queue;
-	_doEventGroup = actEventGroup;
-	_doneEventGroup = doneEventGroup;
-	
+	_actEventGroup = actEventGroup;
 	xTaskCreate(_run, 
 			    TASK_NAME, 
 				configMINIMAL_STACK_SIZE, 
@@ -42,55 +27,50 @@ void VibeController_create(QueueHandle_t senderQueue,
 				TASK_PRIORITY, 
 				NULL
 	);
+	
+	
 }
 
 void VibeController_initTask(void* params) {
 	vTaskDelay(50UL);
-	puts("Controller is initialiazed");
+	printf("Controller is initialiazed");
 	vTaskDelay(100UL);
 	
 }
 
 void VibeController_runTask(void) {	
 	
-	xEventGroupWaitBits(_doneEventGroup, /* The event group being tested. */
-	BIT_CO2_DONE | BIT_HUMIDITY_DONE | BIT_TEMPERATURE_DONE, /* The bits to wait for. */
-	pdTRUE, /* Bits will be cleared before return*/
-	pdTRUE, /* Wait for bits to be set */
-	pdMS_TO_TICKS(3000UL)); /* Maximum time to wait*/
+	calculateAvg();
 	
-	uint16_t humidity;
-	int16_t temperature;
-	uint16_t ppm;
-	if (xQueueReceive(_humidityQueue, &humidity, pdMS_TO_TICKS(10000)) != pdTRUE)
+	uint16_t tempHumidity = getHumAvg();
+	int16_t tempTemperature = getTempAvg();
+	uint16_t tempCo2 = getCo2Avg();
+	
+	if (tempHumidity == INVALID_HUMIDITY_VALUE)
 	{
-		humidity = CONFIG_INVALID_HUMIDITY_VALUE;
-	};
-	if (xQueueReceive(_temperatureQueue, &temperature, pdMS_TO_TICKS(10000)) != pdTRUE)
-	{
-		temperature = CONFIG_INVALID_TEMPERATURE_VALUE;
-	}
-	if (xQueueReceive(_co2Queue, &ppm, pdMS_TO_TICKS(10000)) != pdTRUE)
-	{
-		ppm = CONFIG_INVALID_CO2_VALUE;
-	}
-		
-	uplinkMessageBuilder_setHumidityData(humidity);
-	uplinkMessageBuilder_setTemperatureData(temperature);
-	uplinkMessageBuilder_setCO2Data(ppm);
-		
-	if (_error == true)
-	{
-		puts("Error detected");
 		uplinkMessageBuilder_setSystemErrorState();
 	}
-
+	if (tempTemperature == INVALID_TEMPERATURE_VALUE)
+	{
+		uplinkMessageBuilder_setSystemErrorState();
+	}
+	if (tempCo2 == INVALID_CO2_VALUE)
+	{
+		uplinkMessageBuilder_setSystemErrorState();
+	}
+	
+	uplinkMessageBuilder_setHumidityData(tempHumidity);
+	uplinkMessageBuilder_setTemperatureData(tempHumidity);
+	uplinkMessageBuilder_setCO2Data(tempCo2);
+			
+	xEventGroupSetBits(_actEventGroup, BIT_WINDOW_ACT);
+	
 	lora_driver_payload_t message = uplinkMessageBuilder_buildUplinkMessage(PORT);
 	if (message.len > 0) {
 		xQueueSendToBack(_senderQueue, &message, pdMS_TO_TICKS(10000));
 	}
 
-	_error = false;
+	resetAllCounterValues();
 	TickType_t lastWakeTime = xTaskGetTickCount();
 	xTaskDelayUntil(&lastWakeTime, pdMS_TO_TICKS(TASK_INTERVAL));
 }

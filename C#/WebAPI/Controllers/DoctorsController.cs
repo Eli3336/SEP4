@@ -1,12 +1,14 @@
 using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+
 public class DoctorsController : ControllerBase
 {
     private readonly IDoctorLogic doctorLogic;
@@ -17,7 +19,7 @@ public class DoctorsController : ControllerBase
     }
     
     [HttpPost]
-    public async Task<ActionResult<Patient>> CreateAsync(DoctorCreationDto dto)
+    public async Task<ActionResult<Doctor>> CreateAsync(DoctorCreationDto dto)
     {
         try
         {

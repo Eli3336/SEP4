@@ -5,6 +5,7 @@
 #include <semphr.h>
 #include <stdio_driver.h>
 #include <serial.h>
+#include <SenderTask.h>
 
 // Needed for LoRaWAN
 #include <lora_driver.h>
@@ -15,11 +16,16 @@
 #include <event_groups.h>
 #include <mh_z19.h>
 #include <message_buffer.h>
+#include <hih8120.h>
 
 #include <VibeController.h>
 #include <CO2Task.h>
-#include <Config.h>
+#include <DataHolder.h>
 #include <HumiTempTask.h>
+#include <ReceiverTask.h>
+#include <Counter.h>
+#include <ServoTask.h>
+
 
 // Queues
 static QueueHandle_t _humidityQueue;
@@ -30,8 +36,12 @@ static QueueHandle_t _senderQueue;
 
 static EventGroupHandle_t _actEventGroup = NULL;
 static EventGroupHandle_t _doneEventGroup = NULL;
+static EventGroupHandle_t _receiveEventGroup = NULL;
+
+
 
 static SemaphoreHandle_t _mutex;
+SemaphoreHandle_t mutexAvgValues;
 
 static MessageBufferHandle_t _messageBuffer;
 
@@ -46,10 +56,12 @@ static void _createQueues(void) {
 static void _createEventGroups(void) {
 	_actEventGroup = xEventGroupCreate();
 	_doneEventGroup = xEventGroupCreate();
+	_receiveEventGroup = xEventGroupCreate();
 }
 
 static void _createMutexes(void){
 	_mutex = xSemaphoreCreateMutex();
+	mutexAvgValues = xSemaphoreCreateMutex();
 }
 
 static void _initDrivers(void) {
@@ -61,29 +73,36 @@ static void _initDrivers(void) {
 }
 
 static void _createTasks(void) {
-	senderTask_create(_senderQueue);
-	puts("Created Sender task");
-	VibeController_create(_senderQueue, _humidityQueue, _temperatureQueue, _co2Queue, _actEventGroup, _doneEventGroup);
-	co2Task_create(_co2Queue, _actEventGroup, _doneEventGroup);
-	humiTempTask_create(_humidityQueue, _temperatureQueue, _actEventGroup, _doneEventGroup);
+	senderTask_create(_senderQueue, _receiveEventGroup);
+	VibeController_create(_senderQueue,_actEventGroup);
+	counter_create( _humidityQueue, _temperatureQueue, _co2Queue, _actEventGroup);
+	co2Task_create(_co2Queue, _actEventGroup);
+	humiTempTask_create(_humidityQueue, _temperatureQueue, _actEventGroup,_doneEventGroup);
+	receiverTask_create(_messageBuffer, _receiveEventGroup);
+	servoTask_create(_actEventGroup);
 }
+
+
 
 int main(void)
 {
+	printf("_____START_____");
 	stdio_initialise(ser_USART0);
-	puts("Start initiated");
-
-	_createQueues();
 	_initDrivers();
+	
+	_createQueues();
+	
 	_createEventGroups();
 	_createTasks();
 	_createMutexes();
-	config_create(_mutex);
+	dataHolder_create(_mutex);
 
 	puts("Launching IoT device...");
-
+  
+	vTaskStartScheduler();
+  
 	while (1)
 	{
-		vTaskStartScheduler();
+		
 	}
 }
