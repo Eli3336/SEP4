@@ -47,8 +47,6 @@ public class SensorLogic : ISensorLogic
 
             if (sensor1 != null && sensor2 != null && sensor3 != null)
             {
-                Console.WriteLine(sensor1.Id);
-                Console.WriteLine(sensor1.Values.Count);
                 sensorValues.Add(sensor1.Values[sensor1.Values.Count - 1]);
                 sensorValues.Add(sensor2.Values[sensor2.Values.Count - 1]);
                 sensorValues.Add(sensor3.Values[sensor3.Values.Count - 1]);
