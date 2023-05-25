@@ -37,7 +37,7 @@ public class LoriotClient : IWebClient
         float humidity = Convert.ToInt16(array[0].ToString()+array[1].ToString()+array[2].ToString()+array[3].ToString(),16);
         float temperature= Convert.ToInt16(array[4].ToString()+array[5].ToString()+array[6].ToString()+array[7].ToString(),16);
         float co2 = Convert.ToInt16(array[8].ToString()+array[9].ToString()+array[10].ToString()+array[11].ToString(),16);
-        float flag = Convert.ToInt16(array[12].ToString(),16);
+        float flag = Convert.ToInt16(array[12].ToString()+array[13].ToString(),16);
 
         
         Console.WriteLine(humidity + " " + temperature + " " + co2 +" " + flag + " " +array.Length);
@@ -52,11 +52,11 @@ public class LoriotClient : IWebClient
             case 1: 
                 humidity = -1000;
                 break;
-            case 3:
+            case 2:
                 humidity = -1000;
                 temperature = -1000;
                 break;
-            case 4:
+            case 3:
                 humidity = -1000;
                 temperature = -1000;
                 co2 = -1000;
@@ -166,22 +166,39 @@ public async Task WSSendData()
         };
 
         // Convert humidity breakpoints to hex string
+        string flag = "00";
         string humidityHex = ConvertBreakpointsToHex(sensorHumidity.DownBreakpoint, sensorHumidity.UpBreakpoint);
-       // string humidityHex = ConvertBreakpointsToHex(20, 25);
 
-        downLinkStream.data += humidityHex;
+        if (sensorHumidity.DownBreakpoint == null || sensorHumidity.UpBreakpoint == null)
+        {         
+            humidityHex = ConvertBreakpointsToHex(0,0);
+            flag = "01";
+        }
+        
+            downLinkStream.data += humidityHex;
 
         // Convert temperature breakpoints to hex string
          string temperatureHex = ConvertBreakpointsToHex(sensorTemp.DownBreakpoint, sensorTemp.UpBreakpoint);
-        //string temperatureHex = ConvertBreakpointsToHex(21, 24);
+        
+         if (sensorTemp.DownBreakpoint == null || sensorTemp.UpBreakpoint == null)
+         {         
+             temperatureHex = ConvertBreakpointsToHex(0,0);
+             flag = "02";
+         }
         downLinkStream.data += temperatureHex;
 
         // Convert CO2 breakpoints to hex string
        string co2Hex = ConvertBreakpointsToHex(sensorCo2.DownBreakpoint, sensorCo2.UpBreakpoint);
-        //string co2Hex = ConvertBreakpointsToHex(44, 234);
+       if (sensorCo2.DownBreakpoint == null || sensorCo2.UpBreakpoint == null)
+       {         
+           co2Hex = ConvertBreakpointsToHex(0,0);
+           flag = "03";
+       }
+       
         downLinkStream.data += co2Hex;
         
-        
+
+        downLinkStream.data += flag;
         
         Console.WriteLine(downLinkStream.data); 
         
@@ -207,7 +224,7 @@ public async Task WSSendData()
     }
 }
 
-private string ConvertBreakpointsToHex(float? down, float? up)
+private string ConvertBreakpointsToHex(double? down, double? up)
 {
     string hex = "";
 
