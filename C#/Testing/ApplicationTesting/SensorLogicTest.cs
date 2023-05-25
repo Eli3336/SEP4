@@ -10,19 +10,20 @@ namespace TestingReq5.ApplicationTesting;
 public class SensorLogicTest
 {
     private Mock<ISensorDao> sensorDaoMock;
+    private Mock<IRoomDao> roomDaoMock;
     private SensorLogic sensorService;
 
     [SetUp]
     public void Setup()
     {
         sensorDaoMock = new Mock<ISensorDao>();
-        sensorService = new SensorLogic(sensorDaoMock.Object);
+        roomDaoMock = new Mock<IRoomDao>();
+        sensorService = new SensorLogic(sensorDaoMock.Object, roomDaoMock.Object);
     }
     
     [Test]
     public async Task CreateAsync_ReturnsCreatedSensor()
     {
-        
         var expectedSensor = new Sensor
         {
             Id = 1,
@@ -38,7 +39,7 @@ public class SensorLogicTest
         };
         sensorDaoMock.Setup(dao => dao.CreateAsync(It.IsAny<Sensor>()))
             .ReturnsAsync(expectedSensor);
-
+      
         var sensorCreationDto = new SensorCreationDto
         {
             Type = "Temperature",
@@ -65,9 +66,68 @@ public class SensorLogicTest
         {
             new SensorValue { ValueId = 1, Value = 1, TimeStamp = new DateTime() },
             new SensorValue { ValueId = 1, Value = 1, TimeStamp = new DateTime() },
+
+        var timestamp = new DateTime();
+        var expectedSensorValues1 = new List<SensorValue>
+        {
+            new SensorValue { ValueId = 1,Value = 1, TimeStamp = timestamp},
+            new SensorValue { ValueId = 2,Value = 2, TimeStamp = timestamp},
         };
-        sensorDaoMock.Setup(dao => dao.GetSensorsValuesAsync(It.IsAny<int?>()))
-            .ReturnsAsync(expectedSensorValues);
+        var expectedSensorValues2 = new List<SensorValue>
+        {
+            new SensorValue { ValueId = 3,Value = 1, TimeStamp = timestamp},
+            new SensorValue { ValueId = 4,Value = 4, TimeStamp = timestamp},
+        };
+        var expectedSensorValues3 = new List<SensorValue>
+        {
+            new SensorValue { ValueId = 5,Value = 1, TimeStamp = timestamp},
+            new SensorValue { ValueId = 6,Value = 6, TimeStamp = timestamp},
+        };
+        var sensor1 = new Sensor
+        {
+            Id = 1,
+            Type = "Temperature",
+            Values = expectedSensorValues1
+        };
+        var sensor2 = new Sensor
+        {
+            Id = 2,
+            Type = "Humidity",
+            Values = expectedSensorValues2
+        };
+        var sensor3 = new Sensor
+        {
+            Id = 3,
+            Type = "CO2",
+            Values = expectedSensorValues3
+        };
+        var expectedSensors = new List<Sensor>();
+        expectedSensors.Add(sensor1);
+        expectedSensors.Add(sensor2);
+        expectedSensors.Add(sensor3);
+        var expectedRoom = new Room
+        {
+            Id = 1,
+            Name = "Room1",
+            Capacity = 1,
+            Availability = "Available",
+            Patients = new List<Patient>(),
+            Sensors = expectedSensors
+        };
+        var expectedSensorValues = new List<SensorValue>
+        {
+            new SensorValue { ValueId = 2, Value = 2, TimeStamp = timestamp },
+            new SensorValue { ValueId = 4, Value = 4, TimeStamp = timestamp },
+            new SensorValue { ValueId = 6, Value = 6, TimeStamp = timestamp }
+        };
+        roomDaoMock.Setup(dao => dao.GetById(It.IsAny<int>()))
+            .ReturnsAsync(expectedRoom);
+        sensorDaoMock.Setup(dao => dao.GetById(1))
+            .ReturnsAsync(sensor1);
+        sensorDaoMock.Setup(dao => dao.GetById(2))
+                    .ReturnsAsync(sensor2);
+        sensorDaoMock.Setup(dao => dao.GetById(3))
+            .ReturnsAsync(sensor3);
 
         var sensorValues = await sensorService.GetSensorsValuesAsync(1);
 
@@ -90,7 +150,6 @@ public class SensorLogicTest
         };
         sensorDaoMock.Setup(dao => dao.GetLogOfSensorValuesAsync(It.IsAny<int?>()))
             .ReturnsAsync(expectedSensorValueLog);
-
         // Act
         var sensorValueLog = await sensorService.GetLogOfSensorValuesAsync(1);
 

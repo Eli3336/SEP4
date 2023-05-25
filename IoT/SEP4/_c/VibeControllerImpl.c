@@ -15,11 +15,11 @@
 static void _run(void* params);
 
 static QueueHandle_t _senderQueue;
+static EventGroupHandle_t _actEventGroup;
 
-
-void VibeController_create(QueueHandle_t senderQueue){
+void VibeController_create(QueueHandle_t senderQueue, EventGroupHandle_t actEventGroup){
 	_senderQueue = senderQueue;
-	
+	_actEventGroup = actEventGroup;
 	xTaskCreate(_run, 
 			    TASK_NAME, 
 				configMINIMAL_STACK_SIZE, 
@@ -40,30 +40,31 @@ void VibeController_initTask(void* params) {
 
 void VibeController_runTask(void) {	
 	
-	if (TempCount == 0)
-	{
-		uplinkMessageBuilder_setTemperatureData(INVALID_TEMPERATURE_VALUE);
-		uplinkMessageBuilder_setSystemErrorState();
-		
-	}
-	if (HumCount == 0)
-	{
-		uplinkMessageBuilder_setHumidityData(INVALID_HUMIDITY_VALUE);
-		uplinkMessageBuilder_setSystemErrorState();
-	}
-	if (PpmCount == 0)
-	{
-		uplinkMessageBuilder_setCO2Data(INVALID_CO2_VALUE);
-		uplinkMessageBuilder_setSystemErrorState();
-	}
-	else{
-		
-		
-	uplinkMessageBuilder_setHumidityData(HumPool/HumCount);
-	uplinkMessageBuilder_setTemperatureData(TempPool/TempCount);
-	uplinkMessageBuilder_setCO2Data(PpmPool/PpmCount);
+	calculateAvg();
 	
+	uint16_t tempHumidity = getHumAvg();
+	int16_t tempTemperature = getTempAvg();
+	uint16_t tempCo2 = getCo2Avg();
+	
+	if (tempHumidity == INVALID_HUMIDITY_VALUE)
+	{
+		uplinkMessageBuilder_setSystemErrorState();
 	}
+	if (tempTemperature == INVALID_TEMPERATURE_VALUE)
+	{
+		uplinkMessageBuilder_setSystemErrorState();
+	}
+	if (tempCo2 == INVALID_CO2_VALUE)
+	{
+		uplinkMessageBuilder_setSystemErrorState();
+	}
+	
+	uplinkMessageBuilder_setHumidityData(tempHumidity);
+	uplinkMessageBuilder_setTemperatureData(tempHumidity);
+	uplinkMessageBuilder_setCO2Data(tempCo2);
+			
+	xEventGroupSetBits(_actEventGroup, BIT_WINDOW_ACT);
+	
 	lora_driver_payload_t message = uplinkMessageBuilder_buildUplinkMessage(PORT);
 	if (message.len > 0) {
 		xQueueSendToBack(_senderQueue, &message, pdMS_TO_TICKS(10000));

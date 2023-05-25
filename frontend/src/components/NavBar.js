@@ -22,7 +22,7 @@ const NavBar = () => {
           </Link>
         </li>
         <li>
-          <Link href="/doctor">
+          <Link href="/DoctorManagementPage">
             <a>Doctor</a>
           </Link>
         </li>

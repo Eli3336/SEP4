@@ -24,6 +24,7 @@
 #include <HumiTempTask.h>
 #include <ReceiverTask.h>
 #include <Counter.h>
+#include <ServoTask.h>
 
 
 // Queues
@@ -40,6 +41,7 @@ static EventGroupHandle_t _receiveEventGroup = NULL;
 
 
 static SemaphoreHandle_t _mutex;
+SemaphoreHandle_t mutexAvgValues;
 
 static MessageBufferHandle_t _messageBuffer;
 
@@ -59,6 +61,7 @@ static void _createEventGroups(void) {
 
 static void _createMutexes(void){
 	_mutex = xSemaphoreCreateMutex();
+	mutexAvgValues = xSemaphoreCreateMutex();
 }
 
 static void _initDrivers(void) {
@@ -71,11 +74,12 @@ static void _initDrivers(void) {
 
 static void _createTasks(void) {
 	senderTask_create(_senderQueue, _receiveEventGroup);
-	VibeController_create(_senderQueue);
+	VibeController_create(_senderQueue,_actEventGroup);
 	counter_create( _humidityQueue, _temperatureQueue, _co2Queue, _actEventGroup);
 	co2Task_create(_co2Queue, _actEventGroup);
 	humiTempTask_create(_humidityQueue, _temperatureQueue, _actEventGroup,_doneEventGroup);
 	receiverTask_create(_messageBuffer, _receiveEventGroup);
+	servoTask_create(_actEventGroup);
 }
 
 

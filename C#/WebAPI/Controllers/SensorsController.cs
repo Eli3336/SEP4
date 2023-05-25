@@ -32,7 +32,7 @@ public class SensorsController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<SensorValue>>> GetSensorsValuesAsync([FromQuery] int? roomId)
+    public async Task<ActionResult<IEnumerable<SensorValue>>> GetSensorsValuesAsync([FromQuery] int roomId)
     {
         try
         {

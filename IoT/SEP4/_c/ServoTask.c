@@ -6,11 +6,12 @@
  *  Author: ancab
  */ 
 #include <ServoTask.h>
-#include <Config.h>
+#include <DataHolder.h>
 #include <rc_servo.h>
 #include <stdio.h>
 #include <stdint.h>
 #include <task.h>
+#include <event_groups.h>
 
 #define TASK_NAME "ServoTask"
 #define TASK_PRIORITY configMAX_PRIORITIES - 2
@@ -21,10 +22,10 @@
 
 static void _run(void* params);
 
-static QueueHandle_t _servoQueue;
+static EventGroupHandle_t _actEventGroup;
 
-void servoTask_create(QueueHandle_t servoQueue) {
-	_servoQueue = servoQueue;
+void servoTask_create(EventGroupHandle_t actEventGroup) {
+	_actEventGroup = actEventGroup;
 	
 	xTaskCreate(_run,
 	TASK_NAME,
@@ -36,30 +37,35 @@ void servoTask_create(QueueHandle_t servoQueue) {
 }
 
 void servoTask_initTask(void* params) {
+	rc_servo_initialise();
 	// Default the starting window position to be between open and closed.
 	rc_servo_setPosition(SERVO_PORT, SERVO_POS_MIDDLE);
 }
 
 void servoTask_runTask() {
-	uint16_t humidity;
-	int16_t temperature;
-	uint16_t co2;
-	uint16_t sound;
-	xQueueReceive(_servoQueue, &humidity, portMAX_DELAY);
-	xQueueReceive(_servoQueue, &temperature, portMAX_DELAY);
-	xQueueReceive(_servoQueue, &co2, portMAX_DELAY);
+	xEventGroupWaitBits(_actEventGroup,
+	BIT_WINDOW_ACT,
+	pdTRUE,
+	pdTRUE,
+	portMAX_DELAY
+	);
 	
-	// Delay introduced such that the thresholds are updated before reading them.
-	vTaskDelay(pdMS_TO_TICKS(5000));
+	uint16_t tempCo2Avg = getCo2Avg();
 	
-	int16_t lowThreshold = config_getLowTemperatureThreshold();
-	int16_t highThreshold = config_getHighTemperatureThreshold();
+	//rc_servo_setPosition(SERVO_PORT,SERVO_POS_CLOSED);
 	
-	// Only open or close the window if the stored thresholds are not set to
-	// the default temperature threshold values - the invalid temperature value.
-	if (lowThreshold != INVALID_TEMPERATURE_VALUE && temperature < lowThreshold) {
+	
+	//uint16_t lowPpm = getCo2BreakpointLow();
+	//uint16_t HighPpm = getCo2BreakpointHigh();
+	//tests
+	uint16_t LowPpm = 800;
+	uint16_t HighPpm= 1000;
+	
+	
+	
+	if (LowPpm != INVALID_CO2_VALUE && tempCo2Avg < LowPpm) {
 		rc_servo_setPosition(SERVO_PORT, SERVO_POS_CLOSED);
-		} else if (highThreshold != INVALID_TEMPERATURE_VALUE && temperature > highThreshold) {
+		} else if (HighPpm != INVALID_CO2_VALUE && tempCo2Avg > HighPpm) {
 		rc_servo_setPosition(SERVO_PORT, SERVO_POS_OPEN);
 		} else {
 		rc_servo_setPosition(SERVO_PORT, SERVO_POS_MIDDLE);

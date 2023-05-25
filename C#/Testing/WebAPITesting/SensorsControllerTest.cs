@@ -67,7 +67,7 @@ public class SensorsControllerTest
             new SensorValue { ValueId = 1,Value = 1, TimeStamp = new DateTime()},
             new SensorValue { ValueId = 1,Value = 1, TimeStamp = new DateTime() }
         };
-        sensorLogicMock.Setup(x => x.GetSensorsValuesAsync(It.IsAny<int?>())).ReturnsAsync(expectedValues);
+        sensorLogicMock.Setup(x => x.GetSensorsValuesAsync(It.IsAny<int>())).ReturnsAsync(expectedValues);
 
         // Act
         var result = await controller.GetSensorsValuesAsync(roomId: 1);
