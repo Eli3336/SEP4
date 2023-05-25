@@ -38,36 +38,31 @@ display_7seg_powerUp();
 }
 
 void displayTask_runTask(void){
-	xEventGroupWaitBits(_actEventGrop,BIT_WINDOW_ACT,
+	xEventGroupWaitBits(_actEventGrop,BIT_DISPLAY_ACT,
 	pdFALSE,
 	pdFALSE,
 	portMAX_DELAY);
-		uint16_t tempCo2Avg = getCo2Avg();
-		uint16_t tempTempAvg = getTempAvg();
-		uint16_t tempHumAvg = getHumAvg();
-	
 		
-		
-			display_7seg_powerUp();
-			float disCo2 = tempCo2Avg;
-			float disTemp = tempTempAvg;
-			float disHum = tempHumAvg;
-			display_7seg_displayHex("A");
-			vTaskDelay(pdMS_TO_TICKS(2000));
-			display_7seg_display(disHum,0);
-			vTaskDelay(pdMS_TO_TICKS(2000));
-			display_7seg_displayHex("B");
-			vTaskDelay(pdMS_TO_TICKS(2000));
-			display_7seg_display(disTemp,0);
-			vTaskDelay(pdMS_TO_TICKS(2000));
-			display_7seg_displayHex("C");
-			vTaskDelay(pdMS_TO_TICKS(2000));
-			display_7seg_display(disCo2,0);
-			vTaskDelay(pdMS_TO_TICKS(2000));
-
-
+	uint16_t tempCo2Avg = getCo2Avg();
+	uint16_t tempTempAvg = getTempAvg();
+	uint16_t tempHumAvg = getHumAvg();
 	
-	
+	display_7seg_powerUp();
+	float disCo2 = tempCo2Avg;
+	float disTemp = tempTempAvg;
+	float disHum = tempHumAvg;
+	display_7seg_displayHex("A");
+	vTaskDelay(pdMS_TO_TICKS(2000));
+	display_7seg_display(disHum,0);
+	vTaskDelay(pdMS_TO_TICKS(2000));
+	display_7seg_displayHex("B");
+	vTaskDelay(pdMS_TO_TICKS(2000));
+	display_7seg_display(disTemp,0);
+	vTaskDelay(pdMS_TO_TICKS(2000));
+	display_7seg_displayHex("C");
+	vTaskDelay(pdMS_TO_TICKS(2000));
+	display_7seg_display(disCo2,0);
+	vTaskDelay(pdMS_TO_TICKS(2000));
 }
 
 static void _run(void* params){

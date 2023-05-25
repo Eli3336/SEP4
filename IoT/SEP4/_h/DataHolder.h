@@ -8,7 +8,8 @@
 #define INVALID_HUMIDITY_VALUE 0
 #define INVALID_TEMPERATURE_VALUE -100
 #define INVALID_CO2_VALUE 0
-#define BIT_WINDOW_ACT 1 << 3
+#define BIT_SERVOS_ACT 1 << 3
+#define BIT_DISPLAY_ACT 1 << 4
 
 int tempPool;
 int tempCount;

@@ -1,12 +1,9 @@
-#include "SenderTask.h"
+#include <SenderTask.h>
 #include <stdio.h>
-#include <stddef.h>
 #include <status_leds.h>
 #include <lora_driver.h>
 #include <stdint.h>
 #include <task.h>
-#include <ReceiverTask.h>
-#include <event_groups.h>
 
 #define TASK_NAME "SenderTask"
 #define TASK_PRIORITY 3
@@ -31,14 +28,12 @@ void senderTask_create(QueueHandle_t senderQueue) {
 }
 
 void senderTask_initTask(void* params) {
-		vTaskDelay(50UL);
-		lora_driver_resetRn2483(1);
-		vTaskDelay(100UL);
-		lora_driver_resetRn2483(0);
-		lora_driver_flushBuffers();
-		_connectToLoRaWAN();
-
-	puts("Sender Task initialized");
+	vTaskDelay(50UL);
+	lora_driver_resetRn2483(1);
+	vTaskDelay(100UL);
+	lora_driver_resetRn2483(0);
+	lora_driver_flushBuffers();
+	_connectToLoRaWAN();
 }
 
 void senderTask_runTask() {
@@ -65,7 +60,6 @@ static void _run(void* params) {
 }
 
 static void _connectToLoRaWAN() {
-	puts("Start Connect To Lorawan");
 	char _out_buf[20];
 	lora_driver_returnCode_t rc;
 	status_leds_slowBlink(led_ST2); // OPTIONAL: Led the green led blink slowly while we are setting up LoRa
