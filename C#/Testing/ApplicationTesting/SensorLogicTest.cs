@@ -62,11 +62,6 @@ public class SensorLogicTest
     [Test]
     public async Task GetSensorsValuesAsync_ReturnsSensorsValues()
     {
-        var expectedSensorValues = new List<SensorValue>
-        {
-            new SensorValue { ValueId = 1, Value = 1, TimeStamp = new DateTime() },
-            new SensorValue { ValueId = 1, Value = 1, TimeStamp = new DateTime() },
-
         var timestamp = new DateTime();
         var expectedSensorValues1 = new List<SensorValue>
         {
