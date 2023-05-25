@@ -64,22 +64,25 @@ void VibeController_runTask(void) {
 	int16_t tempTemperature = getTempAvg();
 	uint16_t tempCo2 = getCo2Avg();
 	
+	uint8_t errorFlagToSend[] = {0, 0, 0, 0, 0, 0, 0, 0};
+	
 	if (tempHumidity == INVALID_HUMIDITY_VALUE)
 	{
-		uplinkMessageBuilder_setSystemErrorState();
+		errorFlagToSend[0] = 1;
 	}
 	if (tempTemperature == INVALID_TEMPERATURE_VALUE)
 	{
-		uplinkMessageBuilder_setSystemErrorState();
+		errorFlagToSend[1] = 1;
 	}
 	if (tempCo2 == INVALID_CO2_VALUE)
 	{
-		uplinkMessageBuilder_setSystemErrorState();
+		errorFlagToSend[2] = 1;
 	}
 	
-	uplinkMessageBuilder_setHumidityData(tempHumidity);
-	uplinkMessageBuilder_setTemperatureData(tempTemperature);
-	uplinkMessageBuilder_setCO2Data(tempCo2);
+	uplinkMessageBuilder_setHumidityData(&tempHumidity);
+	uplinkMessageBuilder_setTemperatureData(&tempTemperature);
+	uplinkMessageBuilder_setCO2Data(&tempCo2);
+	uplinkMessageBuilder_setSystemErrorState(&errorFlagToSend);
 			
 	xEventGroupSetBits(_actEventGroup, BIT_SERVOS_ACT | BIT_DISPLAY_ACT);
 	

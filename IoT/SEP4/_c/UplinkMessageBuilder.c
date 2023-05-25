@@ -27,24 +27,23 @@ uplinkMessageBuilder_buildUplinkMessage(uint8_t port) {
 	return payload;
 }
 
-void uplinkMessageBuilder_setHumidityData(uint16_t data) {
-	_humidity = data;
-	printf("the Hum is : %d \n",data);
+void uplinkMessageBuilder_setHumidityData(uint16_t *data) {
+	_humidity = *data;
+	printf("the Hum is : %d \n", *data);
 }
 
-void uplinkMessageBuilder_setTemperatureData(uint16_t data) {
-	_temperature = data;
-	printf("the temp value is: %d \n",data);
+void uplinkMessageBuilder_setTemperatureData(int16_t *data) {
+	_temperature = *data;
+	printf("the temp value is: %d \n", *data);
 }
 
-void uplinkMessageBuilder_setCO2Data(uint16_t data) {
-	_co2 = data;
-	printf("the Co2 value is: %d \n ",data);
+void uplinkMessageBuilder_setCO2Data(uint16_t *data) {
+	_co2 = *data;
+	printf("the Co2 value is: %d \n ", *data);
 }
 
-void uplinkMessageBuilder_setSystemErrorState() {
-	int flagValues[] = {1, 1, 1, 0, 0, 0, 0, 0};		// default flag for all 3 sensors to be bad
-	for(int i = 0; i < 6; i ++)
+void uplinkMessageBuilder_setSystemErrorState(uint8_t *flagValues) {
+	for(int i = 0; i < 8; i ++)
 	{
 		_errorFlag |= flagValues[i] << i;
 	}
