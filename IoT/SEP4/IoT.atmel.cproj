@@ -298,6 +298,9 @@
     <Compile Include="_c\DataHolder.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="_c\DisplayTask.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="_c\ReceiverTask.c">
       <SubType>compile</SubType>
     </Compile>
@@ -308,6 +311,9 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="_h\DataHolder.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="_h\DisplayTask.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="_h\ServoTask.h">
