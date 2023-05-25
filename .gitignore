@@ -37,3 +37,5 @@ msbuild.wrn
 .vs/
 C\#/SEP3/EfcDataAccess/Shop.db-wal
 C\#/SEP3/EfcDataAccess/Shop.db-shm
+C#/EfcDataAccess/Hospital.db-shm
+C#/EfcDataAccess/Hospital.db-wal

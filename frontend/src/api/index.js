@@ -1,4 +1,3 @@
-import AssignPatient from "@/components/AssignPatient";
 import axios from "axios";
 
 const API_BASE_URL = "https://localhost:7216";
@@ -177,6 +176,38 @@ export async function getAllPatients() {
   }
 }
 
+export async function createRoom(roomInfo) {
+  try {
+    const response = await instance.post(`/Rooms`, roomInfo);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating room:", error);
+    throw error;
+  }
+}
+
+export async function updateRoomInfo(id, name, capacity, availability) {
+  try {
+    const response = await instance.patch(
+      `/Rooms/${id}?name=${name}&capacity=${capacity}&availability=${availability}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating room:", error);
+    throw error;
+  }
+}
+
+export async function deleteRoomById(id) {
+  try {
+    const response = await instance.delete(`/Rooms/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting room:", error);
+    throw error;
+  }
+}
+
 export async function getAllAAvailableRooms() {
   try {
     const response = await instance.get(`/Rooms/Empty`);
@@ -287,6 +318,18 @@ export async function deleteReceptionistById(receptionistId) {
   } catch (error) {
     console.error("Error in deleteReceptionistById:", error);
     alert(`Failed to delete receptionist: ${error.response.data}`);
+    throw error;
+  }
+}
+
+export async function updateSensor(id, upbreakpoint, downbreakpoint) {
+  try {
+    const url = `/sensors/${id}`;
+    const updateData = { upbreakpoint, downbreakpoint };
+    const response = await instance.patch(url, updateData);
+    return response.data;
+  } catch (error) {
+    console.error("Error in updateSensor:", error);
     throw error;
   }
 }

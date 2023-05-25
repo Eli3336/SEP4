@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from "react";
 import styles from "../styles/RoomInfo.module.css";
 import SensorInfo from "./SensorInfo";
-import { fetchRoomDetailsById } from "@/api";
-import { fetchSensorDataByRoomId } from "@/api";
+import {
+  fetchRoomDetailsById,
+  fetchSensorDataByRoomId,
+  updateSensor, // Import updateSensor method here
+} from "@/api";
 
 const RoomInfo = ({ roomId, onClose }) => {
   const [roomData, setRoomData] = useState(null);
   const [showSensorLog, setShowSensorLog] = useState(false);
+  const [humidity, setHumidity] = useState("");
+  const [temperature, setTemperature] = useState("");
+  const [co2, setCo2] = useState("");
 
   useEffect(() => {
     async function fetchRoomData() {
@@ -44,6 +50,40 @@ const RoomInfo = ({ roomId, onClose }) => {
     setShowSensorLog(!showSensorLog);
   };
 
+  const handleUpdateSensors = async () => {
+    try {
+      // Update each sensor value that has an entered value
+      if (roomData && roomData.sensors) {
+        for (let sensor of roomData.sensors) {
+          let sensorValue;
+          switch (sensor.type) {
+            case "Humidity":
+              sensorValue = humidity;
+              break;
+            case "Temperature":
+              sensorValue = temperature;
+              break;
+            case "CO2":
+              sensorValue = co2;
+              break;
+            default:
+              break;
+          }
+
+          if (sensorValue) {
+            // Use updateSensor method from API here
+            await updateSensor(sensor.id, sensorValue, sensorValue);
+          }
+        }
+      }
+
+      // Re-fetch room data after updating sensors
+      fetchRoomData();
+    } catch (error) {
+      console.error("Error updating sensor data:", error);
+    }
+  };
+
   return (
     roomData && (
       <div className={styles.container} onClick={handleClose}>
@@ -73,6 +113,24 @@ const RoomInfo = ({ roomId, onClose }) => {
                       : "ppm"}
                   </p>
                 ))}
+              <div>
+                <input
+                  type="text"
+                  placeholder="New humidity value"
+                  onChange={(e) => setHumidity(e.target.value)}
+                />
+                <input
+                  type="text"
+                  placeholder="New temperature value"
+                  onChange={(e) => setTemperature(e.target.value)}
+                />
+                <input
+                  type="text"
+                  placeholder="New CO2 value"
+                  onChange={(e) => setCo2(e.target.value)}
+                />
+                <button onClick={handleUpdateSensors}>Update Sensors</button>
+              </div>
               <h4>Patients:</h4>
               <ul>
                 {roomData.patients && roomData.patients.length === 0 ? (
