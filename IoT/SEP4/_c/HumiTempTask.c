@@ -2,29 +2,25 @@
 #include <stdint.h>
 #include <task.h>
 #include <hih8120.h>
-#include <Config.h>
+#include <DataHolder.h>
 
 #define TASK_NAME "HumiTempTask"
-#define TASK_PRIORITY configMAX_PRIORITIES - 2
+#define TASK_PRIORITY 1
 
 static void _run(void* params);
 
 static QueueHandle_t _humidityQueue;
 static QueueHandle_t _temperatureQueue;
-static EventGroupHandle_t _actEventGroup;
-static EventGroupHandle_t _doneEventGroup;
-
+static EventGroupHandle_t _doEventGroup;
 static uint16_t _latestHumidity;
 static int16_t _latestTemperature;
 
 void humiTempTask_create(QueueHandle_t humidityQueue, 
 									QueueHandle_t temperatureQueue, 
-									EventGroupHandle_t actEventGroup, 
-									EventGroupHandle_t doneEventGroup) {
+									EventGroupHandle_t doEventGroup) {
 	_humidityQueue = humidityQueue;
 	_temperatureQueue = temperatureQueue;
-	_actEventGroup = actEventGroup;
-	_doneEventGroup = doneEventGroup;
+	_doEventGroup = doEventGroup;
 	
 	xTaskCreate(_run, 
 				TASK_NAME, 
@@ -36,14 +32,15 @@ void humiTempTask_create(QueueHandle_t humidityQueue,
 }
 
 void humiTempTask_initTask(void* params) {
-	
+	hih8120_wakeup();
+	vTaskDelay(pdMS_TO_TICKS(100));
 }
 
 void humiTempTask_runTask() {
-	xEventGroupWaitBits(_actEventGroup, 
+	 xEventGroupWaitBits(_doEventGroup, 
 					    BIT_HUMIDITY_ACT | BIT_TEMPERATURE_ACT,
 						pdTRUE,	
-						pdFALSE, 
+						pdTRUE, 
 						portMAX_DELAY
 	);
 	
@@ -55,17 +52,17 @@ void humiTempTask_runTask() {
 			_latestHumidity = hih8120_getHumidityPercent_x10();
 			_latestTemperature = hih8120_getTemperature_x10();
 		} else {
-			_latestHumidity = CONFIG_INVALID_HUMIDITY_VALUE;
-			_latestTemperature = CONFIG_INVALID_TEMPERATURE_VALUE;
+			_latestHumidity = INVALID_HUMIDITY_VALUE;
+			_latestTemperature = INVALID_TEMPERATURE_VALUE;			
 		}
 	} else {
-		_latestHumidity = CONFIG_INVALID_HUMIDITY_VALUE;
-		_latestTemperature = CONFIG_INVALID_TEMPERATURE_VALUE;
+		_latestHumidity = INVALID_HUMIDITY_VALUE;
+		_latestTemperature = INVALID_TEMPERATURE_VALUE;
 	}
 	
 	xQueueSendToBack(_humidityQueue, &_latestHumidity, portMAX_DELAY);
 	xQueueSendToBack(_temperatureQueue, &_latestTemperature, portMAX_DELAY);
-	xEventGroupSetBits(_doneEventGroup, BIT_HUMIDITY_DONE | BIT_TEMPERATURE_DONE);
+	
 }
 
 static void _run(void* params) {

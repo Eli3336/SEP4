@@ -26,6 +26,10 @@ public class PatientLogic : IPatientLogic
         {
             throw new Exception("Room is full. Cannot add more patients!");
         }
+        if (!room.Availability.Equals("Available"))
+        {
+            throw new Exception("Room is not available, cannot add patient!");
+        }
 
         Patient toCreate = new Patient()
         {
@@ -52,6 +56,8 @@ public class PatientLogic : IPatientLogic
             throw new ArgumentException("The name cannot be smaller than 3 characters!");
         if (dto.Name.Length > 255)
             throw new ArgumentException("The name is too long!");
+        if (dto.Name.Contains("0") || dto.Name.Contains("1") || dto.Name.Contains("2") || dto.Name.Contains("3") || dto.Name.Contains("4") || dto.Name.Contains("5") || dto.Name.Contains("6") || dto.Name.Contains("7") || dto.Name.Contains("8") || dto.Name.Contains("9"))
+            throw new Exception("Name cannot contain numbers!");
     }
     
     public async Task DeleteAsync(int id)
@@ -65,7 +71,7 @@ public class PatientLogic : IPatientLogic
         if (room == null)
             throw new Exception("Room not found");
         bool wasFull = room.Availability == "Occupied";
-        await patientDao.DeleteAsync(id);
+        await patientDao.DeleteAsync(patient);
         
         if (wasFull)
         {
@@ -83,5 +89,57 @@ public class PatientLogic : IPatientLogic
                 $"Patient with id {id} not found!");
         }
         return patient;
+    }
+    
+    public async Task MovePatientToGivenRoom(int patientId, int roomId)
+    {
+        //getting the new room
+        Room? roomToMoveInto = await roomDao.GetById(roomId);
+        if (roomToMoveInto == null)
+            throw new Exception($"Room with id {roomId} not found");
+        if (roomToMoveInto.Capacity <= roomToMoveInto.Patients.Count)
+        {
+            throw new Exception("Room is full. Cannot add more patients!");
+        }
+
+        //getting the patient
+        Patient? toMove = await patientDao.GetByIdAsync(patientId);
+        if (toMove != null)
+        {
+            ValidatePatient(new PatientCreationDto(toMove.Name));
+        }
+        else
+            throw new Exception($"Patient with ID {patientId} was not found!");
+
+        //removing from old room
+        List<Room?> allRooms = roomDao.GetAllRoomsAsync().Result.ToList();
+        for (int i = 0; i < allRooms.Count; i++)
+        {
+            if (allRooms[i].Patients.Contains(toMove))
+            {
+                bool wasFull = allRooms[i].Availability == "Occupied";
+                if (wasFull)
+                {
+                    allRooms[i].Availability = "Available";
+                } 
+                allRooms[i].Patients.Remove(toMove);
+                await roomDao.RoomUpdateAsync(allRooms[i]);
+                break;
+            }
+        }   
+        
+        //adding to new room
+        roomToMoveInto.Patients.Add(toMove);
+        if (roomToMoveInto.Capacity == roomToMoveInto.Patients.Count)
+        {
+            roomToMoveInto.Availability = "Occupied";
+        }
+        await roomDao.RoomUpdateAsync(roomToMoveInto);
+    }
+    
+    public Task<IEnumerable<Patient?>> GetAllPatientsAsync()
+    {
+        IEnumerable<Patient?> patients = patientDao.GetAllPatientsAsync().Result; 
+        return Task.FromResult(patients);
     }
 }

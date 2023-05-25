@@ -12,14 +12,9 @@ public class PatientEfcDao : IPatientDao
     {
         this.context = context;
     }
-    public async Task DeleteAsync(int id)
+    public async Task DeleteAsync(Patient patient)
     {
-        Patient? existing = await GetByIdAsync(id);
-        if (existing == null)
-        {
-            throw new Exception($"Patient with id {id} not found");
-        }
-        context.Patients.Remove(existing);
+        context.Patients.Remove(patient);
         await context.SaveChangesAsync();    
     }
     
@@ -35,5 +30,12 @@ public class PatientEfcDao : IPatientDao
         EntityEntry<Patient> newPatient = await context.Patients.AddAsync(patient);
         await context.SaveChangesAsync();
         return newPatient.Entity;
+    }
+    
+    public async Task<IEnumerable<Patient?>> GetAllPatientsAsync()
+    {
+        IQueryable<Patient> patients = context.Patients.AsQueryable();
+        IEnumerable<Patient> result = await patients.ToListAsync();
+        return result;
     }
 }

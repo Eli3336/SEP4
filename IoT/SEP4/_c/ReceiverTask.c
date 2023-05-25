@@ -1,23 +1,22 @@
-#include "./_h/ReceiverTask.h"
+#include "ReceiverTask.h"
 #include <task.h>
 #include <message_buffer.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stddef.h>
 #include <lora_driver.h>
-#include <task.h>
-#include <Configuration.h>
+#include <DataHolder.h>
+#include <event_groups.h>
 
 #define TASK_NAME "ReceiverTask"
-#define TASK_PRIORITY configMAX_PRIORITIES - 2
+#define TASK_PRIORITY 1
 #define EXPECTED_PAYLOAD_LENGTH 15
+
+extern MessageBufferHandle_t messageBuffer;
 
 static void _run(void* params);
 
-static MessageBufferHandle_t _receiverBuffer;
-
-void receiverTask_create(MessageBufferHandle_t receiverBuffer) {
-	_receiverBuffer = receiverBuffer;
+void receiverTask_create(void) {
 	
 	xTaskCreate(_run,
 	TASK_NAME,
@@ -29,20 +28,30 @@ void receiverTask_create(MessageBufferHandle_t receiverBuffer) {
 }
 
 void receiverTask_initTask(void* params) {
-	
 }
 
 void receiverTask_runTask(void) {
+	
 	lora_driver_payload_t payload;
-	xMessageBufferReceive(_receiverBuffer,
+	xMessageBufferReceive(messageBuffer,
 	&payload,
 	sizeof(lora_driver_payload_t),
 	portMAX_DELAY
 	);
+	
+	payload.portNo = 2;
+	printf("DOWN LINK: from port: %d with %d bytes received!", payload.portNo, payload.len);
 
 	if (payload.len == EXPECTED_PAYLOAD_LENGTH) {
-		configuration_setThresholds(payload);
+		dataHolder_setBreakpoints(payload);
 	}
+	
+	printf("Payload received: \n");
+	for(int i=0; i <payload.len; i++)
+	{
+		printf("%02X ", payload.bytes[i]);
+	}
+	printf("\n");
 }
 
 static void _run(void* params) {

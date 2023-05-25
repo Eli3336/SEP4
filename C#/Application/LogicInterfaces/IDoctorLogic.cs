@@ -8,4 +8,7 @@ public interface IDoctorLogic
     Task<Doctor> CreateAsync(DoctorCreationDto doctorToCreate);
     Task<Doctor?> GetByIdAsync(int id);
     Task DeleteAsync(int id);
+    Task DoctorUpdateAsync(int id, string name, string phoneNumber);
+    Task<IEnumerable<Doctor?>> GetAllDoctorsAsync();
+
 }

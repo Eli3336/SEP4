@@ -17,7 +17,7 @@ public class PatientsController : ControllerBase
     }
     
     [HttpPost]
-    public async Task<ActionResult<Patient>> CreateAndAddToRoomAsync(PatientCreationDto dto, int roomId)
+    public async Task<ActionResult<Patient>> CreateAndAddToRoomAsync(int roomId, PatientCreationDto dto)
     {
         try
         {
@@ -53,6 +53,36 @@ public class PatientsController : ControllerBase
         {
             Patient? result = await patientLogic.GetByIdAsync(id);
             return Ok(result);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+    
+    [HttpPatch("{patientId:int}+{roomId}")]
+    public async Task<ActionResult> MovePatientToGivenRoom([FromRoute]int patientId, [FromRoute]int roomId)
+    {
+        try
+        {
+            await patientLogic.MovePatientToGivenRoom(patientId, roomId);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+    
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Patient>>> GetAllPatients()
+    {
+        try
+        {
+            IEnumerable<Patient?> patients= await patientLogic.GetAllPatientsAsync();
+            return Ok(patients);
         }
         catch (Exception e)
         {

@@ -1,10 +1,9 @@
 using Application.DaoInterfaces;
 using Domain.Models;
-
-namespace EfcDataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
+namespace EfcDataAccess;
 
 public class DoctorEfcDao : IDoctorDao
 {
@@ -27,15 +26,33 @@ public class DoctorEfcDao : IDoctorDao
             .SingleOrDefaultAsync(doctor => doctor.Id == id);
         return found;
     }
-
-    public async Task DeleteAsync(int id)
+    
+    public async Task<Doctor?> GetByIdNoTrackingAsync(int id)
     {
-        Doctor? existing = await GetByIdAsync(id);
-        if (existing == null)
-        {
-            throw new Exception($"Doctor with id {id} not found");
-        }
-        context.Doctors.Remove(existing);
+        Doctor? found = await context.Doctors
+            .AsNoTracking()
+            .SingleOrDefaultAsync(p => p.Id == id);
+
+        return found;
+    }
+
+    public async Task DeleteAsync(Doctor doctor)
+    {
+        context.Doctors.Remove(doctor);
         await context.SaveChangesAsync();  
+    }
+    
+    public async Task DoctorUpdateAsync(Doctor doctor)
+    {
+        context.Doctors.Update(doctor);
+        await context.SaveChangesAsync();
+
+    }
+    
+    public async Task<IEnumerable<Doctor?>> GetAllDoctorsAsync()
+    {
+        IQueryable<Doctor> doctors = context.Doctors.AsQueryable();
+        IEnumerable<Doctor> result = await doctors.ToListAsync();
+        return result;
     }
 }
