@@ -8,16 +8,23 @@ public class Doctor : User
         : base(name, password, phoneNumber, "doctor")
     {
         Requests = new List<Request>();
+        Role = "doctor";
     }
     
     public Doctor(string name, string phoneNumber)
         : base(name, "0000", phoneNumber, "doctor" )
     {
         Requests = new List<Request>();
+        Role = "doctor";
+
+        
     }
 
     public Doctor()
     {
         Requests = new List<Request>();
+        Role = "doctor";
+
+        
     }
 }

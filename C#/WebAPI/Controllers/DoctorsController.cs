@@ -63,7 +63,7 @@ public class DoctorsController : ControllerBase
         }
     }
     
-    [HttpGet]
+    [HttpGet, Authorize("BeDoctor")]
     public async Task<ActionResult<IEnumerable<Doctor>>> GetAllDoctors()
     {
         try
