@@ -22,7 +22,8 @@ public class SensorEfcDao : ISensorDao
 
     public async Task<Sensor?> GetById(int id)
     {
-        Sensor? sensor = await context.Sensors.Include(sensor => sensor.Values).SingleOrDefaultAsync(sensor => sensor.Id == id);
+        Sensor? sensor = await context.Sensors.Include(sensor => sensor.Values)
+            .SingleOrDefaultAsync(sensor => sensor.Id == id);
         return sensor;    
     }
 
