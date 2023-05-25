@@ -10,7 +10,7 @@ const HomePage = () => {
         Please select a role to continue: <Link href="/user">User</Link>,{" "}
         <Link href="/assign-room">Receptionist</Link>,{" "}
         <Link href="/room-management">Admin</Link> or{" "}
-        <Link href="/DoctorManagementPage">Doctor</Link>
+        <Link href="/doctor">Doctor</Link>
       </p>
     </div>
   );
