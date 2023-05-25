@@ -3,12 +3,10 @@ using Domain.DTOs;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using NUnit.Framework;
 using WebAPI.Controllers;
+using NUnit.Framework;
 
 namespace TestingReq5.WebAPITesting;
-using NUnit.Framework;
-using Sandbox;
 
 [TestFixture]
 public class SensorsControllerTest
@@ -24,7 +22,6 @@ public class SensorsControllerTest
         controller = new SensorsController(sensorLogicMock.Object);
     }
     
-
     [Test]
     public async Task CreateAsync_ReturnsCreatedSensor()
     {
@@ -36,9 +33,9 @@ public class SensorsControllerTest
             DownBreakpoint = 2,
             Values = new List<SensorValue>
             {
-                new SensorValue { valueId = 1,value = 1, timeStamp = new DateTime()},
-                new SensorValue { valueId = 1,value = 1, timeStamp = new DateTime() },
-                new SensorValue {valueId = 1,value = 1, timeStamp = new DateTime()}
+                new SensorValue { ValueId = 1,Value = 1, TimeStamp = new DateTime()},
+                new SensorValue { ValueId = 1,Value = 1, TimeStamp = new DateTime() },
+                new SensorValue {ValueId = 1,Value = 1, TimeStamp = new DateTime()}
             }
         };
         sensorLogicMock.Setup(x => x.CreateAsync(It.IsAny<SensorCreationDto>())).ReturnsAsync(expectedSensor);
@@ -49,15 +46,15 @@ public class SensorsControllerTest
             Type = "Temperature",
             Values = new List<SensorValue>
             {
-                new SensorValue { valueId = 1,value = 1, timeStamp = new DateTime()},
-                new SensorValue { valueId = 1,value = 1, timeStamp = new DateTime() },
-                new SensorValue {valueId = 1,value = 1, timeStamp = new DateTime()}
+                new SensorValue { ValueId = 1,Value = 1, TimeStamp = new DateTime()},
+                new SensorValue { ValueId = 1,Value = 1, TimeStamp = new DateTime() },
+                new SensorValue {ValueId = 1,Value = 1, TimeStamp = new DateTime()}
             }
         });
 
         // Assert
-        Assert.IsInstanceOf<CreatedAtActionResult>(result.Result);
-        var createdResult = (CreatedAtActionResult)result.Result;
+        Assert.IsInstanceOf<CreatedResult>(result.Result);
+        var createdResult = (CreatedResult)result.Result;
         Assert.AreEqual(expectedSensor, createdResult.Value);
     }
 
@@ -67,8 +64,8 @@ public class SensorsControllerTest
         // Arrange
         var expectedValues = new List<SensorValue>
         {
-            new SensorValue { valueId = 1,value = 1, timeStamp = new DateTime()},
-            new SensorValue { valueId = 1,value = 1, timeStamp = new DateTime() }
+            new SensorValue { ValueId = 1,Value = 1, TimeStamp = new DateTime()},
+            new SensorValue { ValueId = 1,Value = 1, TimeStamp = new DateTime() }
         };
         sensorLogicMock.Setup(x => x.GetSensorsValuesAsync(It.IsAny<int?>())).ReturnsAsync(expectedValues);
 
@@ -87,8 +84,8 @@ public class SensorsControllerTest
         // Arrange
         var expectedLog = new List<SensorValue>
         {
-            new SensorValue { valueId = 1,value = 1, timeStamp = new DateTime()},
-            new SensorValue { valueId = 1,value = 1, timeStamp = new DateTime() }
+            new SensorValue { ValueId = 1,Value = 1, TimeStamp = new DateTime()},
+            new SensorValue { ValueId = 1,Value = 1, TimeStamp = new DateTime() }
         };
         sensorLogicMock.Setup(x => x.GetLogOfSensorValuesAsync(It.IsAny<int?>())).ReturnsAsync(expectedLog);
 

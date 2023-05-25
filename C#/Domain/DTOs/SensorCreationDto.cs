@@ -15,9 +15,5 @@ public class SensorCreationDto
         Values.Add(new SensorValue(35));
         Values.Add(new SensorValue(0.2));
     }
-
-    public SensorCreationDto()
-    {
-        
-    }
+    public SensorCreationDto() {}
 }

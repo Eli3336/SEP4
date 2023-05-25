@@ -36,6 +36,10 @@ public class RoomLogic : IRoomLogic
         {
             throw new ArgumentException("The capacity cannot be smaller than 1");
         }
+        if (roomToCreate.Capacity > 3)
+        {
+            throw new ArgumentException("The capacity cannot be bigger than 3");
+        }
         if (roomToCreate.Availability != "Available" && roomToCreate.Availability != "Under maintenance")
         {
             throw new ArgumentException("The room can only be Available or Under maintenance. Please choose one or check for typos!");
@@ -65,5 +69,70 @@ public class RoomLogic : IRoomLogic
         }
         return room;
     }
+    
+    public async Task RoomUpdateAsync(int id, string name, int capacity, string availability)
+    {
+        Room? existing = await roomDao.GetByIdToUpdateAsync(id);
+        if (existing == null)
+        {
+            throw new Exception($"Room with ID {id} not found!");
+        }
+        
+        RoomUpdateDto dto = new RoomUpdateDto(id, name, capacity, availability);
 
+        string nameToUse = dto.Name ?? existing.Name;
+        int capacityToUse = dto.Capacity ?? existing.Capacity;
+        string statusToUse = dto.Availability ?? existing.Availability;
+        
+        
+        Room updated = new (nameToUse, capacityToUse, statusToUse)
+        {
+            Id = existing.Id,
+            Patients = existing.Patients,
+            Sensors = existing.Sensors
+            
+        };
+        ValidateRoomUpdate(updated);
+        await roomDao.RoomUpdateAsync(updated);
+    }
+
+    public Task<IEnumerable<Room?>> GetAllRoomsAsync()
+    {
+        IEnumerable<Room?> rooms = roomDao.GetAllRoomsAsync().Result;
+        return Task.FromResult(rooms);
+    }
+
+    public async Task<IEnumerable<Room>> GetAllEmptyRooms()
+    {
+        List<Room> result = new List<Room>();
+        List<Room?> rooms = roomDao.GetAllRoomsAsync().Result.ToList();
+        if (rooms.Count < 1)
+        {
+            return result;
+        }
+        for (int i = 0; i < rooms.Count; i++)
+        {
+            Room room = rooms[i];
+            if (room.Patients.Count == 0)
+                    result.Add(room);
+        }
+        return result;
+    }
+
+    private void ValidateRoomUpdate(Room room)
+    {
+        if (room.Capacity < 1)
+        {
+            throw new ArgumentException("The capacity cannot be smaller than 1");
+        }
+        if (room.Capacity > 3)
+        {
+            throw new ArgumentException("The capacity cannot be bigger than 3");
+        }
+        if (room.Availability != "Available" && room.Availability != "Under maintenance")
+        {
+            throw new ArgumentException("The room can only be Available or Under maintenance. Please choose one or check for typos!");
+        }
+    }
+   
 }

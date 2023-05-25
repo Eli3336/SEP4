@@ -5,5 +5,6 @@ namespace Application.DaoInterfaces;
 public interface IPatientDao
 {
     Task<Patient?> GetByIdAsync(int id);
-    Task DeleteAsync(int id);
+    Task DeleteAsync(Patient patient);
+    Task<Patient> CreateAsync(Patient patient);
 }

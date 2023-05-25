@@ -6,25 +6,37 @@
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .modal {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 20%; /* Change width to 40% */
-  height: 50%; /* Change height to 50% */
-  background-color: #f1f1f1; /* Change background color to light grey */
+  width: 80%;
+  max-height: 80%;
+  background-color: #f1f1f1;
   border-radius: 10px;
   padding: 20px;
+  display: flex;
+  flex-direction: row;
   overflow-y: auto;
 }
 
-.close {
-  background-color: transparent; /* Remove background color */
+.leftSection {
+  flex: 1;
+  border-right: 1px solid #ccc;
+  padding-right: 20px;
+}
+
+.rightSection {
+  flex: 1;
+  padding-left: 20px;
+}
+
+.closeButton {
+  background-color: transparent;
   border: none;
-  color: #000000; /* Change color to white */
+  color: #000000;
   cursor: pointer;
   font-size: 18px;
   font-weight: bold;
@@ -33,20 +45,22 @@
   top: 10px;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  color: #000000; /* Change text color to black *
-}
-
-.header h2 {
-  color: #000000; /* Change text color to black */
-}
-
 .content {
   font-size: 18px;
-  color: #000000; /* Change text color to black */
-  font-family: "Roboto", sans-serif; /* Add the "Roboto" font */
+  color: #000000;
+  font-family: "Roboto", sans-serif;
+}
+
+.sensorLogButton {
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 10px 2px;
+  cursor: pointer;
+  padding: 10px 24px;
+  border-radius: 5px;
 }
