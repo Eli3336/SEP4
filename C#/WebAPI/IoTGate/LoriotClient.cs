@@ -37,7 +37,7 @@ public class LoriotClient : IWebClient
         float humidity = Convert.ToInt16(array[0].ToString()+array[1].ToString()+array[2].ToString()+array[3].ToString(),16);
         float temperature= Convert.ToInt16(array[4].ToString()+array[5].ToString()+array[6].ToString()+array[7].ToString(),16);
         float co2 = Convert.ToInt16(array[8].ToString()+array[9].ToString()+array[10].ToString()+array[11].ToString(),16);
-        float flag = Convert.ToInt16(array[12].ToString()+array[13].ToString(),16);
+        float flag = Convert.ToInt16(array[12].ToString(),16);
 
         
         Console.WriteLine(humidity + " " + temperature + " " + co2 +" " + flag + " " +array.Length);
@@ -50,12 +50,15 @@ public class LoriotClient : IWebClient
         switch (flag)
         {
             case 1: 
-                temperature = -1000;
-                break;
-            case 2:
                 humidity = -1000;
                 break;
             case 3:
+                humidity = -1000;
+                temperature = -1000;
+                break;
+            case 4:
+                humidity = -1000;
+                temperature = -1000;
                 co2 = -1000;
                 break;
             default:
@@ -149,9 +152,9 @@ public async Task WSSendData()
         Console.WriteLine("WS-CLIENT--------->START-Sending");
 
         // Retrieve sensor data including breakpoints from the database for a specific sensor (e.g., sensor with ID 1)
-        // Sensor sensorTemp = await _sensorEfcDao.GetById(1);
-        // Sensor sensorHumidity = await _sensorEfcDao.GetById(2);
-        // Sensor sensorCo2 = await _sensorEfcDao.GetById(3);
+        Sensor sensorTemp = await _sensorEfcDao.GetById(1);
+        Sensor sensorHumidity = await _sensorEfcDao.GetById(2);
+        Sensor sensorCo2 = await _sensorEfcDao.GetById(3);
 
         // Create a DownLinkStream object
         DownLinkStream downLinkStream = new DownLinkStream
@@ -163,20 +166,22 @@ public async Task WSSendData()
         };
 
         // Convert humidity breakpoints to hex string
-        //string humidityHex = ConvertBreakpointsToHex(sensorHumidity.DownBreakpoint, sensorHumidity.UpBreakpoint);
-        string humidityHex = ConvertBreakpointsToHex(20, 25);
+        string humidityHex = ConvertBreakpointsToHex(sensorHumidity.DownBreakpoint, sensorHumidity.UpBreakpoint);
+       // string humidityHex = ConvertBreakpointsToHex(20, 25);
 
         downLinkStream.data += humidityHex;
 
         // Convert temperature breakpoints to hex string
-        // string temperatureHex = ConvertBreakpointsToHex(sensorTemp.DownBreakpoint, sensorTemp.UpBreakpoint);
-        string temperatureHex = ConvertBreakpointsToHex(21, 24);
+         string temperatureHex = ConvertBreakpointsToHex(sensorTemp.DownBreakpoint, sensorTemp.UpBreakpoint);
+        //string temperatureHex = ConvertBreakpointsToHex(21, 24);
         downLinkStream.data += temperatureHex;
 
         // Convert CO2 breakpoints to hex string
-        // string co2Hex = ConvertBreakpointsToHex(sensorCo2.DownBreakpoint, sensorCo2.UpBreakpoint);
-        string co2Hex = ConvertBreakpointsToHex(44, 234);
+       string co2Hex = ConvertBreakpointsToHex(sensorCo2.DownBreakpoint, sensorCo2.UpBreakpoint);
+        //string co2Hex = ConvertBreakpointsToHex(44, 234);
         downLinkStream.data += co2Hex;
+        
+        
         
         Console.WriteLine(downLinkStream.data); 
         
@@ -216,7 +221,9 @@ private string ConvertBreakpointsToHex(float? down, float? up)
 
         
         hex += downBytes[0].ToString("X2");
+        hex += downBytes[1].ToString("X2");
         hex += upBytes[0].ToString("X2");
+        hex += upBytes[1].ToString("X2");
 
     }
    
