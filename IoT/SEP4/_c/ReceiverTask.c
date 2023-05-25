@@ -9,17 +9,14 @@
 #include <event_groups.h>
 
 #define TASK_NAME "ReceiverTask"
-#define TASK_PRIORITY 5
+#define TASK_PRIORITY 3
 #define EXPECTED_PAYLOAD_LENGTH 15
 
-static EventGroupHandle_t _receiveEventGroup;
-static MessageBufferHandle_t _receiverBuffer;
+extern MessageBufferHandle_t messageBuffer;
 
 static void _run(void* params);
 
-void receiverTask_create(MessageBufferHandle_t receiverBuffer, EventGroupHandle_t receiveEventGroup) {
-	_receiverBuffer = receiverBuffer;
-	_receiveEventGroup = receiveEventGroup;
+void receiverTask_create(void) {
 	
 	xTaskCreate(_run,
 	TASK_NAME,
@@ -35,17 +32,10 @@ void receiverTask_initTask(void* params) {
 }
 
 void receiverTask_runTask(void) {
-	
-	xEventGroupWaitBits(_receiveEventGroup,
-	BIT_RECEIVER_ACT,
-	pdTRUE,
-	pdFALSE,
-	portMAX_DELAY
-	);
 	printf("ReceiverTask run\n");
 	
 	lora_driver_payload_t payload;
-	xMessageBufferReceive(_receiverBuffer,
+	xMessageBufferReceive(messageBuffer,
 	&payload,
 	sizeof(lora_driver_payload_t),
 	portMAX_DELAY

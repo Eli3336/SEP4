@@ -9,7 +9,7 @@
 
 #define TASK_NAME "VibeController"
 #define TASK_INTERVAL 300000UL //3 seconds
-#define TASK_PRIORITY 6
+#define TASK_PRIORITY 4
 #define PORT 2
 
 static void _run(void* params);
