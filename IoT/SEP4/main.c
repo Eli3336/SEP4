@@ -89,8 +89,8 @@ int main(void)
 	_initDrivers();
 	_createQueues();
 	_createEventGroups();
-	_createTasks();
 	_createMutexes();
+	_createTasks();
 	dataHolder_create(_mutex);
 	puts("Launching IoT device...");
 	vTaskStartScheduler();

@@ -136,34 +136,34 @@ void resetAllCounterValues(){
 }
 
 uint16_t getHumAvg() {
-	if(xSemaphoreTake(mutexAvgValues, pdMS_TO_TICKS(1000)) == pdTRUE)
+	if(xSemaphoreTake(mutexAvgValues, pdMS_TO_TICKS(100)) == pdTRUE)
 	{
-		
+		uint16_t tempHum = avgHum;
 		xSemaphoreGive(mutexAvgValues);
+		return tempHum;
 	}
-	return avgHum;
 }
 
 uint16_t getCo2Avg() {
-	if(xSemaphoreTake(mutexAvgValues, pdMS_TO_TICKS(1000)) == pdTRUE)
+	if(xSemaphoreTake(mutexAvgValues, pdMS_TO_TICKS(2000)) == pdTRUE)
 	{
-		
+		uint16_t tempCo2 = avgCo2;
 		xSemaphoreGive(mutexAvgValues);
+		return tempCo2;
 	}
-	return avgCo2;
 }
 
 int16_t getTempAvg() {
-	if(xSemaphoreTake(mutexAvgValues, pdMS_TO_TICKS(1000)) == pdTRUE)
+	if(xSemaphoreTake(mutexAvgValues, pdMS_TO_TICKS(10000)) == pdTRUE)
 	{
-		
+		int16_t tempTemp = avgTemp;
 		xSemaphoreGive(mutexAvgValues);
+		return tempTemp;
 	}
-	return avgTemp;
 }
 
 void calculateAvg() {
-	if(xSemaphoreTake(mutexAvgValues, pdMS_TO_TICKS(1000)) == pdTRUE)
+	if(xSemaphoreTake(mutexAvgValues, pdMS_TO_TICKS(100)) == pdTRUE)
 	{
 		if(humCount != 0)
 		{
