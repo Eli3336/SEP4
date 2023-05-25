@@ -60,6 +60,21 @@ public class RoomsController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+    
+    [HttpGet("Available")]
+    public async Task<ActionResult<IEnumerable<Room>>> GetAllAvailableRooms()
+    {
+        try
+        {
+            IEnumerable<Room> rooms = await roomLogic.GetAllAvailableRooms();
+            return Ok(rooms);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
 
     [HttpGet ("{id:int}")]
     public async Task<ActionResult<Room?>> GetRoomDetailsByIdAsync([FromRoute] int id)

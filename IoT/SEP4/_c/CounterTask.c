@@ -1,10 +1,3 @@
-
-/*
- * C0ounterTask.S
- *
- * Created: 5/22/2023 3:24:47 PM
- *  Author: ssem5
- */ 
  #include <Counter.h>
  #include <stdio.h>
  #include <stdint.h>
@@ -19,7 +12,7 @@
 
  #define TASKNAME "DATA_TASK"
  #define TASK_INTERVAL 60000UL // 1 Minute delay
- #define TASK_PRIORITY 4
+ #define TASK_PRIORITY 2
 
 
  static void _run(void* params);

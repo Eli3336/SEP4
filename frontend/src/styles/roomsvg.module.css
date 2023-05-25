@@ -1,0 +1,33 @@
+.svgClass {
+  width: 100%;
+}
+
+.svgClass path:hover {
+  fill: url(#roomGradientHover);
+  cursor: pointer;
+}
+
+.svgClass path.selected {
+  fill: url(#roomGradientSelected);
+}
+
+.svgClass path {
+  cursor: pointer;
+  pointer-events: all;
+  fill: url(#roomGradient);
+}
+
+.svgClass title {
+  pointer-events: none;
+}
+
+.room {
+  fill: var(--room-background);
+  stroke: #000000;
+}
+
+.room path {
+  stroke-width: 2;
+}
+
+--room-background: #b3d1f3;

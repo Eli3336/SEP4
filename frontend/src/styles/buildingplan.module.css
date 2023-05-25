@@ -1,5 +1,5 @@
 .roomColor {
-  --room-background: #3fd283; /* Change this value to your preferred color */
+  --room-background: #b3d1f3; /* Change this value to your preferred light blue color */
 }
 
 .svgContainer {
@@ -11,6 +11,7 @@
   max-width: 100%;
   max-height: 100%;
   overflow: auto;
+  background: var(--room-background); /* Using the variable */
 }
 
 .svgClass {
@@ -18,17 +19,18 @@
 }
 
 .svgClass path:hover {
-  fill: #555;
+  fill: url(#roomGradientHover);
   cursor: pointer;
 }
 
 .svgClass path.highlighted {
-  fill: #999;
+  fill: url(#roomGradientSelected);
 }
 
 .svgClass path {
   cursor: pointer;
   pointer-events: all; /* Add pointer-events to all path elements */
+  fill: url(#roomGradient);
 }
 
 .outerContainer {
@@ -37,18 +39,13 @@
   overflow: auto; /* Or use 'scroll' if you prefer */
 }
 
-/* Remove the 'fill' property from .highlighted class */
 .highlighted {
-}
-
-/* Add fill color to all path elements */
-.svgClass path {
-  fill: #7c7c7c;
+  fill: #999; /* Add styles for the highlighted class */
 }
 
 .room {
   composes: roomColor;
-  fill: var(--room-background); /* Change fill color to green */
+  fill: var(--room-background); /* Change fill color to light blue */
   stroke: #000000;
 }
 
@@ -56,7 +53,6 @@
   stroke-width: 2; /* Adjust the border width to your preference */
 }
 
-/* Add the new rule here */
 .svgClass title {
   pointer-events: none;
 }

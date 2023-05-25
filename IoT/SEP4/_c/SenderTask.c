@@ -9,20 +9,17 @@
 #include <event_groups.h>
 
 #define TASK_NAME "SenderTask"
-#define TASK_PRIORITY 4
+#define TASK_PRIORITY 3
 #define LORA_appEUI "6BE1FDCE7E214CF9"
 #define LORA_appKEY "EECCD39BD2AB6C6BD107A08E0DBE9DB9"
 
 static void _run(void* params);
 static void _connectToLoRaWAN();
 
-static EventGroupHandle_t _receiveEventGroup;
-
 static QueueHandle_t _senderQueue;
 
-void senderTask_create(QueueHandle_t senderQueue, EventGroupHandle_t receiveEventGroup) {
+void senderTask_create(QueueHandle_t senderQueue) {
 	_senderQueue = senderQueue;
-	_receiveEventGroup = receiveEventGroup;
 	
 	xTaskCreate(_run,
 	TASK_NAME,
@@ -57,8 +54,6 @@ void senderTask_runTask() {
 	}
 	printf("\n");
 	lora_driver_sendUploadMessage(false, &uplinkPayload);
-	vTaskDelay(pdMS_TO_TICKS(100));
-	xEventGroupSetBits(_receiveEventGroup, BIT_RECEIVER_ACT);
 }
 
 static void _run(void* params) {
