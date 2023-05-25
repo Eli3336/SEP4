@@ -58,7 +58,7 @@ void VibeController_initTask(void* params) {
 void VibeController_runTask(void) {	
 	
 	calculateAvg();
-	vTaskDelay(pdMS_TO_TICKS(100));
+	//vTaskDelay(pdMS_TO_TICKS(100));
 	
 	uint16_t tempHumidity = getHumAvg();
 	int16_t tempTemperature = getTempAvg();
