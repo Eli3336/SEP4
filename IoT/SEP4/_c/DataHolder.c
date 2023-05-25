@@ -138,25 +138,28 @@ void resetAllCounterValues(){
 uint16_t getHumAvg() {
 	if(xSemaphoreTake(mutexAvgValues, pdMS_TO_TICKS(1000)) == pdTRUE)
 	{
-		return avgHum;
+		
 		xSemaphoreGive(mutexAvgValues);
 	}
+	return avgHum;
 }
 
 uint16_t getCo2Avg() {
 	if(xSemaphoreTake(mutexAvgValues, pdMS_TO_TICKS(1000)) == pdTRUE)
 	{
-		return avgCo2;
+		
 		xSemaphoreGive(mutexAvgValues);
 	}
+	return avgCo2;
 }
 
 int16_t getTempAvg() {
 	if(xSemaphoreTake(mutexAvgValues, pdMS_TO_TICKS(1000)) == pdTRUE)
 	{
-		return avgTemp;
+		
 		xSemaphoreGive(mutexAvgValues);
 	}
+	return avgTemp;
 }
 
 void calculateAvg() {

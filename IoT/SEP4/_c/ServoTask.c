@@ -9,7 +9,7 @@
 #define TASK_NAME "ServoTask"
 #define TASK_PRIORITY 5
 #define WINDOW_SERVO_PORT 1
-#define CONDITIONER_SERVO_PORT 2
+#define CONDITIONER_SERVO_PORT 0
 
 #define WINDOW_POS_OPEN 100
 #define WINDOW_POS_CLOSED -100
@@ -36,7 +36,7 @@ void servoTask_create(EventGroupHandle_t actEventGroup) {
 }
 
 void servoTask_initTask(void* params) {
-	rc_servo_initialise();
+	
 	// Default the starting window position to be between open and closed.
 	rc_servo_setPosition(WINDOW_SERVO_PORT, WINDOW_POS_CLOSED);
 	rc_servo_setPosition(CONDITIONER_SERVO_PORT, CONDITIONER_POS_OFF);
@@ -44,7 +44,7 @@ void servoTask_initTask(void* params) {
 
 void servoTask_runTask() {
 	xEventGroupWaitBits(_actEventGroup,
-	BIT_WINDOW_ACT,
+	BIT_SERVOS_ACT,
 	pdTRUE,
 	pdTRUE,
 	portMAX_DELAY
@@ -60,6 +60,14 @@ void servoTask_runTask() {
 	int16_t tempTemperatureBreakpointH = getTemperatureBreakpointHigh();
 	uint16_t tempCo2BreakpointL = getCo2BreakpointLow();
 	uint16_t tempCo2BreakpointH = getHumidityBreakpointHigh();
+	
+	tempCo2BreakpointL = 400;
+	tempCo2BreakpointH = 600;
+	
+	tempTemperatureBreakpointH = 190;
+	tempTemperatureBreakpointL = 160;
+	
+	
 	
 	// Check if the window needs to be open.
 	// If Co2 levels are above required values -> open window; Ignore the Low breakpoint if measurements are above High breakpoint.

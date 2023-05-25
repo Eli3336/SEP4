@@ -9,7 +9,7 @@
 #include <event_groups.h>
 
 #define TASK_NAME "ReceiverTask"
-#define TASK_PRIORITY 3
+#define TASK_PRIORITY 1
 #define EXPECTED_PAYLOAD_LENGTH 15
 
 extern MessageBufferHandle_t messageBuffer;
@@ -25,14 +25,12 @@ void receiverTask_create(void) {
 	TASK_PRIORITY,
 	NULL
 	);
-	puts("receiver task created");
 }
 
 void receiverTask_initTask(void* params) {
 }
 
 void receiverTask_runTask(void) {
-	printf("ReceiverTask run\n");
 	
 	lora_driver_payload_t payload;
 	xMessageBufferReceive(messageBuffer,
@@ -40,6 +38,9 @@ void receiverTask_runTask(void) {
 	sizeof(lora_driver_payload_t),
 	portMAX_DELAY
 	);
+	
+	payload.portNo = 2;
+	printf("DOWN LINK: from port: %d with %d bytes received!", payload.portNo, payload.len);
 
 	if (payload.len == EXPECTED_PAYLOAD_LENGTH) {
 		dataHolder_setBreakpoints(payload);
@@ -54,7 +55,6 @@ void receiverTask_runTask(void) {
 }
 
 static void _run(void* params) {
-	printf("Receiver Task is running\n");
 	receiverTask_initTask(params);
 	
 	while (1) {

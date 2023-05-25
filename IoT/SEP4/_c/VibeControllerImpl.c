@@ -43,8 +43,6 @@ void VibeController_initTask(void* params) {
 		vTaskDelay(pdMS_TO_TICKS(100));
 		display_7seg_displayHex("....");
 		vTaskDelay(pdMS_TO_TICKS(100));
-		/*display_7seg_displayHex("0000");
-		vTaskDelay(pdMS_TO_TICKS(100));*/
 		display_7seg_displayHex("9999");
 		vTaskDelay(pdMS_TO_TICKS(100));
 		display_7seg_displayHex("7777");
@@ -53,7 +51,6 @@ void VibeController_initTask(void* params) {
 		vTaskDelay(pdMS_TO_TICKS(100));
 		display_7seg_displayHex("....");
 		vTaskDelay(pdMS_TO_TICKS(100));
-		
 		display_7seg_powerDown();
 	
 }
@@ -84,7 +81,8 @@ void VibeController_runTask(void) {
 	uplinkMessageBuilder_setTemperatureData(tempTemperature);
 	uplinkMessageBuilder_setCO2Data(tempCo2);
 			
-	xEventGroupSetBits(_actEventGroup, BIT_WINDOW_ACT);
+	xEventGroupSetBits(_actEventGroup, BIT_SERVOS_ACT | BIT_DISPLAY_ACT);
+	
 	
 	lora_driver_payload_t message = uplinkMessageBuilder_buildUplinkMessage(PORT);
 	if (message.len > 0) {
