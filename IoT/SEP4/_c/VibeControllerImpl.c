@@ -32,15 +32,36 @@ void VibeController_create(QueueHandle_t senderQueue, EventGroupHandle_t actEven
 }
 
 void VibeController_initTask(void* params) {
-	vTaskDelay(50UL);
-	printf("Controller is initialiazed");
-	vTaskDelay(100UL);
+	
+		display_7seg_displayHex("0000");
+		vTaskDelay(pdMS_TO_TICKS(100));
+		display_7seg_displayHex("9999");
+		vTaskDelay(pdMS_TO_TICKS(100));
+		display_7seg_displayHex("7777");
+		vTaskDelay(pdMS_TO_TICKS(100));
+		display_7seg_displayHex("1111");
+		vTaskDelay(pdMS_TO_TICKS(100));
+		display_7seg_displayHex("....");
+		vTaskDelay(pdMS_TO_TICKS(100));
+		/*display_7seg_displayHex("0000");
+		vTaskDelay(pdMS_TO_TICKS(100));*/
+		display_7seg_displayHex("9999");
+		vTaskDelay(pdMS_TO_TICKS(100));
+		display_7seg_displayHex("7777");
+		vTaskDelay(pdMS_TO_TICKS(100));
+		display_7seg_displayHex("1111");
+		vTaskDelay(pdMS_TO_TICKS(100));
+		display_7seg_displayHex("....");
+		vTaskDelay(pdMS_TO_TICKS(100));
+		
+		display_7seg_powerDown();
 	
 }
 
 void VibeController_runTask(void) {	
 	
 	calculateAvg();
+	vTaskDelay(pdMS_TO_TICKS(100));
 	
 	uint16_t tempHumidity = getHumAvg();
 	int16_t tempTemperature = getTempAvg();
@@ -60,7 +81,7 @@ void VibeController_runTask(void) {
 	}
 	
 	uplinkMessageBuilder_setHumidityData(tempHumidity);
-	uplinkMessageBuilder_setTemperatureData(tempHumidity);
+	uplinkMessageBuilder_setTemperatureData(tempTemperature);
 	uplinkMessageBuilder_setCO2Data(tempCo2);
 			
 	xEventGroupSetBits(_actEventGroup, BIT_WINDOW_ACT);
