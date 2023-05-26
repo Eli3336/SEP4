@@ -8,6 +8,7 @@ namespace WebAPI.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize("BeAdministrator")]
 
 public class DoctorsController : ControllerBase
 {
@@ -63,7 +64,7 @@ public class DoctorsController : ControllerBase
         }
     }
     
-    [HttpGet, Authorize("BeDoctor")]
+    [HttpGet]
     public async Task<ActionResult<IEnumerable<Doctor>>> GetAllDoctors()
     {
         try
