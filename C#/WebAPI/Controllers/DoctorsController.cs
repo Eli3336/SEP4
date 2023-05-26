@@ -8,7 +8,7 @@ namespace WebAPI.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-[Authorize("BeAdministrator")]
+[Authorize]
 
 public class DoctorsController : ControllerBase
 {
