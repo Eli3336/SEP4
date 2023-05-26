@@ -13,6 +13,8 @@
 static void _run(void* params);
 static void _connectToLoRaWAN();
 
+static bool connected; // check if the connection to LoRaWAN exists
+
 static QueueHandle_t _senderQueue;
 
 void senderTask_create(QueueHandle_t senderQueue) {
@@ -33,22 +35,24 @@ void senderTask_initTask(void* params) {
 	vTaskDelay(100UL);
 	lora_driver_resetRn2483(0);
 	lora_driver_flushBuffers();
+	connected = false;
 	_connectToLoRaWAN();
 }
 
 void senderTask_runTask() {
 	lora_driver_payload_t uplinkPayload;
 	xQueueReceive(_senderQueue, &uplinkPayload, portMAX_DELAY);
-	int i;
 		
 	printf("Payload to send: \n");
-	for(i=0;i <uplinkPayload.len;i++)
+	for(int i=0; i <uplinkPayload.len; i++)
 	{
 		printf("%02X ",uplinkPayload.bytes[i]);
 			
 	}
 	printf("\n");
-	lora_driver_sendUploadMessage(false, &uplinkPayload);
+	
+	if(connected) lora_driver_sendUploadMessage(false, &uplinkPayload);
+	else printf("No connection to LoRaWAN detected, message not sent\n");
 }
 
 static void _run(void* params) {
@@ -108,6 +112,7 @@ static void _connectToLoRaWAN() {
 		}
 		else
 		{
+			connected = true;
 			break;
 		}
 	} while (--maxJoinTriesLeft);

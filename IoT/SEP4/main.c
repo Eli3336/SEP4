@@ -27,7 +27,6 @@
 #include <SenderTask.h>
 #include <DisplayTask.h>
 
-
 // Queues
 static QueueHandle_t _humidityQueue;
 static QueueHandle_t _temperatureQueue;
@@ -83,7 +82,6 @@ static void _createTasks(void) {
 
 int main(void)
 {
-	
 	stdio_initialise(ser_USART0);	
 	_createMessageBuffer();
 	_initDrivers();

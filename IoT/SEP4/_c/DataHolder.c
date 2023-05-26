@@ -30,27 +30,27 @@ void dataHolder_setBreakpoints(lora_driver_payload_t payload) {
 		// Checks for breakpoints to be set in byte 0. (flag)
 		// HumiLow
 		if(CHECK_BIT(payload.bytes[0], 0)) {
-			_humidityLOW = (payload.bytes[1] << 8) + payload.bytes[2];
+			_humidityLOW = (payload.bytes[2] << 8) + payload.bytes[1];
 		}
 		// HumiHigh
 		if(CHECK_BIT(payload.bytes[0], 1)) {
-			_humidityHIGH = (payload.bytes[3] << 8) + payload.bytes[4];
+			_humidityHIGH = (payload.bytes[4] << 8) + payload.bytes[3];
 		}
 		// TempLow
 		if(CHECK_BIT(payload.bytes[0], 2)) {
-			_temperatureLOW = (payload.bytes[5] << 8) + payload.bytes[6];
+			_temperatureLOW = (payload.bytes[6] << 8) + payload.bytes[5];
 		}
 		// TempHigh
 		if(CHECK_BIT(payload.bytes[0], 3)) {
-			_temperatureHIGH = (payload.bytes[7] << 8) + payload.bytes[8];
+			_temperatureHIGH = (payload.bytes[8] << 8) + payload.bytes[7];
 		}
 		// Co2Low
 		if(CHECK_BIT(payload.bytes[0], 4)) {
-			_co2LOW = (payload.bytes[9] << 8) + payload.bytes[10];
+			_co2LOW = (payload.bytes[10] << 8) + payload.bytes[9];
 		}
 		// Co2High
 		if(CHECK_BIT(payload.bytes[0], 5)) {
-			_co2HIGH = (payload.bytes[11] << 8) + payload.bytes[12];
+			_co2HIGH = (payload.bytes[12] << 8) + payload.bytes[11];
 		}
 		
 		xSemaphoreGive(_mutex);
