@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EfcDataAccess", "EfcDataAccess\EfcDataAccess.csproj", "{FAB232B6-B8C1-4FAB-92E6-D7018E00BE1F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSocketIoT", "WebSocketIoT\WebSocketIoT.csproj", "{786C8A2D-34B0-4089-B99E-8D3107FC89E0}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing", "Testing\Testing.csproj", "{2D4C8C70-603A-4306-83F2-72FAEFC0D90B}"
 EndProject
 Global
