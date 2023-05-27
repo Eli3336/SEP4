@@ -14,8 +14,8 @@ namespace WebAPI.IoTGate;
 
 public class LoriotClient : IWebClient
 {
-    private readonly RoomEfcDao _roomEfcDao = new RoomEfcDao(new HospitalContext());
-    private  SensorValueEfcDao _sensorEfcDao= new SensorValueEfcDao(new HospitalContext());
+    private readonly RoomEfcDao _roomEfcDao = new RoomEfcDao(new HospitalContext(new DbContextOptions<HospitalContext>()));
+    private  SensorValueEfcDao _sensorEfcDao= new SensorValueEfcDao(new HospitalContext(new DbContextOptions<HospitalContext>()));
     private readonly ClientWebSocket _clientWebSocket;
 
     private readonly string _uriAddress = "wss://iotnet.cibicom.dk/app?token=vnoVQgAAABFpb3RuZXQudGVyYWNvbS5kawcinBwAkIjcdx98hF2KBE8=";

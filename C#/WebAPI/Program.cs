@@ -5,6 +5,7 @@ using Application.LogicInterfaces;
 using Domain.Auth;
 using EfcDataAccess;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using WebAPI.IoTGate;
 using WebAPI.IoTGate.Background;
@@ -19,7 +20,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<HospitalContext>();
+builder.Services.AddDbContext<HospitalContext>(opt => opt.UseSqlite(builder.Configuration.GetConnectionString("DbConn")));
 builder.Services.AddScoped<ISensorDao, SensorEfcDao>();
 builder.Services.AddScoped<ISensorLogic, SensorLogic>();
 

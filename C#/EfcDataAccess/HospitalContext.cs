@@ -14,10 +14,14 @@ public class HospitalContext : DbContext
      public DbSet<Receptionist> Receptionists { get; set; }
      public DbSet<Request> Request { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseSqlite("Data Source = ../EfcDataAccess/Hospital.db");
-    }
+     public HospitalContext(DbContextOptions<HospitalContext> options) : base(options)
+     {
+     }
+
+     // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    // {
+    //     optionsBuilder.UseSqlite("Data Source = ../EfcDataAccess/Hospital.db");
+    // }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

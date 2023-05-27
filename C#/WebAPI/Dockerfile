@@ -10,11 +10,14 @@ RUN dotnet restore "WebAPI/WebAPI.csproj"
 COPY . .
 WORKDIR "/src/WebAPI"
 RUN dotnet build "WebAPI.csproj" -c Release -o /app/build
+WORKDIR "/src/EfcDataAccess"
+RUN dotnet ef database update
 
 FROM build AS publish
 RUN dotnet publish "WebAPI.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
+COPY --from=build-env /app/Hospital.db .
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "WebAPI.dll"]
