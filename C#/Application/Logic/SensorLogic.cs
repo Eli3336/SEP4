@@ -95,11 +95,11 @@ public class SensorLogic : ISensorLogic
         {
             throw new Exception("The Temperature is invalid!");
         }
-        if (sensor.Type.Equals("Humidity") && (sensor.DownBreakpoint<10 || sensor.UpBreakpoint > 80 || sensor.UpBreakpoint < sensor.DownBreakpoint))
+        if (sensor.Type.Equals("Humidity") && (sensor.DownBreakpoint<0 || sensor.UpBreakpoint > 100 || sensor.UpBreakpoint < sensor.DownBreakpoint))
         {
             throw new Exception("The humidity is invalid!");
         }
-        if (sensor.Type.Equals("CO2") && (sensor.DownBreakpoint<400 || sensor.UpBreakpoint > 2100 || sensor.UpBreakpoint < sensor.DownBreakpoint))
+        if (sensor.Type.Equals("CO2") && (sensor.DownBreakpoint<400 || sensor.UpBreakpoint > 5000 || sensor.UpBreakpoint < sensor.DownBreakpoint))
         {
             throw new Exception("The CO2 level is invalid!");
         }

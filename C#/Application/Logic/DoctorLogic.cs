@@ -86,6 +86,12 @@ public class DoctorLogic : IDoctorLogic
             throw new Exception("Phone number too short!");
         if (doctor.PhoneNumber.Length > 13)
             throw new Exception("Phone number too long!");
+        IEnumerable<Doctor?> doctors = doctorDao.GetAllDoctorsAsync().Result;
+        if (doctors.Contains(doctor))
+        {
+            throw new Exception("Doctor "+ doctor.Name + " already exists!");
+        }
+        
     }
     
     public Task<IEnumerable<Doctor?>> GetAllDoctorsAsync()
