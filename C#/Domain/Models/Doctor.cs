@@ -16,8 +16,9 @@ public class Doctor : User
         Requests = new List<Request>();
     }
 
-    public Doctor()
+    public Doctor():base("bob", "0000", "00000000", "doctor" )
     {
+        
         Requests = new List<Request>();
     }
 }
