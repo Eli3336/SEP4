@@ -11,9 +11,9 @@ COPY . .
 WORKDIR "/src/WebAPI"
 RUN dotnet build "WebAPI.csproj" -c Release -o /app/build
 WORKDIR "/src/EfcDataAccess"
-RUN dotnet tool install --global dotnet-ef
-ENV PATH="${PATH}:/root/.dotnet/tools"
-RUN dotnet ef database update
+#RUN dotnet tool install --global dotnet-ef
+#ENV PATH="${PATH}:/root/.dotnet/tools"
+#RUN dotnet ef database update
 
 FROM build AS publish
 RUN dotnet publish "WebAPI.csproj" -c Release -o /app/publish
