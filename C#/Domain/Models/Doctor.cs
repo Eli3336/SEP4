@@ -20,8 +20,9 @@ public class Doctor : User
         
     }
 
-    public Doctor()
+    public Doctor():base("bob", "0000", "00000000", "doctor" )
     {
+        
         Requests = new List<Request>();
         Role = "doctor";
 

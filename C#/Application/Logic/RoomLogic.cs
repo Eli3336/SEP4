@@ -118,6 +118,23 @@ public class RoomLogic : IRoomLogic
         }
         return result;
     }
+    
+    public async Task<IEnumerable<Room>> GetAllAvailableRooms()
+    {
+        List<Room> result = new List<Room>();
+        List<Room?> rooms = roomDao.GetAllRoomsAsync().Result.ToList();
+        if (rooms.Count < 1)
+        {
+            return result;
+        }
+        for (int i = 0; i < rooms.Count; i++)
+        {
+            Room room = rooms[i];
+            if (room.Availability.Equals("Available"))
+                result.Add(room);
+        }
+        return result;
+    }
 
     private void ValidateRoomUpdate(Room room)
     {
