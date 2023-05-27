@@ -10,7 +10,7 @@ RUN dotnet restore "WebAPI/WebAPI.csproj"
 COPY . .
 WORKDIR "/src/WebAPI"
 RUN dotnet build "WebAPI.csproj" -c Release -o /app/build
-WORKDIR "/src/EfcDataAccess"
+#WORKDIR "/src/EfcDataAccess"
 #RUN dotnet tool install --global dotnet-ef
 #ENV PATH="${PATH}:/root/.dotnet/tools"
 #RUN dotnet ef database update
