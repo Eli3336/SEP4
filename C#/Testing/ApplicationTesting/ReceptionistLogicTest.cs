@@ -12,13 +12,15 @@ namespace TestingReq5.ApplicationTesting;
 public class ReceptionistLogicTest
 {
     private Mock<IReceptionistDao> receptionistDaoMock;
+    private Mock<IDoctorDao> doctorDaoMock;
     private ReceptionistLogic logic;
 
     [SetUp]
     public void Setup()
     {
         receptionistDaoMock = new Mock<IReceptionistDao>();
-        logic = new ReceptionistLogic(receptionistDaoMock.Object);
+        doctorDaoMock = new Mock<IDoctorDao>();
+        logic = new ReceptionistLogic(receptionistDaoMock.Object, doctorDaoMock.Object);
     }
     
     //create method
