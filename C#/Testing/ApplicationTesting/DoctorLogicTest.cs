@@ -12,13 +12,16 @@ namespace TestingReq5.ApplicationTesting;
 public class DoctorLogicTest
 {
     private Mock<IDoctorDao> doctorDaoMock;
+    private Mock<IReceptionistDao> receptionistDaoMock;
+
     private DoctorLogic logic;
 
     [SetUp]
     public void Setup()
     {
         doctorDaoMock = new Mock<IDoctorDao>();
-        logic = new DoctorLogic(doctorDaoMock.Object);
+        receptionistDaoMock = new Mock<IReceptionistDao>();
+        logic = new DoctorLogic(doctorDaoMock.Object, receptionistDaoMock.Object);
     }
     
     //create method

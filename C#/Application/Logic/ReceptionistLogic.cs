@@ -8,10 +8,12 @@ namespace Application.Logic;
 public class ReceptionistLogic : IReceptionistLogic
 {
     private readonly IReceptionistDao receptionistDao;
+    private readonly IDoctorDao doctorDao;
 
-    public ReceptionistLogic(IReceptionistDao receptionistDao)
+    public ReceptionistLogic(IReceptionistDao receptionistDao, IDoctorDao doctorDao)
     {
         this.receptionistDao = receptionistDao;
+        this.doctorDao = doctorDao;
     }
     
     public async Task<Receptionist> CreateAsync(ReceptionistCreationDto receptionistToCreate)
@@ -93,5 +95,23 @@ public class ReceptionistLogic : IReceptionistLogic
             throw new Exception("Phone number too short!"); 
        if (receptionist.PhoneNumber.Length > 13)
             throw new Exception("Phone number too long!");
+       
+       IEnumerable<Doctor?> doctors = doctorDao.GetAllDoctorsAsync().Result;
+       foreach (Doctor doc in doctors)
+       {
+           if (doc.Name.Equals(receptionist.Name))
+           {
+               throw new Exception("User "+ receptionist.Name + " already exists!");
+           }
+       }
+
+       IEnumerable<Receptionist?> receptionists = receptionistDao.GetAllReceptionistsAsync().Result;
+       foreach (Receptionist rec in receptionists)
+       {
+           if (rec.Name.Equals(receptionist.Name))
+           {
+               throw new Exception("User "+ receptionist.Name + " already exists!");
+           }
+       }
     }
 }

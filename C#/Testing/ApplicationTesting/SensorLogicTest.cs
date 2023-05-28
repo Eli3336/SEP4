@@ -288,7 +288,7 @@ public class SensorLogicTest
         sensorDaoMock.Setup(dao => dao.GetByIdToUpdateAsync(It.IsAny<int>())).ReturnsAsync(expectedSensor)
             .Verifiable();
 
-        var ex = Assert.ThrowsAsync<Exception>(() => sensorService.SensorUpdateAsync(1, 40, 1));
+        var ex = Assert.ThrowsAsync<Exception>(() => sensorService.SensorUpdateAsync(1, 40, -1));
         Assert.AreEqual("The humidity is invalid!", ex.Message);
         sensorDaoMock.Verify(dao => dao.GetByIdToUpdateAsync(It.IsAny<int>()), Times.Once);
     }
@@ -312,7 +312,7 @@ public class SensorLogicTest
         sensorDaoMock.Setup(dao => dao.GetByIdToUpdateAsync(It.IsAny<int>())).ReturnsAsync(expectedSensor)
             .Verifiable();
 
-        var ex = Assert.ThrowsAsync<Exception>(() => sensorService.SensorUpdateAsync(1, 100,20));
+        var ex = Assert.ThrowsAsync<Exception>(() => sensorService.SensorUpdateAsync(1, 101,20));
         Assert.AreEqual("The humidity is invalid!", ex.Message);
         sensorDaoMock.Verify(dao => dao.GetByIdToUpdateAsync(It.IsAny<int>()), Times.Once);
     }

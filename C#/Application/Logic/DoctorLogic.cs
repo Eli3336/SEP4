@@ -8,10 +8,12 @@ namespace Application.Logic;
 public class DoctorLogic : IDoctorLogic
 {
     private readonly IDoctorDao doctorDao;
+    private readonly IReceptionistDao receptionistDao;
 
-    public DoctorLogic(IDoctorDao doctorDao)
+    public DoctorLogic(IDoctorDao doctorDao, IReceptionistDao receptionistDao)
     {
         this.doctorDao = doctorDao;
+        this.receptionistDao = receptionistDao;
     }
     
     public async Task<Doctor> CreateAsync(DoctorCreationDto doctorToCreate)
@@ -86,6 +88,23 @@ public class DoctorLogic : IDoctorLogic
             throw new Exception("Phone number too short!");
         if (doctor.PhoneNumber.Length > 13)
             throw new Exception("Phone number too long!");
+        IEnumerable<Doctor?> doctors = doctorDao.GetAllDoctorsAsync().Result;
+        foreach (Doctor doc in doctors)
+        {
+            if (doc.Name.Equals(doctor.Name))
+            {
+                throw new Exception("User "+ doctor.Name + " already exists!");
+            }
+        }
+
+        IEnumerable<Receptionist?> receptionists = receptionistDao.GetAllReceptionistsAsync().Result;
+        foreach (Receptionist rec in receptionists)
+        {
+            if (rec.Name.Equals(doctor.Name))
+            {
+                throw new Exception("User "+ doctor.Name + " already exists!");
+            }
+        }
     }
     
     public Task<IEnumerable<Doctor?>> GetAllDoctorsAsync()
