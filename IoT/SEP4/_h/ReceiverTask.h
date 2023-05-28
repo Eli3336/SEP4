@@ -1,5 +1,3 @@
-#pragma once
-
 #include <ATMEGA_FreeRTOS.h>
 #include <message_buffer.h>
 #include <event_groups.h>
