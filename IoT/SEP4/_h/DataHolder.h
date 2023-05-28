@@ -1,5 +1,3 @@
-#pragma once
-
 #include <ATMEGA_FreeRTOS.h>
 #include <semphr.h>
 #include <lora_driver.h>
