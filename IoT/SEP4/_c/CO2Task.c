@@ -49,8 +49,6 @@ void co2Task_runTask() {
 }
 
 static void _co2CallBack(uint16_t ppm){
-	
-	
 	xQueueSendToBack(_co2Queue, &ppm, portMAX_DELAY);
 }
 

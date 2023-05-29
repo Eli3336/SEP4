@@ -1,10 +1,3 @@
-
-/*
- * Counter.h'
- *
- * Created: 5/22/2023 3:42:07 PM
- *  Author: ssem5
- */ 
  #include <atmega_freertos.h>
   #include <queue.h>
   #include <event_groups.h>

@@ -1,4 +1,4 @@
-#include "ReceiverTask.h"
+#include <ReceiverTask.h>
 #include <task.h>
 #include <message_buffer.h>
 #include <stdint.h>
@@ -10,7 +10,7 @@
 
 #define TASK_NAME "ReceiverTask"
 #define TASK_PRIORITY 1
-#define EXPECTED_PAYLOAD_LENGTH 15
+#define EXPECTED_PAYLOAD_LENGTH 13
 
 extern MessageBufferHandle_t messageBuffer;
 
@@ -40,11 +40,7 @@ void receiverTask_runTask(void) {
 	);
 	
 	payload.portNo = 2;
-	printf("DOWN LINK: from port: %d with %d bytes received!", payload.portNo, payload.len);
-
-	if (payload.len == EXPECTED_PAYLOAD_LENGTH) {
-		dataHolder_setBreakpoints(payload);
-	}
+	printf("DOWN LINK: from port: %d with %d bytes received!\n", payload.portNo, payload.len);
 	
 	printf("Payload received: \n");
 	for(int i=0; i <payload.len; i++)
@@ -52,6 +48,10 @@ void receiverTask_runTask(void) {
 		printf("%02X ", payload.bytes[i]);
 	}
 	printf("\n");
+	
+	if (payload.len == EXPECTED_PAYLOAD_LENGTH) {
+		dataHolder_setBreakpoints(payload);
+	}
 }
 
 static void _run(void* params) {

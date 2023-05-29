@@ -16,8 +16,9 @@
 #define WINDOW_POS_ON_DRY 30			// Slightly open window for regulating humidity levels
 static bool windowOpen = false;			// true -> window is open | false -> window is closed
 
-#define CONDITIONER_POS_ON 100
-#define CONDITIONER_POS_OFF -100
+#define CONDITIONER_POS_COOL 100
+#define CONDITIONER_POS_OFF 0
+#define CONDITIONER_POS_HEAT -100
 
 static void _run(void* params);
 
@@ -36,8 +37,7 @@ void servoTask_create(EventGroupHandle_t actEventGroup) {
 }
 
 void servoTask_initTask(void* params) {
-	
-	// Default the starting window position to be between open and closed.
+	// Default window position defined to be closed/turned off.
 	rc_servo_setPosition(WINDOW_SERVO_PORT, WINDOW_POS_CLOSED);
 	rc_servo_setPosition(CONDITIONER_SERVO_PORT, CONDITIONER_POS_OFF);
 }
@@ -50,10 +50,12 @@ void servoTask_runTask() {
 	portMAX_DELAY
 	);
 	
+	// Take calculated Averages from DataHolder
 	uint16_t tempHumidityAvg = getHumAvg();
 	int16_t tempTemperatureAvg = getTempAvg();
 	uint16_t tempCo2Avg = getCo2Avg();
 	
+	// Take set Breakpoints from DataHolder
 	uint16_t tempHumidityBreakpointL = getHumidityBreakpointLow();
 	uint16_t tempHumidityBreakpointH = getHumidityBreakpointHigh();
 	int16_t tempTemperatureBreakpointL = getTemperatureBreakpointLow();
@@ -61,42 +63,69 @@ void servoTask_runTask() {
 	uint16_t tempCo2BreakpointL = getCo2BreakpointLow();
 	uint16_t tempCo2BreakpointH = getHumidityBreakpointHigh();
 	
-	tempCo2BreakpointL = 400;
-	tempCo2BreakpointH = 600;
 	
-	tempTemperatureBreakpointH = 190;
-	tempTemperatureBreakpointL = 160;
+	// -------------------TESTS-------------------------
 	
+// 	tempCo2BreakpointL = 600;		//window is closed at 1500
+// 	tempCo2BreakpointH = 2000;
+// 	tempCo2BreakpointL = 100;		//window is open at 1500
+// 	tempCo2BreakpointH = 300;
+
+// 	tempHumidityBreakpointH = 200;	// goes to dry mode
+// 	tempHumidityBreakpointL = 100;
 	
+// 	tempHumidityBreakpointH = 90;	// doesn't go to dry mode
+// 	tempHumidityBreakpointL = 80;
+
+// 	tempTemperatureBreakpointH = 190;		// air conditioner is on COOL at 27
+// 	tempTemperatureBreakpointL = 160;
+//  tempTemperatureBreakpointH = 350;		// air conditioner is OFF at 27
+//  tempTemperatureBreakpointL = 160;
+//  tempTemperatureBreakpointH = 400;		// air conditioner is ON HEAT at 27
+//  tempTemperatureBreakpointL = 350;
+
+// All tests passed. Uncomment to simulate the required
+
+	// -------------------TESTS END-------------------------
 	
+	// In addition to comparing average values we also check if the averages are valid before executing anything
 	// Check if the window needs to be open.
+	// First check if breakpoints are set.
 	// If Co2 levels are above required values -> open window; Ignore the Low breakpoint if measurements are above High breakpoint.
 	// We cannot regulate just humidity values, so it has lower priority. If window is closed (co2 is OK), open the window on DRY.
-	if (tempCo2BreakpointH != INVALID_CO2_VALUE && tempCo2Avg > tempCo2BreakpointH)
+	
+	if(tempCo2BreakpointL != INVALID_CO2_VALUE || tempCo2BreakpointH != INVALID_CO2_VALUE)
 	{
-		rc_servo_setPosition(WINDOW_SERVO_PORT, WINDOW_POS_OPEN);
-		windowOpen = true;
-	} else if (tempCo2BreakpointL != INVALID_CO2_VALUE && tempCo2Avg < tempCo2BreakpointL)
-			{
-				rc_servo_setPosition(WINDOW_SERVO_PORT, WINDOW_POS_CLOSED);
-			}
-	vTaskDelay(pdMS_TO_TICKS(3000));
-	if (!windowOpen && tempHumidityBreakpointH != INVALID_HUMIDITY_VALUE && tempHumidityAvg > tempHumidityBreakpointH)
-	{
-		rc_servo_setPosition(WINDOW_SERVO_PORT, WINDOW_POS_ON_DRY);
+		if (tempCo2Avg != INVALID_CO2_VALUE && tempCo2Avg > tempCo2BreakpointH)
+		{
+			rc_servo_setPosition(WINDOW_SERVO_PORT, WINDOW_POS_OPEN);
+			windowOpen = true;
+		} else if (tempCo2Avg != INVALID_CO2_VALUE && tempCo2Avg < tempCo2BreakpointL)
+		{
+			rc_servo_setPosition(WINDOW_SERVO_PORT, WINDOW_POS_CLOSED);
+			windowOpen = false;
+		}
+		else if (!windowOpen && tempHumidityAvg != INVALID_HUMIDITY_VALUE && tempHumidityAvg > tempHumidityBreakpointH && (tempHumidityBreakpointL != INVALID_HUMIDITY_VALUE || tempHumidityBreakpointH != INVALID_HUMIDITY_VALUE))
+		{
+			rc_servo_setPosition(WINDOW_SERVO_PORT, WINDOW_POS_ON_DRY);
+		}
 	}
 	
 	// Check if the Air-Conditioner needs to be turned on.
+	// First check if breakpoints are set.
 	// If Temperature is below required values -> turn on; Ignore the High breakpoint if measuerements are below the Low breakpoint.
-	if (tempTemperatureBreakpointL != INVALID_TEMPERATURE_VALUE && tempTemperatureAvg < tempTemperatureBreakpointL)
+	if(tempTemperatureBreakpointL != INVALID_TEMPERATURE_VALUE || tempTemperatureBreakpointH != INVALID_TEMPERATURE_VALUE)
+	{
+		if (tempTemperatureAvg != INVALID_TEMPERATURE_VALUE && tempTemperatureAvg < tempTemperatureBreakpointL)
 		{
-			rc_servo_setPosition(CONDITIONER_SERVO_PORT, CONDITIONER_POS_OFF);
+			rc_servo_setPosition(CONDITIONER_SERVO_PORT, CONDITIONER_POS_HEAT);
 		}
-		else if (tempTemperatureBreakpointH != INVALID_TEMPERATURE_VALUE && tempTemperatureAvg > tempTemperatureBreakpointH)
-				{
-					rc_servo_setPosition(WINDOW_SERVO_PORT, WINDOW_POS_OPEN);
-				}
-	
+		else if (tempTemperatureAvg != INVALID_TEMPERATURE_VALUE && tempTemperatureAvg > tempTemperatureBreakpointH)
+		{
+			rc_servo_setPosition(CONDITIONER_SERVO_PORT, CONDITIONER_POS_COOL);
+		}
+		else rc_servo_setPosition(CONDITIONER_SERVO_PORT, CONDITIONER_POS_OFF);
+	}	
 }
 
 static void _run(void* params) {
