@@ -86,7 +86,6 @@ public class LoriotClient : IWebClient
         try
         {
             IEnumerable<Room> rooms = await _roomEfcDao.GetAllRoomsAsync();
-            Console.WriteLine(rooms);
             foreach (var room in rooms)
             {
                 _eui = "0004A30B00ED3752";
