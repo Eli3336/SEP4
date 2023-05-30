@@ -32,5 +32,4 @@ jobs:
         cd IoT/SEP4/Test
         cmake .
         cmake --build .
-        cd ../build
         ctest --output-on-failure
