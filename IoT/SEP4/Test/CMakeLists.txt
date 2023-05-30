@@ -20,7 +20,10 @@ set(SOURCES_TEST
     humi_temp_test.cpp
     ServoTest.cpp
     FreeRTOS_defs/FreeRTOS_FFF_MocksDefinitions.cpp
+    ../project_files/_c/HumiTempTask.c
+    ../project_files/_c/ServoTask.c
 )
+
 
 # This makes the test.cpp files able to #include target libraries without errors.  
 include_directories(
