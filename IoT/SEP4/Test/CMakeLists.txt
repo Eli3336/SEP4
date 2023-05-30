@@ -31,12 +31,15 @@ set(SOURCES_TEST
 )
 
 
-# This makes the test.cpp files able to #include target libraries without errors.  
+# This makes the test.cpp files able to #include target libraries without errors.
+
+# Because of the differencies in format used to pinpoint directories between local 
+# testing and CD/CI testing the compiler evaluates in which environment it is located.
 include_directories(
  FreeRTOS_defs
-  ${CMAKE_SOURCE_DIR}/./project_files/_h/
-  ${CMAKE_SOURCE_DIR}/./project_files/drivers/
-  ${CMAKE_SOURCE_DIR}/./project_files/_c/DataHoler.c
+ $<$<OR:$<CONFIG:Debug>,$<CONFIG:Release>>:${CMAKE_CURRENT_SOURCE_DIR}/../project_files/_h/>
+ $<$<OR:$<CONFIG:Debug>,$<CONFIG:Release>>:${CMAKE_CURRENT_SOURCE_DIR}/../project_files/drivers/>
+ $<$<OR:$<CONFIG:Debug>,$<CONFIG:Release>>:${CMAKE_CURRENT_SOURCE_DIR}/../project_files/_c/>
 )
 
 # Something to 
