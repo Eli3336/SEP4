@@ -20,7 +20,6 @@ set(SOURCES_TEST
     humi_temp_test.cpp
     ServoTest.cpp
     FreeRTOS_defs/FreeRTOS_FFF_MocksDefinitions.cpp
-    ${CMAKE_SOURCE_DIR}/../project_files/_c/HumiTempTask.c
 )
 
 
