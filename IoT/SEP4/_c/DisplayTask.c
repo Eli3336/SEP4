@@ -1,3 +1,11 @@
+
+/*
+ * DisplayTask.c
+ *
+ * Created: 5/24/2023 5:17:04 PM
+ *  Author: ssem5
+ */ 
+
 #include <DisplayTask.h>
 #include <DataHolder.h>
 #include <stdio.h>
@@ -43,8 +51,6 @@ void displayTask_runTask(void){
 	float disCo2 = tempCo2Avg;
 	float disTemp = tempTempAvg;
 	float disHum = tempHumAvg;
-	
-	// Display latest average values
 	display_7seg_displayHex("A");
 	vTaskDelay(pdMS_TO_TICKS(2000));
 	display_7seg_display(disHum,0);
