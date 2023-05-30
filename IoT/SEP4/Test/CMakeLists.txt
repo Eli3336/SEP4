@@ -1,11 +1,9 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.19)
 set(projectName VibHealthTest)
 project(${projectName})
 
 # GoogleTest requires at least C++14
 set(CMAKE_CXX_STANDARD 14)
-
-set(DOWNLOAD_EXTRACT_TIMESTAMP true)
 
 include(FetchContent)
 FetchContent_Declare(
@@ -20,21 +18,17 @@ FetchContent_MakeAvailable(googletest )
 
 set(SOURCES_TEST
     humi_temp_test.cpp
-    ServoTest.cpp
-  
-    
     FreeRTOS_defs/FreeRTOS_FFF_MocksDefinitions.cpp
-    ../project_files/_c/HumiTempTask.c
-    ../project_files/_c/ServoTask.c
     
-    ${SRCS}
+    ../project_files/_c/HumiTempTask.c
 )
+
 
 # This makes the test.cpp files able to #include target libraries without errors.  
 include_directories(
   FreeRTOS_defs
-  ../project_files/_h/
-  ../project_files/drivers/
+  ${CMAKE_SOURCE_DIR}/../project_files/_h/
+  ${CMAKE_SOURCE_DIR}/../project_files/drivers/
 )
 
 # Something to 

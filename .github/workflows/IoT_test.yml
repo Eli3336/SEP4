@@ -1,0 +1,44 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches:
+      - IoT_GoogleTestingVs
+  pull_request:
+    branches:
+      - dev
+      - main
+      
+# run Ubuntu environment
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+# cloning repo that triggered workflow and then fetches the code
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+# install vs code 2022 compiler tools
+    - name: Set up Visual Studio Community 2022
+      uses: ilammy/msvc-dev-cmd@v1
+      with:
+        vs_version: '2022'
+
+# install CMake tool
+    - name: Install CMake
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake
+        
+# create build directory then go to Test folder.
+# generate build files in build folder.
+# start building
+# and run the tests
+    - name: Build and run tests
+      run: |
+        mkdir build
+        cd IoT/SEP4/Test
+        cmake .
+        cmake --build .
+        ctest --output-on-failure
