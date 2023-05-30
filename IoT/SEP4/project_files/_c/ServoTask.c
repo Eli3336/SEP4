@@ -61,7 +61,7 @@ void servoTask_runTask() {
 	int16_t tempTemperatureBreakpointL = getTemperatureBreakpointLow();
 	int16_t tempTemperatureBreakpointH = getTemperatureBreakpointHigh();
 	uint16_t tempCo2BreakpointL = getCo2BreakpointLow();
-	uint16_t tempCo2BreakpointH = getHumidityBreakpointHigh();
+	uint16_t tempCo2BreakpointH = getCo2BreakpointHigh();
 	
 	
 	// -------------------TESTS-------------------------
@@ -109,6 +109,7 @@ void servoTask_runTask() {
 		{
 			rc_servo_setPosition(WINDOW_SERVO_PORT, WINDOW_POS_ON_DRY);
 		}
+		
 	}
 	
 	// Check if the Air-Conditioner needs to be turned on.
@@ -126,6 +127,7 @@ void servoTask_runTask() {
 		}
 		else rc_servo_setPosition(CONDITIONER_SERVO_PORT, CONDITIONER_POS_OFF);
 	}	
+	
 }
 
 static void _run(void* params) {

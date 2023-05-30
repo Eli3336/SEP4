@@ -47,15 +47,16 @@ void Counter_initTask(void* params){
 
 
 void Counter_runTask(void){
+	
 	xEventGroupSetBits(_doEventGroup,BIT_HUMIDITY_ACT |BIT_TEMPERATURE_ACT|BIT_CO2_ACT);
 	 
 	uint16_t humidity;
-	uint16_t temperature;
+	int16_t temperature;
 	uint16_t ppm;
 	if (xQueueReceive(_humidityQueue, &humidity, pdMS_TO_TICKS(10000)) != pdTRUE)
 	{
 		humidity = INVALID_HUMIDITY_VALUE;
-		 }
+	 }
 	if (xQueueReceive(_temperatureQueue, &temperature, pdMS_TO_TICKS(10000)) != pdTRUE)
 	{
 		temperature = INVALID_TEMPERATURE_VALUE;
@@ -84,6 +85,7 @@ void Counter_runTask(void){
 	 
 	TickType_t lastWakeTime = xTaskGetTickCount();
 	xTaskDelayUntil(&lastWakeTime, pdMS_TO_TICKS(TASK_INTERVAL));
+	
 }
  
 static void _run(void* params){

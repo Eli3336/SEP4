@@ -5,13 +5,14 @@
 #include <stdint.h>
 #include <task.h>
 
+
 #define TASK_NAME "SenderTask"
 #define TASK_PRIORITY 3
 #define LORA_appEUI "6BE1FDCE7E214CF9"
 #define LORA_appKEY "EECCD39BD2AB6C6BD107A08E0DBE9DB9"
 
 static void _run(void* params);
-static void _connectToLoRaWAN();
+ void _connectToLoRaWAN();
 
 static bool connected; // check if the connection to LoRaWAN exists
 
@@ -35,13 +36,12 @@ void senderTask_initTask(void* params) {
 	vTaskDelay(100UL);
 	lora_driver_resetRn2483(0);
 	lora_driver_flushBuffers();
-	connected = false;
 	_connectToLoRaWAN();
 }
 
 void senderTask_runTask() {
 	lora_driver_payload_t uplinkPayload;
-	xQueueReceive(_senderQueue, &uplinkPayload, portMAX_DELAY);
+		xQueueReceive(_senderQueue, &uplinkPayload, portMAX_DELAY);
 		
 	printf("Payload to send: \n");
 	for(int i=0; i <uplinkPayload.len; i++)
@@ -51,8 +51,12 @@ void senderTask_runTask() {
 	}
 	printf("\n");
 	
-	if(connected) lora_driver_sendUploadMessage(false, &uplinkPayload);
-	else printf("No connection to LoRaWAN detected, message not sent\n");
+	if (lora_driver_join == LORA_ACCEPTED)
+	{
+		lora_driver_sendUploadMessage(false, &uplinkPayload);
+	}else{
+	 printf("No connection to LoRaWAN detected, message not sent\n");
+	}
 }
 
 static void _run(void* params) {
@@ -63,7 +67,7 @@ static void _run(void* params) {
 	}
 }
 
-static void _connectToLoRaWAN() {
+ void _connectToLoRaWAN() {
 	char _out_buf[20];
 	lora_driver_returnCode_t rc;
 	status_leds_slowBlink(led_ST2); // OPTIONAL: Led the green led blink slowly while we are setting up LoRa
@@ -112,8 +116,9 @@ static void _connectToLoRaWAN() {
 		}
 		else
 		{
-			connected = true;
+			
 			break;
 		}
 	} while (--maxJoinTriesLeft);
+	
 }

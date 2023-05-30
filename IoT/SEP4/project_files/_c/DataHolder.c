@@ -112,7 +112,7 @@ void addPPM(uint16_t ppm)
 }
 
 
-void addTemperture(uint16_t temperature)
+void addTemperture(int16_t temperature)
 {
 	tempPool+=temperature;
 	tempCount++;

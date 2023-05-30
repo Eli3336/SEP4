@@ -9,12 +9,13 @@
 #define BIT_SERVOS_ACT 1 << 3
 #define BIT_DISPLAY_ACT 1 << 4
 
-int tempPool;
-int tempCount;
-int humPool;
-int humCount;
-int co2Pool;
-int co2Count;
+ extern int tempPool;
+ extern int tempPool;
+ extern int tempCount;
+ extern int humPool;
+ extern int humCount;
+ extern int co2Pool;
+ extern int co2Count;
 
 int16_t avgTemp;
 uint16_t avgHum;
@@ -23,7 +24,7 @@ uint16_t avgCo2;
 void dataHolder_create(SemaphoreHandle_t mutex);
 void dataHolder_setBreakpoints(lora_driver_payload_t payload);
 void addPPM(uint16_t ppm);
-void addTemperture(uint16_t temperature);
+void addTemperture(int16_t temperature);
 void addHumidity(uint16_t humidity);
 void resetAllCounterValues();
 uint16_t getHumAvg();
