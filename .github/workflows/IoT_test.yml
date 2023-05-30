@@ -7,26 +7,27 @@ on:
   pull_request:
     branches:
       - dev
-
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up CMake
-        uses: cmake/setup-cmake@v1
+      - name: Install CMake
+        uses: jwlawson/actions-setup-cmake@v1.13
+        with:
+          cmake-version: '3.19.x'
 
-      - name: Configure and build project
+      - name: Build
         run: |
           mkdir build
           cd build
           cmake ..
           cmake --build .
 
-      - name: Run tests
+      - name: Test
         run: |
-          cd build
-          ctest --output-on-failure
+          cd build/test
+          ctest --verbose
