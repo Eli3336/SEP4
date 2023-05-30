@@ -23,8 +23,8 @@ jobs:
         run: |
           mkdir build
           cd IoT/SEP4/Test
-          cmake -B ../../build .
-          cmake --build ../../build
+          cmake .
+          cmake --build .
 
       - name: Test
         run: |
