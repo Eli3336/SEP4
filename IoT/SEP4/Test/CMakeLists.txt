@@ -36,11 +36,13 @@ set(SOURCES_TEST
 # Because of the differencies in format used to pinpoint directories between local 
 # testing and CD/CI testing the compiler evaluates in which environment it is located.
 include_directories(
- FreeRTOS_defs
- $<$<OR:$<CONFIG:Debug>,$<CONFIG:Release>>:${CMAKE_CURRENT_SOURCE_DIR}/../project_files/_h/>
- $<$<OR:$<CONFIG:Debug>,$<CONFIG:Release>>:${CMAKE_CURRENT_SOURCE_DIR}/../project_files/drivers/>
- $<$<OR:$<CONFIG:Debug>,$<CONFIG:Release>>:${CMAKE_CURRENT_SOURCE_DIR}/../project_files/_c/>
+  .
+  FreeRTOS_defs
+  $<$<NOT:$<CONFIG:Local>>:${CMAKE_CURRENT_SOURCE_DIR}/../project_files/_h/>
+  $<$<NOT:$<CONFIG:Local>>:${CMAKE_CURRENT_SOURCE_DIR}/../project_files/drivers/>
+  $<$<NOT:$<CONFIG:Local>>:${CMAKE_CURRENT_SOURCE_DIR}/../project_files/_c/>
 )
+
 
 # Something to 
 enable_testing()
