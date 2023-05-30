@@ -1,0 +1,29 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [dev, IoT_GoogleTestingVs]
+  pull_request:
+    branches: [dev]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install CMake
+      uses: jwlawson/actions-setup-cmake@v1.13
+      with:
+        cmake-version: '3.19.x'
+    - name: Build
+      run: |
+        mkdir build
+        cd build
+        cmake ..
+        make
+    - name: Test
+      run: |
+        cd build/test
+        ctest --verbose
