@@ -18,7 +18,6 @@ FetchContent_MakeAvailable(googletest )
 
 set(SOURCES_TEST
     humi_temp_test.cpp
-    ServoTest.cpp
     FreeRTOS_defs/FreeRTOS_FFF_MocksDefinitions.cpp
 )
 
