@@ -39,6 +39,6 @@ jobs:
       run: |
         mkdir build
         cd IoT/SEP4/Test
-        cmake .
+        cmake -DCMAKE_SOURCE_DIR=${{ github.workspace }}/project_files .
         cmake --build .
         ctest --output-on-failure
