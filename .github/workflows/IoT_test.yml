@@ -22,11 +22,11 @@ jobs:
       - name: Build
         run: |
           mkdir build
-          cd build
+          cd IoT/SEP4/Test
           cmake ..
           cmake --build .
 
       - name: Test
         run: |
-          cd build/test
+          cd IoT/SEP4/Test
           ctest --verbose
