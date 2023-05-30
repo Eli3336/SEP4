@@ -17,9 +17,9 @@
  extern int co2Pool;
  extern int co2Count;
 
-int16_t avgTemp;
-uint16_t avgHum;
-uint16_t avgCo2;
+static int16_t avgTemp;
+static uint16_t avgHum;
+static uint16_t avgCo2;
 
 void dataHolder_create(SemaphoreHandle_t mutex);
 void dataHolder_setBreakpoints(lora_driver_payload_t payload);
