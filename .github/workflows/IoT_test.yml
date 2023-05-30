@@ -1,9 +1,12 @@
-name: CI
+name: C/C++ CI
 
 on:
   push:
     branches:
-      - main
+      - IoT_GoogleTestingVs
+  pull_request:
+    branches:
+      - dev
 
 jobs:
   build:
