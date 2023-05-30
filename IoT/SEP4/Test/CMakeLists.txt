@@ -20,8 +20,6 @@ set(SOURCES_TEST
     humi_temp_test.cpp
     ServoTest.cpp
     FreeRTOS_defs/FreeRTOS_FFF_MocksDefinitions.cpp
-    ../project_files/_c/HumiTempTask.c
-    ../project_files/_c/ServoTask.c
 )
 
 
