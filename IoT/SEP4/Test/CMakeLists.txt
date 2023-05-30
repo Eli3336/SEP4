@@ -34,9 +34,9 @@ set(SOURCES_TEST
 # This makes the test.cpp files able to #include target libraries without errors.  
 include_directories(
  FreeRTOS_defs
-  ../project_files/_h/
-  ../project_files/drivers/
-  ../project_files/_c/DataHoler.c
+ ${CMAKE_SOURCE_DIR}/./project_files/_h/
+  ${CMAKE_SOURCE_DIR}/./project_files/drivers/
+  ${CMAKE_SOURCE_DIR}/./project_files/_c/DataHoler.c
 )
 
 # Something to 
