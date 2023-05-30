@@ -30,7 +30,7 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake .
-        cmake --build ../../build
-        cd ../../build
+        cmake ..
+        cmake --build ../build
+        cd ../build
         ctest --output-on-failure
