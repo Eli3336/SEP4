@@ -25,11 +25,11 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y cmake
-
+        
     - name: Build and run tests
       run: |
         mkdir build
         cd build
-        cmake ../../IoT/SEP4/Test
+        cmake ../../../Test
         cmake --build .
         ctest --output-on-failure
