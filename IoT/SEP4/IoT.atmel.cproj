@@ -292,16 +292,31 @@
     <Compile Include="FreeRTOS\src\timers.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="_c\CounterTask.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="_c\DataHolder.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="_c\DisplayTask.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="_c\ReceiverTask.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="_c\ServoTask.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="_c\VibeControllerImpl.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="_h\DataHolder.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="_h\DisplayTask.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="_h\ServoTask.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="_h\VibeController.h">
@@ -343,6 +358,9 @@
     <Compile Include="_h\HumiTempTask.h">
       <SubType>compile</SubType>
     </Compile>
+    <None Include="_h\Counter.h">
+      <SubType>compile</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="drivers\" />

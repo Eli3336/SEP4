@@ -1,12 +1,14 @@
 ﻿using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize]
 public class SensorsController : ControllerBase
 {
     private readonly ISensorLogic sensorLogic;
@@ -32,7 +34,7 @@ public class SensorsController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<SensorValue>>> GetSensorsValuesAsync([FromQuery] int? roomId)
+    public async Task<ActionResult<IEnumerable<SensorValue>>> GetSensorsValuesAsync([FromQuery] int roomId)
     {
         try
         {

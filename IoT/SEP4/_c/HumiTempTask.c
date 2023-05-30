@@ -5,25 +5,22 @@
 #include <DataHolder.h>
 
 #define TASK_NAME "HumiTempTask"
-#define TASK_PRIORITY 3
+#define TASK_PRIORITY 1
 
 static void _run(void* params);
 
 static QueueHandle_t _humidityQueue;
 static QueueHandle_t _temperatureQueue;
 static EventGroupHandle_t _doEventGroup;
-static EventGroupHandle_t _doneEventGroup;
 static uint16_t _latestHumidity;
 static int16_t _latestTemperature;
 
 void humiTempTask_create(QueueHandle_t humidityQueue, 
 									QueueHandle_t temperatureQueue, 
-									EventGroupHandle_t doEventGroup, 
-									EventGroupHandle_t doneEventGroup) {
+									EventGroupHandle_t doEventGroup) {
 	_humidityQueue = humidityQueue;
 	_temperatureQueue = temperatureQueue;
 	_doEventGroup = doEventGroup;
-	_doneEventGroup = doneEventGroup;
 	
 	xTaskCreate(_run, 
 				TASK_NAME, 
@@ -36,6 +33,7 @@ void humiTempTask_create(QueueHandle_t humidityQueue,
 
 void humiTempTask_initTask(void* params) {
 	hih8120_wakeup();
+	vTaskDelay(pdMS_TO_TICKS(100));
 }
 
 void humiTempTask_runTask() {

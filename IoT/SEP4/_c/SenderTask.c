@@ -1,28 +1,24 @@
-#include "SenderTask.h"
+#include <SenderTask.h>
 #include <stdio.h>
-#include <stddef.h>
 #include <status_leds.h>
 #include <lora_driver.h>
 #include <stdint.h>
 #include <task.h>
-#include <ReceiverTask.h>
-#include <event_groups.h>
 
 #define TASK_NAME "SenderTask"
-#define TASK_PRIORITY 4
+#define TASK_PRIORITY 3
 #define LORA_appEUI "6BE1FDCE7E214CF9"
 #define LORA_appKEY "EECCD39BD2AB6C6BD107A08E0DBE9DB9"
 
 static void _run(void* params);
 static void _connectToLoRaWAN();
 
-static EventGroupHandle_t _receiveEventGroup;
+static bool connected; // check if the connection to LoRaWAN exists
 
 static QueueHandle_t _senderQueue;
 
-void senderTask_create(QueueHandle_t senderQueue, EventGroupHandle_t receiveEventGroup) {
+void senderTask_create(QueueHandle_t senderQueue) {
 	_senderQueue = senderQueue;
-	_receiveEventGroup = receiveEventGroup;
 	
 	xTaskCreate(_run,
 	TASK_NAME,
@@ -34,31 +30,29 @@ void senderTask_create(QueueHandle_t senderQueue, EventGroupHandle_t receiveEven
 }
 
 void senderTask_initTask(void* params) {
-		vTaskDelay(50UL);
-		lora_driver_resetRn2483(1);
-		vTaskDelay(100UL);
-		lora_driver_resetRn2483(0);
-		lora_driver_flushBuffers();
-		//_connectToLoRaWAN();
-
-	puts("Sender Task initialized");
+	vTaskDelay(50UL);
+	lora_driver_resetRn2483(1);
+	vTaskDelay(100UL);
+	lora_driver_resetRn2483(0);
+	lora_driver_flushBuffers();
+	connected = false;
+	_connectToLoRaWAN();
 }
 
 void senderTask_runTask() {
 	lora_driver_payload_t uplinkPayload;
 	xQueueReceive(_senderQueue, &uplinkPayload, portMAX_DELAY);
-	int i;
 		
 	printf("Payload to send: \n");
-	for(i=0;i <uplinkPayload.len;i++)
+	for(int i=0; i <uplinkPayload.len; i++)
 	{
 		printf("%02X ",uplinkPayload.bytes[i]);
 			
 	}
 	printf("\n");
-	lora_driver_sendUploadMessage(false, &uplinkPayload);
-	vTaskDelay(pdMS_TO_TICKS(100));
-	xEventGroupSetBits(_receiveEventGroup, BIT_RECEIVER_ACT);
+	
+	if(connected) lora_driver_sendUploadMessage(false, &uplinkPayload);
+	else printf("No connection to LoRaWAN detected, message not sent\n");
 }
 
 static void _run(void* params) {
@@ -70,7 +64,6 @@ static void _run(void* params) {
 }
 
 static void _connectToLoRaWAN() {
-	puts("Start Connect To Lorawan");
 	char _out_buf[20];
 	lora_driver_returnCode_t rc;
 	status_leds_slowBlink(led_ST2); // OPTIONAL: Led the green led blink slowly while we are setting up LoRa
@@ -119,6 +112,7 @@ static void _connectToLoRaWAN() {
 		}
 		else
 		{
+			connected = true;
 			break;
 		}
 	} while (--maxJoinTriesLeft);
