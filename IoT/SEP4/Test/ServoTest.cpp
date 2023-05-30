@@ -3,11 +3,16 @@
 
 // Include interfaces and define global variables
 // defined by the production code
+
 extern "C"
 {
 	#include <rc_servo.h>
 	#include "ServoTask.h"
 	#include <DataHolder.h>
+	#include <Counter.h>
+
+	
+
 
 	
 }
@@ -15,9 +20,15 @@ extern "C"
 // Create Fake Driver functions.
 FAKE_VOID_FUNC(rc_servo_setPosition,uint8_t,int8_t);
 
+
 FAKE_VALUE_FUNC(uint16_t, getHumAvg);
 FAKE_VALUE_FUNC(uint16_t, getCo2Avg);
 FAKE_VALUE_FUNC(int16_t, getTempAvg);
+
+FAKE_VOID_FUNC(addHumidity,uint16_t);
+FAKE_VOID_FUNC(addTemperture,int16_t);
+FAKE_VOID_FUNC(addPPM,uint16_t);
+FAKE_VOID_FUNC(resetAllCounterValues);
 
 FAKE_VALUE_FUNC(uint16_t, getHumidityBreakpointLow);
 FAKE_VALUE_FUNC(uint16_t, getHumidityBreakpointHigh);
@@ -42,7 +53,10 @@ protected:
 		RESET_FAKE(xTaskGetTickCount);
 		RESET_FAKE(xTaskDelayUntil);
 		RESET_FAKE(rc_servo_setPosition);
-        RESET_FAKE(getHumAvg);
+        RESET_FAKE(addHumidity);
+        RESET_FAKE(addTemperture);
+        RESET_FAKE(getTempAvg);
+		RESET_FAKE(addPPM);
         RESET_FAKE(getCo2Avg);
         RESET_FAKE(getTempAvg);
         RESET_FAKE(getHumidityBreakpointLow);
@@ -51,6 +65,9 @@ protected:
         RESET_FAKE(getCo2BreakpointHigh);
         RESET_FAKE(getTemperatureBreakpointLow);
         RESET_FAKE(getTemperatureBreakpointHigh);
+		RESET_FAKE(resetAllCounterValues);
+		RESET_FAKE(xQueueReceive);
+		RESET_FAKE(xQueueSendToBack);
 		FFF_RESET_HISTORY();
 	}
 	void TearDown() override
@@ -351,3 +368,16 @@ TEST_F(Servo,CO2LevelOverTheimit)
 	ASSERT_EQ(2,rc_servo_setPosition_fake.call_count);	
 }
 
+TEST_F(Servo,CounterDontAddValuesIfTheyAreInvalid){
+	// Arr  	
+
+	// Act
+	Counter_runTask();
+
+	// Assert/Expect
+	ASSERT_EQ(addPPM_fake.call_count,0);
+	ASSERT_EQ(addTemperture_fake.call_count,0);
+	ASSERT_EQ(addHumidity_fake.call_count,0);
+	ASSERT_EQ(xEventGroupSetBits_fake.call_count,1);
+
+}
