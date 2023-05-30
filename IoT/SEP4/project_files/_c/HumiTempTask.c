@@ -1,5 +1,6 @@
 #include <HumiTempTask.h>
 #include <stdint.h>
+#include <stddef.h>
 #include <task.h>
 #include <hih8120.h>
 #include <DataHolder.h>
