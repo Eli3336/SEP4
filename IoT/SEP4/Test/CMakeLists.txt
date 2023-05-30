@@ -27,7 +27,6 @@ set(SOURCES_TEST
 include_directories(
   FreeRTOS_defs
   ${CMAKE_SOURCE_DIR}/../project_files/_h/
-  ${CMAKE_SOURCE_DIR}/../project_files/_c/
   ${CMAKE_SOURCE_DIR}/../project_files/drivers/
 )
 
