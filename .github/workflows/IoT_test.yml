@@ -23,9 +23,8 @@ jobs:
         run: |
           mkdir build
           cd IoT/SEP4/Test
-          cmake -B /home/runner/work/SEP4/SEP4/IoT/SEP4/Test/build .
-          cmake --build /home/runner/work/SEP4/SEP4/IoT/SEP4/Test/build
-          --help
+          cmake .
+          cmake --build .
 
       - name: Test
         run: |
