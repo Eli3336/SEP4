@@ -19,20 +19,14 @@ FetchContent_MakeAvailable(googletest )
 set(SOURCES_TEST
     humi_temp_test.cpp
     ServoTest.cpp
-  
-    
     FreeRTOS_defs/FreeRTOS_FFF_MocksDefinitions.cpp
-    ../project_files/_c/HumiTempTask.c
-    ../project_files/_c/ServoTask.c
-    
-    ${SRCS}
 )
 
 # This makes the test.cpp files able to #include target libraries without errors.  
 include_directories(
   FreeRTOS_defs
-  ../project_files/_h/
-  ../project_files/drivers/
+  ${CMAKE_SOURCE_DIR}/../project_files/_h/
+  ${CMAKE_SOURCE_DIR}/../project_files/drivers/
 )
 
 # Something to 
