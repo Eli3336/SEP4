@@ -12,6 +12,9 @@ static int16_t _temperatureLOW;
 static int16_t _temperatureHIGH;
 static uint16_t _co2LOW;
 static uint16_t _co2HIGH;
+static int16_t avgTemp;
+static uint16_t avgHum;
+static uint16_t avgCo2;
 
 void dataHolder_create(SemaphoreHandle_t mutex) {
 	_mutex = mutex;

@@ -8,14 +8,17 @@ extern "C"
 {
 	#include <rc_servo.h>
 	#include "ServoTask.h"
-	#include <DataHolder.h>
 	#include <Counter.h>
+	#include <semphr.h>
 
 	
 
 
 	
 }
+
+SemaphoreHandle_t mutexAvgValues;
+
 
 // Create Fake Driver functions.
 FAKE_VOID_FUNC(rc_servo_setPosition,uint8_t,int8_t);
@@ -28,7 +31,7 @@ FAKE_VALUE_FUNC(int16_t, getTempAvg);
 FAKE_VOID_FUNC(addHumidity,uint16_t);
 FAKE_VOID_FUNC(addTemperture,int16_t);
 FAKE_VOID_FUNC(addPPM,uint16_t);
-FAKE_VOID_FUNC(resetAllCounterValues);
+//FAKE_VOID_FUNC(resetAllCounterValues);
 
 FAKE_VALUE_FUNC(uint16_t, getHumidityBreakpointLow);
 FAKE_VALUE_FUNC(uint16_t, getHumidityBreakpointHigh);
@@ -39,6 +42,7 @@ FAKE_VALUE_FUNC(uint16_t, getCo2BreakpointHigh);
 FAKE_VALUE_FUNC(int16_t, getTemperatureBreakpointLow);
 FAKE_VALUE_FUNC(int16_t, getTemperatureBreakpointHigh);
 
+
 // Create Test fixture and Reset all Mocks before each test
 class Servo : public ::testing::Test
 {
@@ -46,7 +50,8 @@ protected:
 	void SetUp() override
 	{
 		RESET_FAKE(xSemaphoreCreateMutex);
-		RESET_FAKE(xSemaphoreGive)
+		RESET_FAKE(xSemaphoreGive);
+		RESET_FAKE(xSemaphoreTake);
 		RESET_FAKE(xTaskCreate);
 		RESET_FAKE(xEventGroupSetBits);
 		RESET_FAKE(xEventGroupWaitBits);
@@ -65,7 +70,7 @@ protected:
         RESET_FAKE(getCo2BreakpointHigh);
         RESET_FAKE(getTemperatureBreakpointLow);
         RESET_FAKE(getTemperatureBreakpointHigh);
-		RESET_FAKE(resetAllCounterValues);
+//		RESET_FAKE(resetAllCounterValues);
 		RESET_FAKE(xQueueReceive);
 		RESET_FAKE(xQueueSendToBack);
 		FFF_RESET_HISTORY();

@@ -1,3 +1,4 @@
+ #pragma once
  #ifndef co2task_h_
  #define co2task_h_
  
@@ -13,4 +14,4 @@
 
  
  
- #endif /* co2task_h_ */
+ #endif

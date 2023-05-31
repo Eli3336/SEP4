@@ -1,3 +1,4 @@
+#pragma once
 #include <lora_driver.h>
 #include <stdint.h>
 

@@ -1,3 +1,4 @@
+#pragma once
 #include <ATMEGA_FreeRTOS.h>
 #include <queue.h>
 #include <event_groups.h>
