@@ -42,7 +42,6 @@ include_directories(
   FreeRTOS_defs
   $<$<NOT:$<CONFIG:Local>>:${CMAKE_CURRENT_SOURCE_DIR}/../project_files/_h/>
   $<$<NOT:$<CONFIG:Local>>:${CMAKE_CURRENT_SOURCE_DIR}/../project_files/drivers/>
-  $<$<NOT:$<CONFIG:Local>>:${CMAKE_CURRENT_SOURCE_DIR}/../project_files/_c/>
 )
 
 
