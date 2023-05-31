@@ -12,12 +12,7 @@
 #define BIT_SERVOS_ACT 1 << 3
 #define BIT_DISPLAY_ACT 1 << 4
 
-int tempPool;
-int tempCount;
-int humPool;
-int humCount;
-int co2Pool;
-int co2Count;
+
 
 static int16_t avgTemp;
 static uint16_t avgHum;

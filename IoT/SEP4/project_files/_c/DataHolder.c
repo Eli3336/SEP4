@@ -2,6 +2,12 @@
 #include <semphr.h>
 
 #define CHECK_BIT(variable, position) variable & (1 << position)
+int tempPool;
+int tempCount;
+int humPool;
+int humCount;
+int co2Pool;
+int co2Count;
 
 static SemaphoreHandle_t _mutex;
 static SemaphoreHandle_t mutexAvgValues;
