@@ -108,6 +108,8 @@ public class LoriotClient : IWebClient
     {
         try
         {
+            if (_clientWebSocket.State != WebSocketState.Open)
+                await ConnectClientAsync();
             //IEnumerable<Room> rooms = await _roomEfcDao.GetAllRoomsAsync();
             //Console.WriteLine(rooms);
             

@@ -32,8 +32,8 @@ public class AuthController : ControllerBase
         {
             User user = await authService.ValidateUser(userLoginDto.Username, userLoginDto.Password);
             string token = GenerateJwt(user);
-        
-            return Ok(token);
+            string role = user.Role;
+            return Ok(role + " " + token);
         }
         catch (Exception e)
         {

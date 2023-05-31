@@ -8,7 +8,6 @@ namespace WebAPI.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-[Authorize]
 public class SensorsController : ControllerBase
 {
     private readonly ISensorLogic sensorLogic;
