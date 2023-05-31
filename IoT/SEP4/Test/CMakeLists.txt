@@ -20,7 +20,7 @@ set(SOURCES_TEST
     HumiTempTest.cpp
     SenderTest.cpp 
     ServoTest.cpp 
-    ReceiverTest.cpp
+   
 
     FreeRTOS_defs/FreeRTOS_FFF_MocksDefinitions.cpp
     
@@ -29,7 +29,7 @@ set(SOURCES_TEST
     ../project_files/_c/ServoTask.c
     ../project_files/_c/SenderTask.c
     ../project_files/_c/ReceiverTask.c
-    ../project_files/_c/DataHolder.c
+    
 )
 
 

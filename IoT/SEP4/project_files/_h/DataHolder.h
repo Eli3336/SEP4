@@ -4,6 +4,7 @@
 #include <semphr.h>
 #include <lora_driver.h>
 #include <stdint.h>
+#include <message_buffer.h>
 
 #define INVALID_HUMIDITY_VALUE 0
 #define INVALID_TEMPERATURE_VALUE -100
@@ -11,7 +12,6 @@
 #define BIT_SERVOS_ACT 1 << 3
 #define BIT_DISPLAY_ACT 1 << 4
 
-int tempPool;
 int tempPool;
 int tempCount;
 int humPool;
@@ -23,9 +23,9 @@ static int16_t avgTemp;
 static uint16_t avgHum;
 static uint16_t avgCo2;
 
-extern SemaphoreHandle_t mutexAvgValues;
 
-void dataHolder_create(SemaphoreHandle_t mutex);
+
+void dataHolder_create(SemaphoreHandle_t mutex,SemaphoreHandle_t _mutexAvgValues);
 void dataHolder_setBreakpoints(lora_driver_payload_t payload);
 void addPPM(uint16_t ppm);
 void addTemperture(int16_t temperature);

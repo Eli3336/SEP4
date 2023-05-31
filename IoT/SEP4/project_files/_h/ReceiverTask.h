@@ -5,8 +5,8 @@
 
 #define BIT_RECEIVER_ACT 1 << 3
 
-extern MessageBufferHandle_t messageBuffer;
 
-void receiverTask_create(void);
+
+void receiverTask_create(MessageBufferHandle_t _messageBuffer);
 void receiverTask_initTask(void* params);
 void receiverTask_runTask(void);

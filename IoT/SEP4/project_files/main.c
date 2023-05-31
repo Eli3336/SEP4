@@ -36,8 +36,8 @@ static QueueHandle_t _senderQueue;
 static EventGroupHandle_t _actEventGroup = NULL;
 
 static SemaphoreHandle_t _mutex;
-SemaphoreHandle_t mutexAvgValues;
-MessageBufferHandle_t messageBuffer;
+static SemaphoreHandle_t mutexAvgValues;
+static MessageBufferHandle_t messageBuffer;
 
 static void _createQueues(void) {
 	_co2Queue = xQueueCreate(10, sizeof(uint16_t));
@@ -73,7 +73,7 @@ static void _createTasks(void) {
 	counter_create( _humidityQueue, _temperatureQueue, _co2Queue, _actEventGroup);
 	co2Task_create(_co2Queue, _actEventGroup);
 	humiTempTask_create(_humidityQueue, _temperatureQueue, _actEventGroup);
-	receiverTask_create();
+	receiverTask_create(messageBuffer);
 	servoTask_create(_actEventGroup);
 	displayTask_create(_actEventGroup);
 }
@@ -89,7 +89,7 @@ int main(void)
 	_createEventGroups();
 	_createMutexes();
 	_createTasks();
-	dataHolder_create(_mutex);
+	dataHolder_create(_mutex,mutexAvgValues);
 	puts("Launching IoT device...");
 	vTaskStartScheduler();
   

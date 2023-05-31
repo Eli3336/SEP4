@@ -4,7 +4,7 @@
 #define CHECK_BIT(variable, position) variable & (1 << position)
 
 static SemaphoreHandle_t _mutex;
-extern SemaphoreHandle_t mutexAvgValues;
+static SemaphoreHandle_t mutexAvgValues;
 
 static uint16_t _humidityLOW;
 static uint16_t _humidityHIGH;
@@ -16,9 +16,10 @@ static int16_t avgTemp;
 static uint16_t avgHum;
 static uint16_t avgCo2;
 
-void dataHolder_create(SemaphoreHandle_t mutex) {
+void dataHolder_create(SemaphoreHandle_t mutex,SemaphoreHandle_t _mutexAvgValues) {
 	_mutex = mutex;
 	
+	_mutexAvgValues = mutexAvgValues;
 	_humidityLOW = INVALID_HUMIDITY_VALUE;
 	_humidityHIGH = INVALID_HUMIDITY_VALUE;
 	_temperatureLOW = INVALID_TEMPERATURE_VALUE;

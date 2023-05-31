@@ -10,6 +10,11 @@ extern "C"
 	#include "ServoTask.h"
 	#include <Counter.h>
 	#include <semphr.h>
+	#include <DataHolder.h>
+	#include <lora_driver.h>
+	#include <message_buffer.h>
+	#include <ReceiverTask.h>
+
 
 	
 
@@ -17,21 +22,23 @@ extern "C"
 	
 }
 
-SemaphoreHandle_t mutexAvgValues;
+extern SemaphoreHandle_t mutexAvgValues;
+extern MessageBufferHandle_t messageBuffer;
 
 
 // Create Fake Driver functions.
 FAKE_VOID_FUNC(rc_servo_setPosition,uint8_t,int8_t);
 
-
 FAKE_VALUE_FUNC(uint16_t, getHumAvg);
 FAKE_VALUE_FUNC(uint16_t, getCo2Avg);
 FAKE_VALUE_FUNC(int16_t, getTempAvg);
 
+FAKE_VOID_FUNC(dataHolder_setBreakpoints,lora_driver_payload_t);
+
 FAKE_VOID_FUNC(addHumidity,uint16_t);
 FAKE_VOID_FUNC(addTemperture,int16_t);
 FAKE_VOID_FUNC(addPPM,uint16_t);
-//FAKE_VOID_FUNC(resetAllCounterValues);
+FAKE_VOID_FUNC(resetAllCounterValues);
 
 FAKE_VALUE_FUNC(uint16_t, getHumidityBreakpointLow);
 FAKE_VALUE_FUNC(uint16_t, getHumidityBreakpointHigh);
@@ -70,14 +77,18 @@ protected:
         RESET_FAKE(getCo2BreakpointHigh);
         RESET_FAKE(getTemperatureBreakpointLow);
         RESET_FAKE(getTemperatureBreakpointHigh);
-//		RESET_FAKE(resetAllCounterValues);
+		RESET_FAKE(resetAllCounterValues);
 		RESET_FAKE(xQueueReceive);
 		RESET_FAKE(xQueueSendToBack);
+		RESET_FAKE(dataHolder_setBreakpoints);
+		RESET_FAKE(xMessageBufferReceive);
+        RESET_FAKE(xMessageBufferSend);
 		FFF_RESET_HISTORY();
 	}
 	void TearDown() override
 	{}
 };
+
 
 TEST_F(Servo,noBreakpointsHasBeenExceeded)
 {
@@ -384,5 +395,17 @@ TEST_F(Servo,CounterDontAddValuesIfTheyAreInvalid){
 	ASSERT_EQ(addTemperture_fake.call_count,0);
 	ASSERT_EQ(addHumidity_fake.call_count,0);
 	ASSERT_EQ(xEventGroupSetBits_fake.call_count,1);
+
+}
+TEST_F(Servo,Rreceive){
+	lora_driver_payload_t fake;
+	// Arr  
+	xMessageBufferSend_fake.arg1_history[0]=&fake;
+
+	// Act
+	receiverTask_runTask();
+
+	// Assert/Expect
+	EXPECT_EQ(xMessageBufferReceive_fake.call_count,1);
 
 }

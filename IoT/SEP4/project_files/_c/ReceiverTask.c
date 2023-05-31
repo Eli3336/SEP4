@@ -12,11 +12,12 @@
 #define TASK_PRIORITY 1
 #define EXPECTED_PAYLOAD_LENGTH 13
 
-extern MessageBufferHandle_t messageBuffer;
+static MessageBufferHandle_t messageBuffer;
 
 static void _run(void* params);
 
-void receiverTask_create(void) {
+void receiverTask_create(MessageBufferHandle_t _messgaBuffer) {
+	_messgaBuffer = messageBuffer;
 	
 	xTaskCreate(_run,
 	TASK_NAME,
