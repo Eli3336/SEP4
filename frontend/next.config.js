@@ -1,12 +1,21 @@
 const withImages = require("next-images");
 
 module.exports = withImages({
-  webpack(config, options) {
+  images: {
+    disableStaticImages: true,
+  },
+  webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,
-      use: ["@svgr/webpack", "react-svg-loader"],
+      use: [
+        {
+          loader: "@svgr/webpack",
+          options: {
+            svgoConfig: {},
+          },
+        },
+      ],
     });
-
     return config;
   },
 });

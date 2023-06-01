@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { createRequest } from "../api";
+import { Button, Form, Container } from "react-bootstrap";
 
 const CreateRequest = () => {
   const [requestType, setRequestType] = useState("");
@@ -9,7 +10,7 @@ const CreateRequest = () => {
     try {
       await createRequest({ type: requestType, content: content });
       alert("Request created successfully");
-      // Clear the input fields after successful request creation
+
       setRequestType("");
       setContent("");
     } catch (error) {
@@ -19,31 +20,37 @@ const CreateRequest = () => {
   };
 
   return (
-    <div>
-      <h2>Create Request</h2>
-      <div>
-        <label htmlFor="requestType">Request Type: </label>
-        <select
-          id="requestType"
-          value={requestType}
-          onChange={(e) => setRequestType(e.target.value)}
+    <Container className="text-dark">
+      <h2 className="my-3">Create Request</h2>
+      <Form>
+        <Form.Group controlId="requestType">
+          <Form.Label>Request Type</Form.Label>
+          <Form.Control
+            as="select"
+            value={requestType}
+            onChange={(e) => setRequestType(e.target.value)}
+          >
+            <option value="">--Select a request type--</option>
+            <option value="Move">Move</option>
+            <option value="Additional">Additional</option>
+          </Form.Control>
+        </Form.Group>
+        <Form.Group controlId="content">
+          <Form.Label>Content</Form.Label>
+          <Form.Control
+            type="text"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+          />
+        </Form.Group>
+        <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          onClick={handleCreateRequest}
         >
-          <option value="">--Select a request type--</option>
-          <option value="Move">Move</option>
-          <option value="Additional">Additional</option>
-        </select>
-      </div>
-      <div>
-        <label htmlFor="content">Content: </label>
-        <input
-          type="text"
-          id="content"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-        />
-      </div>
-      <button onClick={handleCreateRequest}>Create Request</button>
-    </div>
+          Create Request
+        </button>
+      </Form>
+    </Container>
   );
 };
 

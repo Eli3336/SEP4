@@ -1,4 +1,3 @@
-// src/components/NavBar.js
 import React from "react";
 import Link from "next/link";
 
@@ -8,22 +7,22 @@ const NavBar = () => {
       <ul>
         <li>
           <Link href="/user">
-            <a>User</a>
+            <span>User</span>
           </Link>
         </li>
         <li>
           <Link href="/assign-room">
-            <a>Receptionist</a>
+            <span>Receptionist</span>
           </Link>
         </li>
         <li>
           <Link href="/room-management">
-            <a>Admin</a>
+            <span>Admin</span>
           </Link>
         </li>
         <li>
           <Link href="/doctor">
-            <a>Doctor</a>
+            <span>Doctor</span>
           </Link>
         </li>
       </ul>
@@ -43,11 +42,14 @@ const NavBar = () => {
         li {
           margin: 0 1rem;
         }
-        a {
+        a,
+        span {
+          cursor: pointer;
           text-decoration: none;
           color: #0070f3;
         }
-        a:hover {
+        a:hover,
+        span:hover {
           color: #0056b3;
         }
       `}</style>
