@@ -1,32 +1,42 @@
 import React, { useState } from "react";
-import { updateRoom } from "../api"; // Import the updateRoom function
+import { createRoom, deleteRoomById, updateRoomInfo } from "../api";
 
-const RoomManagement = ({ room }) => {
-  const [roomInfo, setRoomInfo] = useState({
-    id: room.id,
-    name: room.name,
-    capacity: room.capacity,
-    availability: room.availability,
-  });
+const RoomManagement = () => {
+  const [roomId, setRoomId] = useState("");
+  const [roomName, setRoomName] = useState("");
+  const [roomCapacity, setRoomCapacity] = useState("");
+  const [roomAvailability, setRoomAvailability] = useState("");
 
-  const [newCapacity, setNewCapacity] = useState(room.capacity || 0);
+  const [newRoomName, setNewRoomName] = useState("");
+  const [newRoomCapacity, setNewRoomCapacity] = useState("");
+  const [newRoomAvailability, setNewRoomAvailability] = useState("");
 
-  const [newAvailability, setNewAvailability] = useState(room.availability);
+  // Handle Add Room
+  const handleAddRoom = async () => {
+    const roomInfo = {
+      name: roomName,
+      capacity: roomCapacity,
+      availability: roomAvailability,
+    };
 
-  const handleRoomUpdate = async () => {
     try {
-      console.log("Updating room with:", {
-        roomId: roomInfo.id,
-        newCapacity: parseInt(newCapacity, 10),
-        newAvailability,
-      });
+      await createRoom(roomInfo);
+      alert("Room created successfully");
+    } catch (error) {
+      console.error("Error creating room", error);
+      alert("Failed to create room");
+    }
+  };
 
-      await updateRoom(roomInfo.id, parseInt(newCapacity, 10), newAvailability);
-      setRoomInfo({
-        ...roomInfo,
-        capacity: parseInt(newCapacity, 10),
-        availability: newAvailability,
-      });
+  // Handle Update Room
+  const handleUpdateRoom = async () => {
+    try {
+      await updateRoomInfo(
+        roomId,
+        newRoomName,
+        newRoomCapacity,
+        newRoomAvailability
+      );
       alert("Room updated successfully");
     } catch (error) {
       console.error("Error updating room:", error);
@@ -34,38 +44,75 @@ const RoomManagement = ({ room }) => {
     }
   };
 
+  // Handle Remove Room
+  const handleRemoveRoom = async () => {
+    try {
+      await deleteRoomById(roomId);
+      alert("Room deleted successfully");
+    } catch (error) {
+      console.error("Error deleting room:", error);
+      alert("Failed to delete room");
+    }
+  };
+
   return (
     <div>
-      <h2>Room Management</h2>
-      <div>
-        <p>Room ID: {roomInfo.id}</p>
-        <p>Room Name: {roomInfo.name}</p>
-        <p>Room Capacity: {roomInfo.capacity}</p>
-        <p>Room Availability: {roomInfo.availability}</p>
-      </div>
-      <div>
-        <label htmlFor="capacity">New Capacity: </label>
-        <input
-          type="number"
-          id="capacity"
-          value={newCapacity}
-          onChange={(e) =>
-            setNewCapacity(e.target.value ? parseInt(e.target.value, 10) : 0)
-          }
-        />
-      </div>
-      <div>
-        <label htmlFor="availability">New Availability: </label>
-        <select
-          id="availability"
-          value={newAvailability}
-          onChange={(e) => setNewAvailability(e.target.value)}
-        >
-          <option value="Available">Available</option>
-          <option value="Under maintenance">Under maintenance</option>
-        </select>
-      </div>
-      <button onClick={handleRoomUpdate}>Update Room</button>
+      <h2>Create Room</h2>
+      <input
+        type="text"
+        placeholder="Room Name"
+        value={roomName}
+        onChange={(e) => setRoomName(e.target.value)}
+      />
+      <input
+        type="text"
+        placeholder="Room Capacity"
+        value={roomCapacity}
+        onChange={(e) => setRoomCapacity(e.target.value)}
+      />
+      <input
+        type="text"
+        placeholder="Room Availability"
+        value={roomAvailability}
+        onChange={(e) => setRoomAvailability(e.target.value)}
+      />
+      <button onClick={handleAddRoom}>Add Room</button>
+
+      <h2>Update Room</h2>
+      <input
+        type="text"
+        placeholder="Room ID"
+        value={roomId}
+        onChange={(e) => setRoomId(e.target.value)}
+      />
+      <input
+        type="text"
+        placeholder="New Room Name"
+        value={newRoomName}
+        onChange={(e) => setNewRoomName(e.target.value)}
+      />
+      <input
+        type="text"
+        placeholder="New Room Capacity"
+        value={newRoomCapacity}
+        onChange={(e) => setNewRoomCapacity(e.target.value)}
+      />
+      <input
+        type="text"
+        placeholder="New Room Availability"
+        value={newRoomAvailability}
+        onChange={(e) => setNewRoomAvailability(e.target.value)}
+      />
+      <button onClick={handleUpdateRoom}>Update Room</button>
+
+      <h2>Delete Room</h2>
+      <input
+        type="text"
+        placeholder="Room ID"
+        value={roomId}
+        onChange={(e) => setRoomId(e.target.value)}
+      />
+      <button onClick={handleRemoveRoom}>Delete Room</button>
     </div>
   );
 };
