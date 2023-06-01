@@ -4,14 +4,9 @@ import { createRoom, deleteRoomById, updateRoomInfo } from "../api";
 const RoomManagement = () => {
   const [roomId, setRoomId] = useState("");
   const [roomName, setRoomName] = useState("");
-  const [roomCapacity, setRoomCapacity] = useState("");
-  const [roomAvailability, setRoomAvailability] = useState("");
+  const [roomCapacity, setRoomCapacity] = useState(0);
+  const [roomAvailability, setRoomAvailability] = useState(true);
 
-  const [newRoomName, setNewRoomName] = useState("");
-  const [newRoomCapacity, setNewRoomCapacity] = useState("");
-  const [newRoomAvailability, setNewRoomAvailability] = useState("");
-
-  // Handle Add Room
   const handleAddRoom = async () => {
     const roomInfo = {
       name: roomName,
@@ -28,15 +23,14 @@ const RoomManagement = () => {
     }
   };
 
-  // Handle Update Room
   const handleUpdateRoom = async () => {
+    const updatedRoomInfo = {
+      name: roomName,
+      capacity: roomCapacity,
+      availability: roomAvailability,
+    };
     try {
-      await updateRoomInfo(
-        roomId,
-        newRoomName,
-        newRoomCapacity,
-        newRoomAvailability
-      );
+      await updateRoomInfo(roomId, updatedRoomInfo);
       alert("Room updated successfully");
     } catch (error) {
       console.error("Error updating room:", error);
@@ -44,7 +38,6 @@ const RoomManagement = () => {
     }
   };
 
-  // Handle Remove Room
   const handleRemoveRoom = async () => {
     try {
       await deleteRoomById(roomId);
@@ -65,19 +58,18 @@ const RoomManagement = () => {
         onChange={(e) => setRoomName(e.target.value)}
       />
       <input
-        type="text"
+        type="number"
         placeholder="Room Capacity"
         value={roomCapacity}
-        onChange={(e) => setRoomCapacity(e.target.value)}
+        onChange={(e) => setRoomCapacity(parseInt(e.target.value))}
       />
       <input
-        type="text"
-        placeholder="Room Availability"
-        value={roomAvailability}
-        onChange={(e) => setRoomAvailability(e.target.value)}
+        type="checkbox"
+        checked={roomAvailability}
+        onChange={(e) => setRoomAvailability(e.target.checked)}
       />
+      Room Available
       <button onClick={handleAddRoom}>Add Room</button>
-
       <h2>Update Room</h2>
       <input
         type="text"
@@ -87,24 +79,23 @@ const RoomManagement = () => {
       />
       <input
         type="text"
-        placeholder="New Room Name"
-        value={newRoomName}
-        onChange={(e) => setNewRoomName(e.target.value)}
+        placeholder="Room Name"
+        value={roomName}
+        onChange={(e) => setRoomName(e.target.value)}
       />
       <input
-        type="text"
-        placeholder="New Room Capacity"
-        value={newRoomCapacity}
-        onChange={(e) => setNewRoomCapacity(e.target.value)}
+        type="number"
+        placeholder="Room Capacity"
+        value={roomCapacity}
+        onChange={(e) => setRoomCapacity(parseInt(e.target.value))}
       />
       <input
-        type="text"
-        placeholder="New Room Availability"
-        value={newRoomAvailability}
-        onChange={(e) => setNewRoomAvailability(e.target.value)}
+        type="checkbox"
+        checked={roomAvailability}
+        onChange={(e) => setRoomAvailability(e.target.checked)}
       />
+      Room Available
       <button onClick={handleUpdateRoom}>Update Room</button>
-
       <h2>Delete Room</h2>
       <input
         type="text"

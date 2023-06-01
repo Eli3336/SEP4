@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { getAllRequestsToMovePatients, getAllAdditionalRequests } from "../api";
-import styles from "../styles/viewrequest.module.css";
+import {
+  getAllRequestsToMovePatients,
+  getAllAdditionalRequests,
+  deleteRequestById,
+} from "../api";
+import { Button } from "react-bootstrap";
 
 const ViewRequests = () => {
   const [requestsToMove, setRequestsToMove] = useState([]);
@@ -22,38 +26,66 @@ const ViewRequests = () => {
     fetchRequests();
   }, []);
 
+  const handleDeleteRequest = async (id) => {
+    try {
+      await deleteRequestById(id);
+      setRequestsToMove(requestsToMove.filter((request) => request.id !== id));
+      setAdditionalRequests(
+        additionalRequests.filter((request) => request.id !== id)
+      );
+    } catch (error) {
+      console.error("Error deleting request:", error);
+    }
+  };
+
   return (
-    <div>
-      <h2>
+    <div className="text-dark">
+      <h2 className="my-3">
         Requests to Move Patients
-        <span
-          className={styles.circle}
+        <Button
+          variant="info"
           onClick={() => setShowMoveRequests(!showMoveRequests)}
         >
           {requestsToMove.length}
-        </span>
+        </Button>
       </h2>
       {showMoveRequests && (
         <ul>
           {requestsToMove.map((request) => (
-            <li key={request.id}>{request.content}</li>
+            <li key={request.id}>
+              {request.content}
+              <Button
+                variant="danger"
+                onClick={() => handleDeleteRequest(request.id)}
+              >
+                Delete
+              </Button>
+            </li>
           ))}
         </ul>
       )}
 
-      <h2>
+      <h2 className="my-3">
         Additional Requests
-        <span
-          className={styles.circle}
+        <Button
+          variant="info"
           onClick={() => setShowAdditionalRequests(!showAdditionalRequests)}
         >
           {additionalRequests.length}
-        </span>
+        </Button>
       </h2>
       {showAdditionalRequests && (
         <ul>
           {additionalRequests.map((request) => (
-            <li key={request.id}>{request.content}</li>
+            <li key={request.id}>
+              {request.content}
+              <Button
+                variant="danger"
+                onClick={() => handleDeleteRequest(request.id)}
+              >
+                Delete
+              </Button>
+            </li>
           ))}
         </ul>
       )}

@@ -186,6 +186,15 @@ export async function createRoom(roomInfo) {
   }
 }
 
+export async function getRooms() {
+  try {
+    const response = await instance.get("/Rooms");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching rooms:", error);
+    throw error;
+  }
+}
 export async function updateRoomInfo(id, name, capacity, availability) {
   try {
     const response = await instance.patch(
@@ -273,6 +282,17 @@ export async function getAllAdditionalRequests() {
   }
 }
 
+export async function deleteRequestById(id) {
+  try {
+    const response = await instance.delete(`/Requests/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error in deleteRequestById:`, error);
+    alert(`Failed to delete request: ${error.response.data}`);
+    throw error;
+  }
+}
+
 export async function createReceptionist(receptionistInfo) {
   try {
     const response = await instance.post("/Receptionists", receptionistInfo);
@@ -325,11 +345,21 @@ export async function deleteReceptionistById(receptionistId) {
 export async function updateSensor(id, upbreakpoint, downbreakpoint) {
   try {
     const url = `/sensors/${id}`;
-    const updateData = { upbreakpoint, downbreakpoint };
-    const response = await instance.patch(url, updateData);
+    const queryParams = new URLSearchParams({
+      upbreakpoint,
+      downbreakpoint,
+    });
+    const response = await instance.patch(`${url}?${queryParams.toString()}`);
     return response.data;
   } catch (error) {
     console.error("Error in updateSensor:", error);
     throw error;
   }
+}
+
+export async function loginUser(username, password) {
+  return instance.post("/Auth/login", {
+    username,
+    password,
+  });
 }

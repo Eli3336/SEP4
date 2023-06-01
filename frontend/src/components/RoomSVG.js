@@ -20,8 +20,8 @@ const RoomSVG = ({ onRoomClick }) => {
       viewBox="0 0 1870 1200"
       width="1870"
       xmlns="http://www.w3.org/2000/svg"
-      className={styles.svgClass} // Add the className here
-      style={{ backgroundColor: "black", marginTop: "-200px" }} // Set the background color to white and top margin to negative
+      className={styles.svgClass}
+      style={{ backgroundColor: "white", marginTop: "-200px" }} // Changed from black to white
     >
       <defs>
         <linearGradient id="roomGradient" x1="0%" y1="0%" x2="100%" y2="100%">

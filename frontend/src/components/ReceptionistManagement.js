@@ -15,7 +15,6 @@ const ReceptionistManagement = () => {
   const [newReceptionistPhoneNumber, setNewReceptionistPhoneNumber] =
     useState("");
 
-  // Handle Add Receptionist
   const handleAddReceptionist = async () => {
     const receptionistInfo = {
       name: receptionistName,
@@ -32,7 +31,6 @@ const ReceptionistManagement = () => {
     }
   };
 
-  // Handle Update Receptionist
   const handleUpdateReceptionist = async () => {
     try {
       await updateReceptionist(
@@ -47,7 +45,6 @@ const ReceptionistManagement = () => {
     }
   };
 
-  // Handle Remove Receptionist
   const handleRemoveReceptionist = async () => {
     try {
       await deleteReceptionistById(receptionistId);
