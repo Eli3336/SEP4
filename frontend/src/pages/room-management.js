@@ -1,41 +1,39 @@
-import React, { useState, useEffect } from "react";
+// pages/AdminPage.js
+import React from "react";
 import AdminLayout from "@/layouts/AdminLayout";
 import RoomManagement from "@/components/RoomManagement";
-import { fetchRoomDetailsById } from "../api";
+import DoctorManagement from "@/components/DoctorManagement";
+import DoctorInfo from "@/components/DoctorInfo";
+import ReceptionistManagement from "@/components/ReceptionistManagement";
+import ReceptionistInfo from "@/components/ReceptionistInfo";
 
-const RoomManagementPage = () => {
-  const [roomData, setRoomData] = useState(null);
-  const [roomIdInput, setRoomIdInput] = useState("");
-
-  useEffect(() => {
-    if (roomIdInput.trim() === "") return;
-
-    const fetchData = async () => {
-      try {
-        const room = await fetchRoomDetailsById(roomIdInput);
-        setRoomData(room);
-      } catch (error) {
-        console.error("Error fetching room data:", error);
-      }
-    };
-
-    fetchData();
-  }, [roomIdInput]);
-
+const AdminPage = () => {
   return (
     <AdminLayout>
-      <div>
-        <label htmlFor="roomId">Room ID: </label>
-        <input
-          type="text"
-          id="roomId"
-          value={roomIdInput}
-          onChange={(e) => setRoomIdInput(e.target.value)}
-        />
+      <div className="container mx-auto px-4">
+        <div className="my-5">
+          <h2 className="my-3">Room Management</h2>
+          <RoomManagement />
+        </div>
+        <div className="my-5">
+          <h2 className="my-3">Doctor Management</h2>
+          <DoctorManagement />
+        </div>
+        <div className="my-5">
+          <h2 className="my-3">Doctor Info</h2>
+          <DoctorInfo />
+        </div>
+        <div className="my-5">
+          <h2 className="my-3">Receptionist Management</h2>
+          <ReceptionistManagement />
+        </div>
+        <div className="my-5">
+          <h2 className="my-3">Receptionist Info</h2>
+          <ReceptionistInfo />
+        </div>
       </div>
-      {roomData ? <RoomManagement room={roomData} /> : <p>Loading...</p>}
     </AdminLayout>
   );
 };
 
-export default RoomManagementPage;
+export default AdminPage;

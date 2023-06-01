@@ -88,6 +88,16 @@ export async function fetchSensorLogById(sensorId) {
   }
 }
 
+export async function createDoctor(doctorInfo) {
+  try {
+    const response = await instance.post(doctorInfo);
+    return response.data;
+  } catch (error) {
+    console.error("Error in addDoctor:", error);
+    alert(`Failed to add doctor: ${error.response.data}`);
+    throw error;
+  }
+}
 export async function getDoctorById(doctorId) {
   try {
     const response = await instance.get(`/Doctors/${doctorId}`);
@@ -101,7 +111,7 @@ export async function getDoctorById(doctorId) {
 
 export async function deleteDoctorById(doctortId) {
   try {
-    const response = await instance.delete(`/Doctors/${doctorId}`);
+    const response = await instance.delete(`/Doctors/${doctortId}`);
     return response;
   } catch (error) {
     console.error("Error in deleteDoctorById:", error);
@@ -155,6 +165,68 @@ export async function getPatientById(patientId) {
   }
 }
 
+export async function getAllPatients() {
+  try {
+    const response = await instance.get(`/Patients`);
+    return response.data;
+  } catch (error) {
+    console.error("Error in getAllPatients:", error);
+    alert(`Failed to get patients: ${error.response.data}`);
+    throw error;
+  }
+}
+
+export async function createRoom(roomInfo) {
+  try {
+    const response = await instance.post(`/Rooms`, roomInfo);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating room:", error);
+    throw error;
+  }
+}
+
+export async function getRooms() {
+  try {
+    const response = await instance.get("/Rooms");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching rooms:", error);
+    throw error;
+  }
+}
+export async function updateRoomInfo(id, name, capacity, availability) {
+  try {
+    const response = await instance.patch(
+      `/Rooms/${id}?name=${name}&capacity=${capacity}&availability=${availability}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating room:", error);
+    throw error;
+  }
+}
+
+export async function deleteRoomById(id) {
+  try {
+    const response = await instance.delete(`/Rooms/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting room:", error);
+    throw error;
+  }
+}
+
+export async function getAllAAvailableRooms() {
+  try {
+    const response = await instance.get(`/Rooms/Empty`);
+    return response.data;
+  } catch (error) {
+    console.error("Error in getAllAAvailableRooms:", error);
+    throw error;
+  }
+}
+
 export const updateRoom = async (id, capacity, availability) => {
   try {
     if (availability !== "Available" && availability !== "Under maintenance") {
@@ -176,3 +248,118 @@ export const updateRoom = async (id, capacity, availability) => {
     throw error;
   }
 };
+
+export async function createRequest(requestDto) {
+  try {
+    const response = await instance.post(`/Requests`, requestDto);
+    return response.data;
+  } catch (error) {
+    console.error("Error in createRequest:", error);
+    alert(`Failed to create request: ${error.response.data}`);
+    throw error;
+  }
+}
+
+export async function getAllRequestsToMovePatients() {
+  try {
+    const response = await instance.get(`/ToMove`);
+    return response.data;
+  } catch (error) {
+    console.error("Error in getAllRequestsToMovePatients:", error);
+    alert(`Failed to get requests: ${error.response.data}`);
+    throw error;
+  }
+}
+
+export async function getAllAdditionalRequests() {
+  try {
+    const response = await instance.get(`/Additional`);
+    return response.data;
+  } catch (error) {
+    console.error("Error in getAllAdditionalRequests:", error);
+    alert(`Failed to get requests: ${error.response.data}`);
+    throw error;
+  }
+}
+
+export async function deleteRequestById(id) {
+  try {
+    const response = await instance.delete(`/Requests/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error in deleteRequestById:`, error);
+    alert(`Failed to delete request: ${error.response.data}`);
+    throw error;
+  }
+}
+
+export async function createReceptionist(receptionistInfo) {
+  try {
+    const response = await instance.post("/Receptionists", receptionistInfo);
+    return response.data;
+  } catch (error) {
+    console.error("Error in createReceptionist:", error);
+    alert(`Failed to create receptionist: ${error.response.data}`);
+    throw error;
+  }
+}
+
+export async function getReceptionistById(receptionistId) {
+  try {
+    const response = await instance.get(`/Receptionists/${receptionistId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error in getReceptionistById:", error);
+    alert(`Failed to get Receptionist: ${error.response.data}`);
+    throw error;
+  }
+}
+
+export const updateReceptionist = async (id, name, phoneNumber) => {
+  try {
+    console.log(
+      `Updating receptionist ${id} with name ${name} and phone number ${phoneNumber}`
+    );
+    const response = await instance.patch(
+      `/Receptionists/${id}?name=${name}&number=${phoneNumber}`
+    );
+    console.log("Updated receptionist:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating receptionist:", error);
+    throw error;
+  }
+};
+
+export async function deleteReceptionistById(receptionistId) {
+  try {
+    const response = await instance.delete(`/Receptionists/${receptionistId}`);
+    return response;
+  } catch (error) {
+    console.error("Error in deleteReceptionistById:", error);
+    alert(`Failed to delete receptionist: ${error.response.data}`);
+    throw error;
+  }
+}
+
+export async function updateSensor(id, upbreakpoint, downbreakpoint) {
+  try {
+    const url = `/sensors/${id}`;
+    const queryParams = new URLSearchParams({
+      upbreakpoint,
+      downbreakpoint,
+    });
+    const response = await instance.patch(`${url}?${queryParams.toString()}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error in updateSensor:", error);
+    throw error;
+  }
+}
+
+export async function loginUser(username, password) {
+  return instance.post("/Auth/login", {
+    username,
+    password,
+  });
+}

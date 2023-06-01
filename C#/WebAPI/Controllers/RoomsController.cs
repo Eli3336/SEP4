@@ -1,12 +1,14 @@
 ﻿using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize]
 public class RoomsController : ControllerBase
 {
     private readonly IRoomLogic roomLogic;
@@ -52,6 +54,21 @@ public class RoomsController : ControllerBase
         try
         {
             IEnumerable<Room> rooms = await roomLogic.GetAllEmptyRooms();
+            return Ok(rooms);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+    
+    [HttpGet("Available")]
+    public async Task<ActionResult<IEnumerable<Room>>> GetAllAvailableRooms()
+    {
+        try
+        {
+            IEnumerable<Room> rooms = await roomLogic.GetAllAvailableRooms();
             return Ok(rooms);
         }
         catch (Exception e)

@@ -1,11 +1,12 @@
-#include "UplinkMessageBuilder.h"
-#include "Config.h"
+#include <UplinkMessageBuilder.h>
+#include <DataHolder.h>
+#include <stdio.h>
 
 static uint16_t _humidity;
 static uint16_t _temperature;
 static uint16_t _co2;
 
-static uint8_t _validationBits;
+static uint8_t _errorFlag = 0;
 
 lora_driver_payload_t
 uplinkMessageBuilder_buildUplinkMessage(uint8_t port) {
@@ -20,41 +21,30 @@ uplinkMessageBuilder_buildUplinkMessage(uint8_t port) {
 	payload.bytes[3] = _temperature & 0xFF;
 	payload.bytes[4] = _co2 >> 8;
 	payload.bytes[5] = _co2 & 0xFF;
-	payload.bytes[6] = _validationBits;
+	payload.bytes[6] = _errorFlag;
+
 	
 	return payload;
 }
 
-void uplinkMessageBuilder_setHumidityData(uint16_t data) {
-	_humidity = data;
-	
-	if (data == CONFIG_INVALID_HUMIDITY_VALUE) {
-		_validationBits |= 0 << 3;
-	} else {
-		_validationBits |=1 << 3;
-	}
+void uplinkMessageBuilder_setHumidityData(uint16_t *data) {
+	_humidity = *data;
+	printf("the Hum is : %d \n", *data);
 }
 
-void uplinkMessageBuilder_setTemperatureData(uint16_t data) {
-	_temperature = data;
-	
-	if (data == CONFIG_INVALID_TEMPERATURE_VALUE) {
-		_validationBits |= 0 << 2;
-		} else {
-		_validationBits |=1 << 2;
-	}
+void uplinkMessageBuilder_setTemperatureData(int16_t *data) {
+	_temperature = *data;
+	printf("the temp value is: %d \n", *data);
 }
 
-void uplinkMessageBuilder_setCO2Data(uint16_t data) {
-	_co2 = data;
-	
-	if (data == CONFIG_INVALID_CO2_VALUE) {
-		_validationBits |= 0 << 1;
-		} else {
-		_validationBits |=1 << 1;
-	}
+void uplinkMessageBuilder_setCO2Data(uint16_t *data) {
+	_co2 = *data;
+	printf("the Co2 value is: %d \n ", *data);
 }
 
-void uplinkMessageBuilder_setSystemErrorState() {
-	_validationBits = 0;
+void uplinkMessageBuilder_setSystemErrorState(uint8_t *flagValues) {
+	for(int i = 0; i < 8; i ++)
+	{
+		_errorFlag |= flagValues[i] << i;
+	}
 }

@@ -22,7 +22,8 @@ public class RoomEfcDao : IRoomDao
 
     public async Task<Room?> GetById(int id)
     {
-        Room? room = await context.Rooms.Include(room => room.Patients).Include(room => room.Sensors).SingleOrDefaultAsync(room => room.Id == id);
+        Room? room = await context.Rooms.Include(room => room.Patients)
+            .Include(room => room.Sensors).SingleOrDefaultAsync(room => room.Id == id);
         return room;
     }
     public IEnumerable<string> GetAllNames()

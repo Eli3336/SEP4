@@ -26,6 +26,10 @@ public class PatientLogic : IPatientLogic
         {
             throw new Exception("Room is full. Cannot add more patients!");
         }
+        if (!room.Availability.Equals("Available"))
+        {
+            throw new Exception("Room is not available, cannot add patient!");
+        }
 
         Patient toCreate = new Patient()
         {
@@ -131,5 +135,11 @@ public class PatientLogic : IPatientLogic
             roomToMoveInto.Availability = "Occupied";
         }
         await roomDao.RoomUpdateAsync(roomToMoveInto);
+    }
+    
+    public Task<IEnumerable<Patient?>> GetAllPatientsAsync()
+    {
+        IEnumerable<Patient?> patients = patientDao.GetAllPatientsAsync().Result; 
+        return Task.FromResult(patients);
     }
 }
